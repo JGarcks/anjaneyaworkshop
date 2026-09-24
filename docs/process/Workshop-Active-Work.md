@@ -31,7 +31,6 @@
 
 - **Trim CLAUDE.md** from 15.6 KB toward the 12 KB budget (rule 6) at the first session that touches it; the About Jamie section is the long one.
 - **A second, stable planet instance** on `main` with its own world file and port, as a one-line nginx repoint — only if Jamie ever wants the site not to follow the experiments (WS · D2).
-- **Phone zoom** (Jamie's walk, W2): the viewer sizes the globe to the screen's height, so a portrait phone sees only the middle (`docs/screens/phase-1/phone-390x844-default.png`). The hub is unaffected (it sets its own `?zoom=`, W3); the Planet room at `planet.` still opens zoomed on a phone until the Planet session's fix lands (relayed 24 Sep; being worked).
 - **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
 
 ## Held for triggers

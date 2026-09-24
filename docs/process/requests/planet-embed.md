@@ -4,6 +4,8 @@
 
 *Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and are not yet live (checked 24 Sep 20:00: no `embed` in the public `viewer.js`). Items 5–6 are new from Jamie's phone walk in W4. Item 7 is for later.*
 
+*Pull first: Planet's portrait fix (WEB · D2 — an upright screen fits the narrower side unless `?zoom=` is given; `main` e0a06d7, `sc-option1` 01bb0ba) is already in the live binary, rebuilt and restarted ~18:34 on 24 Sep (Desktop Claude). The hub always passes `?zoom=`, so that fix does not change it.*
+
 ## Why
 
 The hub at anjaneyaworkshop.co.uk frames the public viewer (`planet.anjaneyaworkshop.co.uk/?embed&zoom=…`) full screen behind its words (Workshop WS · D3, W3-b). The frame is another origin, so the hub cannot change anything inside it; it can only set the address, and read one message if the viewer sends it.
