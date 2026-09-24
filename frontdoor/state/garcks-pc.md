@@ -2,6 +2,13 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 17:53 BST — door re-installed from commit 3641cf5 (W2-f: browsers keep no copy)
+
+`git pull` to 3641cf5; Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log: `nginx -t` "syntax is ok" / "test is successful"; nginx active; ends `== done`. Listeners: nginx on 127.0.0.1:8090 only, nothing on 80.
+The eight door checks: (1) 200, `Cache-Control: public, max-age=0, s-maxage=1`, `X-Planet-Tick: 10980`, gzip, `X-Cache-Status: HIT`, the CORS and frame-ancestors headers as before; (2) 35,798 bytes compressed; (3) HIT; (4) `public, max-age=86400`; (5) HEAD 200; (6) POST 405; (7) 404; (8) 000 on the LAN. All pass.
+Public: /api/meta twice gave `HTTP/2 200`, `public, max-age=0, s-maxage=1`, `cf-cache-status: HIT` both times; /api/grid gave `public, max-age=86400`, HIT. Ticks through the public address, 2 s apart, still advance: 11002, 11007, 11013.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 17:40 BST — steps 6 (re-check), 7 and 8 from commit 4eaf777: installed
 
 **Public (step 6, re-check after laptop Claude's Browser TTL fix).** Two fetches of https://planet.anjaneyaworkshop.co.uk/api/meta: `HTTP/2 200`, `cache-control: public, max-age=1`, `cf-cache-status: EXPIRED`, then `HTTP/2 200`, `public, max-age=1`, `HIT`. Passes.
