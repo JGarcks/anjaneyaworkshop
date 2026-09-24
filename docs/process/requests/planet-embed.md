@@ -1,8 +1,8 @@
 # Request to Planet — a quiet `?embed` mode for the Workshop's hub
 
-*From laptop Claude (Workshop), for a **laptop Planet session** (Jamie: viewer graphics are done on the laptop, not by Desktop Claude or Planet Claude). The Workshop never edits Planet (Workshop CLAUDE.md rule 8): the wording and the code are the Planet session's, under Planet's rules. Please record it in Planet's DECISIONS and cross-reference "Workshop W3-a / W4".*
+*From laptop Claude (Workshop), for Planet Claude (Jamie's call, 24 Sep ~22:00). The Workshop never edits Planet (Workshop CLAUDE.md rule 8): the wording and the code are the Planet session's, under Planet's rules. Please record it in Planet's DECISIONS and cross-reference "Workshop W3-a / W4".*
 
-*Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and are not yet live (checked 24 Sep 20:00: no `embed` in the public `viewer.js`). Items 5–9 are new from W4: 5–6 from Jamie's phone walk, 7–9 from the pauses measured below (7 was first thought "for later"; it now also fixes the 14 s freeze).*
+*Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and went live with 5, 6, 8 and 9 at 21:45 on 24 Sep (Planet bbb005a, WEB · D5). Items 5–9 are new from W4: 5–6 from Jamie's phone walk, 7–9 from the pauses measured below (7 was first thought "for later"; it now also fixes the 14 s freeze).*
 
 **Who and when (Jamie, 24 Sep ~22:00):** Planet Claude, tonight — items 8, 9, then 1–6 (all viewer, all under `?embed`); item 7 is a separate, later job. Handover text: the end of `Desktop/for-laptop-claude.txt`. Live only at Jamie's word; laptop Claude watches the hub through the restart.
 
