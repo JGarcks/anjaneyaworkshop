@@ -137,6 +137,19 @@ bash ~/anjaneyaworkshop/frontdoor/door-rate.sh 60
 
 Paste the output under **The gate** in the state file with the time; commit and push as in step 9.
 
+## At the Phase 2 gate (when laptop Claude asks, at Jamie's word)
+
+The landing page must show "resumed" by itself when the engine restarts (rule 12). Laptop Claude is watching the public page; wait for Jamie's word, then:
+
+```bash
+curl -s http://127.0.0.1:8080/api/meta | grep -o '"tick":[0-9]*'      # the tick before
+date -u '+%H:%M:%S UTC'; systemctl --user restart planet.service
+sleep 20; curl -s http://127.0.0.1:8080/api/meta | grep -o '"tick":[0-9]*'   # lower than before: a resume from the last save
+systemctl --user status planet.service --no-pager | head -5
+```
+
+This restarts Planet's own service and changes nothing in Planet (rule 8). If the tick after is **not** lower, say so: the page has nothing to show. Paste the four outputs under **The Phase 2 gate** in the state file with the time; commit and push as in step 9. (The other half of the gate — Garcks-PC's network pulled for a minute — is Jamie's hands alone; nothing to run.)
+
 ## Changing the door later
 
 `git pull`; then **Jamie** runs `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door` (for `nginx.conf` or the nginx add-on) or `… install.sh tunnel` (for `config.yml` or the tunnel's service). PC Claude records the commit and the log's checks in the state file.
