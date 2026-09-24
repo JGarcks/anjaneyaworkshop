@@ -69,6 +69,12 @@ One place to remember; each room independent of the hub and of each other.
 
 **The trade.** Moving the engine makes the site independent of the house and costs a VPS (about €4 to €8 a month runs it: 6 ms per tick at 2.5 ticks a second is under 2% of one core); Planet's rule 4 promises its hash on Garcks-PC only, so a world file resumed elsewhere may diverge from that point, harmless for a public view and recorded if it happens. Leaving the engine home keeps Jamie's kiosk and experiments as they are and keeps the tunnel. Decide with the numbers then.
 
+**Booked (Jamie, 24 Sep 2026):** put at the decision round after Phase 2 closes, with WS · D13, rather than waiting for a trigger.
+
+### WS · D13 — A livelier public picture (open; booked for the decision round after Phase 2)
+
+**The trade.** Through Cloudflare a visitor gets a picture about every 2.2 s (the edge's own refresh at `s-maxage=1`, measured in W2), 5–6 ticks at a time; the viewer glides smoothly between them, but the sea's twinkle and plate movement are subtler than on the kiosk, which shows every 400 ms tick. A paid Cloudflare plan may shorten the edge's refresh (check what each tier really changes before paying); a push relay — every tick sent to each visitor over one connection — would match the kiosk but is a new moving part that likely wants a server (WS · D7). Neither is needed for the site to work.
+
 ### WS · D8 — Cloudflare for DNS, TLS, edge cache, Pages and the tunnel (agreed, W1)
 
 **Choice.** Porkbun stays the registrar; the domains' nameservers move to Cloudflare. Pages hosts the static rooms; the named tunnel exposes the front door; the edge cache serves the fan-out.

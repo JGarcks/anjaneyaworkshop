@@ -20,6 +20,12 @@
 
 ---
 
+## Booked for the decision round after Phase 2 closes (Jamie, 24 Sep 2026)
+
+Priced with that day's numbers, each with its trade-off (Strategic Plan WS · D7, D13):
+1. **A livelier picture — WS · D13.** A picture every ~2.2 s is Cloudflare's own refresh (gate: 0.48 edge asks per address per second), so the sea's twinkle and plate movement are subtler than the kiosk. Options: a paid Cloudflare plan (what each tier really changes, checked first), or a push relay sending every tick.
+2. **Not local — WS · D7, brought forward from Phase 4.** A rented server (≈ €4–8/month): move the engine, or only the front door. Cloudflare's plans don't host Planet; a server is the home for a program that never stops. A server also makes the push relay above easier.
+
 ## Queued (cross-session, ride-alongside — pick when a session is already in the relevant file)
 
 - **Trim CLAUDE.md** from 15.6 KB toward the 12 KB budget (rule 6) at the first session that touches it; the About Jamie section is the long one.
@@ -31,8 +37,6 @@
 
 ## Held for triggers
 
-- **The rented server (Phase 4)** — trigger: the house's downtime showing on the site more than Jamie likes, or Jamie wanting Garcks-PC off. Then WS · D7.
-- **A livelier public picture** (W2 walk: smooth, but twinkle and plate movement subtler than the kiosk; "not a major issue for now"). A picture every ~2.2 s is Cloudflare's own refresh at `s-maxage=1` (gate: 0.48 edge asks per address per second), not the door's. Trigger: Jamie wanting it. Action: a paid plan or a push relay, measured first, put to Jamie.
 - **A restart caught mid-visit** — trigger: the "resumed" state showing more than once a day in the check log. Action: read Planet's `journalctl --user -u planet` with PC Claude; nothing on the site changes.
 - **The world moving to a new build or seed** — trigger: PC Claude reporting a restart from year zero in `frontdoor/state/`. Action: the still refreshes itself; nothing else to do; note it in the log.
 - **Planet's resolution changes** (a restart with a different `--f`) — trigger: PC Claude's note of a new `f`, or `/api/meta`'s `frequency` not 32. Action: purge `planet.anjaneyaworkshop.co.uk/api/grid` at Cloudflare (the edge keeps the grid a day; nginx only a second). A new seed at f=32 needs nothing.

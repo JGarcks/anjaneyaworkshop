@@ -46,7 +46,10 @@ The dark hub, live.
 
 ### Phase 4 — The rented server (2–3 sessions, optional)
 
-- **WS · D7** decided at this phase's decision round with the numbers then: move the engine or only the front door.
+*Booked (Jamie, 24 Sep 2026): WS · D7 and WS · D13 (a livelier picture) are put at the decision round after Phase 2 closes, priced then; if Jamie says go, this phase may run before Phase 3.*
+
+- **WS · D7** decided with the numbers then: move the engine or only the front door.
+- **WS · D13** decided alongside: a paid Cloudflare plan, a push relay (easier from a server), or neither.
 - **A VPS** (Hetzner or similar, Europe); the front door's nginx and, if the engine moves, Planet's service and world file; the tunnel retired if the engine moves, kept if not; one DNS record changed.
 - **Runbooks** for the move and for the move back; `secrets-map.md` gains the VPS key.
 - **If the engine moves:** Planet's golden-seed test run on the new machine first, per Planet's own queue; the result recorded.
