@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # check-public.sh — the public check: asserts, against the live addresses, what each closed phase promised.
-# In:  nothing but the internet; optional first argument overrides the site; THROUGH=<n> runs phases 0..n (default 1).
+# In:  nothing but the internet; optional first argument overrides the site; THROUGH=<n> runs phases 0..n (default 2).
 # Out: one PASS/FAIL line per assertion with the number behind it; exit 0 only if every assertion passed.
 # Decision: the budget is a test (CLAUDE.md rule 9) — a FAIL here blocks the commit exactly as a red npm test does.
-# Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door).
+# Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door);
+#   W3 — the landing page began Phase 2 (browsers re-check the hub's files; W4 adds the rest).
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
 HOST="${SITE#https://}"
 COM="anjaneyaworkshop.com"
 PLANET="${PLANET:-https://planet.anjaneyaworkshop.co.uk}"
-THROUGH="${THROUGH:-1}"   # before the door is live (W2, until RUNBOOK step 6): THROUGH=0, and the log says so
+THROUGH="${THROUGH:-2}"   # before the door is live (W2, until RUNBOOK step 6): THROUGH=0, and the log says so
 failures=0
 
 pass() { printf 'PASS  %s\n' "$1"; }
@@ -115,6 +116,19 @@ if (( THROUGH >= 1 )); then
   if [[ "$code" == 404 ]]; then pass "an unknown path → 404 at the door"; else fail "an unknown path → expected 404, got $code"; fi
 
   echo "(The engine's load and the house's upload are measured at nginx: frontdoor/door-rate.sh, pasted into frontdoor/state/.)"
+fi
+
+# ---- Phase 2 — the landing page.
+if (( THROUGH >= 2 )); then
+  echo
+  echo "Phase 2 — the landing page ($SITE)"
+
+  # 11. Browsers re-check the hub's files on every visit, so a deploy reaches everyone at once (W3-i: the zone's Browser Cache TTL
+  #     is "Respect Existing Headers"; at its default 4 hours Jamie's Chrome kept the holding page's style for hours after W3's deploy).
+  for path in / /style.css /js/main.js /still/planet.webp; do
+    cc="$(header cache-control "$(headers "$SITE$path")")"
+    if [[ "$cc" == *"max-age=0"* ]]; then pass "$path Cache-Control: $cc"; else fail "$path Cache-Control: expected max-age=0 (browsers re-check), got ${cc:-none} — is the zone's Browser Cache TTL back from \"Respect Existing Headers\"?"; fi
+  done
 fi
 
 echo

@@ -10,7 +10,7 @@
 
 **Phase 0 — Ground: closed (W1).** **Phase 1 — the front door: closed (W2, 24 Sep 2026).** The planet is public at `planet.anjaneyaworkshop.co.uk` through nginx and a named tunnel on Garcks-PC (`frontdoor/`, installed state in `frontdoor/state/garcks-pc.md`). `check-public.sh` 17/17; the gate with three browsers: 28.9 KB/s up the line (budget 600), 0.48 engine fetches per address per second; Jamie's walk: smooth on the laptop and the phone. Detail: `progress/2026-09.md` §W2.
 
-**Phase 2 — the landing page: open (W3, 24 Sep 2026).** The hub is live at `anjaneyaworkshop.co.uk`: the planet full screen behind the words, the still before it and when the house is away, the live line at the bottom. Decisions W3-a…g all taken (`decisions.md`); 51 tests; check-public 17/17. Detail: `progress/2026-09.md` §W3.
+**Phase 2 — the landing page: open (W3, 24 Sep 2026).** The hub is live at `anjaneyaworkshop.co.uk`: the planet full screen behind the words, the still before it and when the house is away, the live line at the bottom. Decisions W3-a…g all taken (`decisions.md`); 51 tests; check-public 21/21 (Phase 2 begun: browsers re-check the hub's files, W3-i). Detail: `progress/2026-09.md` §W3.
 
 **Next build session: W4 — Phase 2 continued** (Coverage Plan §Phase 2): the daily GitHub Action for the still (W3-e; rule 16 gains a still-only bot), `check-public.sh` Phase 2 (framing allowed, still under a day old, time to first picture — W3-f), screens of the still and "resumed" states, the gate. Its decision round: **how often the still is retaken** (the planet moves ~0.9 billion years an hour, so a day-old still is another world and the fade morphs one into the other); **drop the 56 px crop and the 2.5 s wait** once Planet's `?embed` lands.
 
