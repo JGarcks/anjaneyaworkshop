@@ -51,6 +51,18 @@ A 5-minute run of the hub in a browser (24 Sep, ~21:30; every request logged; no
 
    **Checks before it goes live (Planet's own, plus):** through the door on Garcks-PC, `curl -s -D - -o /dev/null -H 'Accept-Encoding: gzip' http://127.0.0.1:8090/api/picture/elevation_m` → 200, gzip, an `X-Planet-Tick`; the planet at `planet.anjaneyaworkshop.co.uk/` and in the hub keeps drawing; `/api/field/elevation_m` unchanged. Rebuild and restart `planet.service` only at Jamie's word, as for D5.
 
+## Item 10 — the turn hitches when a picture lands (Jamie, 24 Sep ~23:00, Workshop W5-c)
+
+**Where the supply stands now.** Item 7 live 22:29 BST; the Workshop's door stopped holding `/api/picture/` (W5-b, 22:37) and `/api/meta` (W5-c, 22:45). A freshly loaded hub, 3 min: a new picture reaches the viewer every **1,061 ms** (median; p90 1,111; max 2,167), none over 3 s, no failures, picture replies ~74 ms (W4: 2.1 s apart, freezes to 38 s). Nothing more to gain on the wire.
+
+**What Jamie still sees:** "still stutter, but it's close". Asked which kind: **the globe's own spin catches, about once a second** — not the land jumping. So something the viewer does when a picture arrives costs the turn a frame or more.
+
+**What the Workshop could and couldn't measure.** In the desktop app's browser pane (throttled, ~25 fps, so not a fair test) no task over 50 ms showed in 12 s — so it is probably not one large block of work per picture, at least there. Frame timing on real hardware is Planet's to take (the viewer's own timing readout, or the browser's Performance panel on the laptop at `planet.anjaneyaworkshop.co.uk/?embed&zoom=0.6`).
+
+**Candidates (Planet's call; listed only so nothing is missed):** the recolour or buffer rebuild for 10,242 cells happening in one frame (spread it across frames, or reuse buffers rather than allocate); a GPU upload or canvas resize on each picture; the glide's new target resetting or nudging the rotation clock (the turn should run on wall time, independent of pictures); garbage from the 164 KB parse. Separately, the glide (item 8: 2.5 pictures behind, 5 s) was sized for the old 3–4 s gaps; at a steady ~1 s it can likely come back toward 1–1.5 — Jamie's W4 note "too drawn out" still stands, second to the hitch.
+
+**Checks:** the spin smooth through several picture arrivals on the laptop and a phone (Jamie's eye is the bar); `planet.anjaneyaworkshop.co.uk/` without `?embed` unchanged unless Planet chooses otherwise. Live at Jamie's word, as before.
+
 ## What the hub does when these land
 
 - 1: drops the 56 px crop. 4: already listens for `{ planet: 'drawn' }` from the planet's origin and drops the 2.5 s wait by itself; then re-times the Phase 2 gate (live within 2 s). 5: nothing — pinch just works. 6: sends the zoom on a turn instead of reloading. 8–9: nothing; the Workshop re-runs its 5-minute pause monitor to confirm. 7: the pause monitor re-run (freezes gone?); `check-public.sh` gains the picture address (200, gzip, tick, one second at the edge); then, measured, the door's hold on it tried off again (W4-e); then the glide retuned to what is left (W5).
