@@ -163,6 +163,16 @@ curl -s -o /dev/null -w '%{http_code}\n' $D/api/pictures                 #   404
 
 Record the commit, the log's checks and the three answers in the state file; commit and push as in step 9. Then tell Planet Claude (via the handover file) that the door is ready.
 
+**W5-b — the picture no longer held at the door** (after item 7 is live, at Jamie's word). `git pull`; **Jamie**: `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`; the install log's checks as in step 3; then:
+
+```bash
+D=http://127.0.0.1:8090
+curl -s -o /dev/null -D - $D/api/picture/elevation_m | grep -iE '^(HTTP|x-cache-status|x-planet-tick|cache-control)'   #   200; X-Cache-Status: BYPASS; a tick; public, max-age=0, s-maxage=1
+curl -s -o /dev/null -D - $D/api/field/elevation_m | grep -i x-cache-status                                            #   HIT, MISS or EXPIRED (still held — never BYPASS)
+```
+
+Record them in the state file; commit and push as in step 9. **To undo** (if laptop Claude or Jamie asks): laptop Claude reverts the commit; the same `git pull` and `sudo` line.
+
 ## Changing the door later
 
 `git pull`; then **Jamie** runs `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door` (for `nginx.conf` or the nginx add-on) or `… install.sh tunnel` (for `config.yml` or the tunnel's service). PC Claude records the commit and the log's checks in the state file.

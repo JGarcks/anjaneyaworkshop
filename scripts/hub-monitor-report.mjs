@@ -5,14 +5,17 @@
  * Out: pictures (moments all four fields — elevation and the three river fields — share a new tick), the gaps between them,
  *      every gap over 3 s with the ticks each field saw and the edge/door cache status, request latency, failures, the hub's state.
  * Decision: a "picture" is rebuilt from the replies the way the viewer's fetchOneTick needs it (Planet WEB · D3: one tick for all four);
- *   it measures what reaches the viewer, not the glide it draws from them.
- * Built in W4 — Phase 2 continued (24 Sep 2026).
+ *   it measures what reaches the viewer, not the glide it draws from them. A /api/picture/ reply (Planet item 7) carries all four at one tick.
+ * Built in W4 — Phase 2 continued (24 Sep 2026); W5-a counts the one-request picture.
  */
 import { readFileSync } from "node:fs";
 const d = JSON.parse(readFileSync(process.argv[2] || "run5min.json", "utf8"));
 const FIELDS = ["elevation_m", "drainage_km2", "downstream_cell", "lake_depth_m"];
-const fields = d.done.filter((r) => r.url.startsWith("/api/field/")).map((r) => ({ ...r, name: r.url.slice(11).replace(/\?.*/, "") }))
+// A picture reply stands for all four fields at its tick; it is named "picture" so the pause detail can tell the two ways apart.
+const fields = d.done.filter((r) => r.url.startsWith("/api/field/") || r.url.startsWith("/api/picture/"))
+  .map((r) => ({ ...r, name: r.url.startsWith("/api/picture/") ? "picture" : r.url.slice(11).replace(/\?.*/, "") }))
   .sort((a, b) => (a.end ?? a.sent) - (b.end ?? b.sent));
+console.log(`asks: ${fields.filter((r) => r.name === "picture").length} one-request pictures, ${fields.filter((r) => r.name !== "picture").length} single fields`);
 const q = (xs, p) => { const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
 const s1 = (ms) => (ms / 1000).toFixed(1);
 
@@ -20,7 +23,7 @@ const s1 = (ms) => (ms / 1000).toFixed(1);
 const latest = {}; const pictures = [];
 for (const r of fields) {
   if (r.failed || r.status !== 200) continue;
-  latest[r.name] = r.tick;
+  if (r.name === "picture") for (const f of FIELDS) latest[f] = r.tick; else latest[r.name] = r.tick;
   const ts = FIELDS.map((f) => latest[f]);
   if (ts.every((t) => t !== undefined && t === ts[0]) && (pictures.length === 0 || pictures.at(-1).tick !== ts[0])) pictures.push({ t: r.end, tick: ts[0] });
 }
@@ -44,7 +47,7 @@ for (const g of long) {
   const bad = inside.filter((r) => r.failed || r.status !== 200).map((r) => `${r.name} ${r.failed || r.status}`);
   const edge = {}; for (const r of inside) edge[`${r.edge}/${r.door}`] = (edge[`${r.edge}/${r.door}`] || 0) + 1;
   console.log(`- ${s1(g.from.t)}→${s1(g.to.t)} s: ${g.ms} ms, tick ${g.from.tick}→${g.to.tick} (+${g.ticks}); ${inside.length} field asks; edge/door ${JSON.stringify(edge)}`);
-  console.log(`    ticks each field saw: ${FIELDS.map((f) => `${f.split("_")[0]} ${[...new Set(ticksSeen[f] || [])].join(",")}`).join(" | ")}`);
+  console.log(`    ticks each field saw: ${[...FIELDS, "picture"].map((f) => `${f.split("_")[0]} ${[...new Set(ticksSeen[f] || [])].join(",")}`).join(" | ")}`);
   if (slow.length) console.log(`    slow: ${slow.join("; ")}`);
   if (bad.length) console.log(`    failed: ${bad.join("; ")}`);
 }
