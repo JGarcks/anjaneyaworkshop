@@ -38,6 +38,7 @@
 ## Held for triggers
 
 - **The rented server (Phase 4)** — trigger: the house's downtime showing on the site more than Jamie likes, or Jamie wanting Garcks-PC off. Then WS · D7.
+- **Livelier public picture** — at the next decision round (Jamie, W2 walk: smooth, but the sea's twinkle and plate movement subtler than the kiosk; "not a major issue for now"). Measured: a picture every ~2.2 s (door + edge stack). First option: the door holds nothing (≈1.1 s, ~3 ticks; more engine requests, same upload) — a change to WS · D4, Jamie's.
 - **Sub-second snapshots for visitors** — trigger: Jamie finding the once-a-second picture visibly steppier than the LAN kiosk. Action: measure it first; then a paid Cloudflare plan or a push relay, put to Jamie.
 - **A restart caught mid-visit** — trigger: the "resumed" state showing more than once a day in the check log. Action: read Planet's `journalctl --user -u planet` with PC Claude; nothing on the site changes.
 - **The world moving to a new build or seed** — trigger: PC Claude reporting a restart from year zero in `frontdoor/state/`. Action: the still refreshes itself; nothing else to do; note it in the log.
