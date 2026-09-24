@@ -80,10 +80,10 @@ if (( THROUGH >= 1 )); then
   tick="$(header x-planet-tick "$h")"
   if [[ "$tick" =~ ^[0-9]+$ ]]; then pass "X-Planet-Tick present on a field ($tick)"; else fail "X-Planet-Tick missing on a field"; fi
 
-  # 6. One second on meta and fields; a day on the grid.
+  # 6. One second at the edge and none in the browser on meta and fields (W2-f); a day on the grid.
   for path in /api/meta /api/field/elevation_m; do
     cc="$(header cache-control "$(headers "$PLANET$path")")"
-    if [[ "$cc" == "public, max-age=1" ]]; then pass "$path Cache-Control: $cc"; else fail "$path Cache-Control: expected public, max-age=1, got ${cc:-none}"; fi
+    if [[ "$cc" == "public, max-age=0, s-maxage=1" ]]; then pass "$path Cache-Control: $cc"; else fail "$path Cache-Control: expected public, max-age=0, s-maxage=1, got ${cc:-none}"; fi
   done
   cc="$(header cache-control "$(headers "$PLANET/api/grid")")"
   if [[ "$cc" == "public, max-age=86400" ]]; then pass "/api/grid Cache-Control: $cc"; else fail "/api/grid Cache-Control: expected public, max-age=86400, got ${cc:-none}"; fi

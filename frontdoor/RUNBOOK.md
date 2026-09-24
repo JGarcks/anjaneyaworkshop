@@ -53,7 +53,7 @@ Then prove the door from the PC itself (no password needed). Each line's expecte
 ```bash
 D=http://127.0.0.1:8090
 curl -s -o /dev/null -D - -H 'Accept-Encoding: gzip' $D/api/field/elevation_m | grep -iE '^(HTTP|cache-control|x-planet-tick|content-encoding|x-cache-status|access-control-allow-origin|content-security-policy)'
-#   200; Cache-Control: public, max-age=1; X-Planet-Tick: <n>; Content-Encoding: gzip; Access-Control-Allow-Origin: https://anjaneyaworkshop.co.uk; frame-ancestors 'self' https://anjaneyaworkshop.co.uk
+#   200; Cache-Control: public, max-age=0, s-maxage=1; X-Planet-Tick: <n>; Content-Encoding: gzip; Access-Control-Allow-Origin: https://anjaneyaworkshop.co.uk; frame-ancestors 'self' https://anjaneyaworkshop.co.uk
 curl -s -o /dev/null -w '%{size_download} bytes compressed\n' -H 'Accept-Encoding: gzip' $D/api/field/elevation_m
 #   about 35,000 (41,000 uncompressed)
 curl -s -o /dev/null -D - $D/api/field/elevation_m | grep -i x-cache-status          #   HIT (asked again within the second)
