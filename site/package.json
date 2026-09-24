@@ -1,0 +1,15 @@
+{
+  "name": "anjaneyaworkshop-site",
+  "private": true,
+  "description": "The Workshop's landing page and its tests. public/ is served exactly as written (no build step); test/ holds the Vitest tests for its logic. Pages runs `npm test` before every deploy, so a red test stops the deploy. Built in W1 — Ground (JSON takes no comments, so this line is the file's header, CLAUDE.md rule 14).",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.1"
+  }
+}

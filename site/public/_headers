@@ -1,0 +1,10 @@
+# _headers — the response headers Cloudflare Pages adds to every file under site/public/.
+# In:  every request for the holding page (later, the landing page).
+# Out: a strict content policy (nothing loads from anywhere else; no scripts at all yet), no referrer leaks, no framing of the hub.
+# Decision: start locked down and open exactly what each phase needs; Phase 2 adds the planet subdomain to frame-src and script-src 'self'.
+# Built in W1 — Ground (24 Sep 2026).
+/*
+  Content-Security-Policy: default-src 'none'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()

@@ -1,0 +1,32 @@
+/*
+ * style.css — the holding page's look: Planet's viewer background, the name centred, quiet.
+ * In:  index.html's single heading.
+ * Out: one screen at any width, no scroll, readable on a phone.
+ * Decision: #0b0e14 is the viewer's own background, so Phase 2's framed globe will sit on the same dark (WS · D3).
+ * Built in W1 — Ground (24 Sep 2026).
+ */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0b0e14;
+}
+
+main {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #c9cdd6;
+  opacity: 0.8;
+}

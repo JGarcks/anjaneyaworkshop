@@ -13,3 +13,4 @@ frontdoor/secrets/
 docs/screens/**/*.psd
 .DS_Store
 Thumbs.db
+.claude/settings.local.json
