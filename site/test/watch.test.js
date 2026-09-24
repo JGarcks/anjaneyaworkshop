@@ -12,7 +12,8 @@ const meta = (tick) => ({ tick, year: tick * 100_000 });
 
 // A page that loaded its frame at 0 ms and heard from the door at 500 ms.
 function livePage() {
-  const w = createWatch({ startedAt: 0, stillTakenAt: -86_400_000 });
+  const w = createWatch({ startedAt: 0 });
+  w.stillTaken(-86_400_000);
   w.frameLoaded(300);
   w.metaOk(meta(1000), 500);
   return w;
@@ -59,7 +60,8 @@ it("failures for just under ten seconds keep the live picture", () => {
 });
 
 it("with the house offline from the start, 'last seen' is the still's own time", () => {
-  const w = createWatch({ startedAt: 0, stillTakenAt: 42 });
+  const w = createWatch({ startedAt: 0 });
+  w.stillTaken(42);
   for (let at = 0; at <= 10_000; at += 2000) w.metaFailed("network error", at);
   expect(w.view(10_000).lastSeenAt).toBe(42);
 });

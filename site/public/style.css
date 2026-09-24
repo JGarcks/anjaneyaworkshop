@@ -1,32 +1,160 @@
 /*
- * style.css — the holding page's look: Planet's viewer background, the name centred, quiet.
- * In:  index.html's single heading.
- * Out: one screen at any width, no scroll, readable on a phone.
- * Decision: #0b0e14 is the viewer's own background, so Phase 2's framed globe will sit on the same dark (WS · D3).
- * Built in W1 — Ground (24 Sep 2026).
+ * style.css — the landing page's look: the viewer's own dark, the planet behind everything, the words quiet on top.
+ * In:  index.html's still, frame, name and words; main.js sets the frame's and the still's boxes and where the words start.
+ * Out: one screen at any width, no scroll; the live line a faint grey (Jamie, W3 decision 3); links brightening on hover.
+ * Decision: #0b0e14 is the viewer's own background, so the frame's edge is invisible (WS · D3); a soft dark halo keeps the words
+ *   readable where the planet runs under them (W3 decision 2). Until main.js runs, the still sits centred by these rules alone.
+ * Built in W1 — Ground as the holding page's look; became the landing page's in W3 (24 Sep 2026).
  */
+:root {
+  --bg: #0b0e14;
+  --ink: #c9cdd6;
+  --faint: #7f8794;
+  --halo: 0 0 6px #0b0e14, 0 0 14px #0b0e14, 0 0 2px #0b0e14;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+}
+
 html, body {
   margin: 0;
   height: 100%;
-  background: #0b0e14;
-}
-
-main {
-  display: grid;
-  place-items: center;
-  min-height: 100dvh;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-h1 {
-  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+#still {
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  width: min(86vh, 100vw);
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+#planet {
+  position: fixed;
+  border: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s ease;
+}
+
+#planet.shown {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#name {
+  position: fixed;
+  top: 18px;
+  left: 16px;
+  z-index: 2;
+  margin: 0;
   font-weight: 300;
-  font-size: clamp(1.25rem, 4vw, 2rem);
-  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
+  opacity: 0.75;
+  text-shadow: var(--halo);
+  pointer-events: none;
+}
+
+#words {
+  position: fixed;
+  top: 80%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 0 16px;
   text-align: center;
-  color: #c9cdd6;
+  pointer-events: none;
+}
+
+#line, #status {
+  margin: 0;
+  font-family: var(--mono);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  text-shadow: var(--halo);
+}
+
+#line {
+  min-height: 1.5em;
+  font-size: min(0.8rem, 2.75vw);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+#line span {
+  white-space: nowrap;
+}
+
+#status {
+  min-height: 1.4em;
+  margin-top: 2px;
+  font-size: min(0.72rem, 2.6vw);
+  line-height: 1.4;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#status.shown {
   opacity: 0.8;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 10px;
+}
+
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  color: var(--ink);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: var(--halo);
+  pointer-events: auto;
+  transition: opacity 0.25s ease;
+}
+
+nav a:hover, nav a:focus-visible {
+  opacity: 0.95;
+}
+
+nav a:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.mark {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0.9;
+}
+
+.mark ellipse {
+  fill: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #planet, #status, nav a { transition: none; }
 }

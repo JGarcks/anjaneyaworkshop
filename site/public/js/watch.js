@@ -12,9 +12,9 @@ export const STILL_AFTER_MS = 10_000;   // failures this long in a row: the stil
 export const RESUMED_FOR_MS = 6_000;    // how long "resumed" stays after a restart
 export const DRAWN_GUESS_MS = 2_500;    // until Planet's ?embed says "drawn": the frame is trusted this long after it loads
 
-export function createWatch({ startedAt, stillTakenAt = null }) {
+export function createWatch({ startedAt }) {
   const s = {
-    lastTick: null, lastMeta: null, lastOkAt: null,
+    stillTakenAt: null, lastTick: null, lastMeta: null, lastOkAt: null,
     failingSince: null, lastError: null, still: false, resumedAt: null,
     frameStartedAt: startedAt, frameLoadedAt: null, frameDrawnAt: null,
   };
@@ -42,6 +42,9 @@ export function createWatch({ startedAt, stillTakenAt = null }) {
       return { wentStill, failingFor: at - s.failingSince };
     },
 
+    // When the still was taken (from still/planet.json, which arrives while the frame loads): "last seen" if the door never answers.
+    stillTaken(at) { s.stillTakenAt = at; },
+
     frameReloaded(at) { s.frameStartedAt = at; s.frameLoadedAt = null; s.frameDrawnAt = null; },
     frameLoaded(at) { s.frameLoadedAt = at; },
     frameDrawn(at) { s.frameDrawnAt = at; },
@@ -53,7 +56,7 @@ export function createWatch({ startedAt, stillTakenAt = null }) {
       return {
         showFrame: !s.still && drawn && doorAnswered,
         still: s.still,
-        lastSeenAt: s.still ? (s.lastOkAt ?? stillTakenAt) : null,
+        lastSeenAt: s.still ? (s.lastOkAt ?? s.stillTakenAt) : null,
         resumed: !s.still && s.resumedAt !== null && at - s.resumedAt < RESUMED_FOR_MS,
         meta: s.lastMeta,
         lastError: s.lastError,

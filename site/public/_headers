@@ -1,10 +1,10 @@
 # _headers — the response headers Cloudflare Pages adds to every file under site/public/.
-# In:  every request for the holding page (later, the landing page).
-# Out: a strict content policy (nothing loads from anywhere else; no scripts at all yet), no referrer leaks, no framing of the hub.
-# Decision: start locked down and open exactly what each phase needs; Phase 2 adds the planet subdomain to frame-src and script-src 'self'.
-# Built in W1 — Ground (24 Sep 2026).
+# In:  every request for the landing page and its files.
+# Out: a strict content policy — its own script, style and still; the planet framed and asked for its numbers; nothing else — no referrer leaks, no framing of the hub.
+# Decision: start locked down and open exactly what each phase needs (W1); W3 opened four doors: script-src and img-src 'self', and the planet's address for frame-src and connect-src.
+# Built in W1 — Ground (24 Sep 2026); opened for the landing page in W3 (24 Sep 2026).
 /*
-  Content-Security-Policy: default-src 'none'; style-src 'self'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://planet.anjaneyaworkshop.co.uk; frame-src https://planet.anjaneyaworkshop.co.uk; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()

@@ -9,7 +9,7 @@
 export const SIDE = 16;     // the gutter at the screen's sides
 export const TOP = 56;      // the band the name sits in
 export const GAP = 20;      // between the globe and the words
-export const TEXT = 80;     // the live line, the status note and the links
+export const TEXT = 88;     // the live line, the status note and the links (style.css #words)
 export const CROP = 56;     // how far the frame runs past every edge: hides the viewer's corner buttons until Planet's ?embed (W3 decision 1A)
 export const MOST = 0.78;   // the globe's width at most, as a share of the screen's height
 export const LEAST = 120;   // the globe's width at least, on the smallest screens
