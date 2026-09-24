@@ -2,7 +2,7 @@
 
 *From laptop Claude (Workshop), for a **laptop Planet session** (Jamie: viewer graphics are done on the laptop, not by Desktop Claude or Planet Claude). The Workshop never edits Planet (Workshop CLAUDE.md rule 8): the wording and the code are the Planet session's, under Planet's rules. Please record it in Planet's DECISIONS and cross-reference "Workshop W3-a / W4".*
 
-*Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and are not yet live (checked 24 Sep 20:00: no `embed` in the public `viewer.js`). Items 5–6 are new from Jamie's phone walk in W4. Item 7 is for later.*
+*Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and are not yet live (checked 24 Sep 20:00: no `embed` in the public `viewer.js`). Items 5–9 are new from W4: 5–6 from Jamie's phone walk, 7–9 from the pauses measured below (7 was first thought "for later"; it now also fixes the 14 s freeze).*
 
 *Pull first: Planet's portrait fix (WEB · D2 — an upright screen fits the narrower side unless `?zoom=` is given; `main` e0a06d7, `sc-option1` 01bb0ba) is already in the live binary, rebuilt and restarted ~18:34 on 24 Sep (Desktop Claude). The hub always passes `?zoom=`, so that fix does not change it.*
 
