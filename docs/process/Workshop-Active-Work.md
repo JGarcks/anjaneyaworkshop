@@ -15,7 +15,7 @@
 **Next build session: W4 — Phase 2 continued** (Coverage Plan §Phase 2): the daily GitHub Action for the still (W3-e; rule 16 gains a still-only bot), `check-public.sh` Phase 2 (framing allowed, still under a day old, time to first picture — W3-f), screens of the still and "resumed" states, the gate. Its decision round: **how often the still is retaken** (the planet moves ~0.9 billion years an hour, so a day-old still is another world and the fade morphs one into the other); **drop the 56 px crop and the 2.5 s wait** once Planet's `?embed` lands.
 
 **Pending Jamie, in order:**
-1. Look at `anjaneyaworkshop.co.uk` on the laptop and a phone on mobile data, and say what you saw (the walk).
+1. Anything about the look to change (size of the globe, how faint the line is) — the W3 walk found it working on both; W4 opens with it.
 2. If not already done: relay the `?embed` request (the very end of `Desktop/for-laptop-claude.txt`, W3-a) to the Planet session working on the zoom request.
 3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
 
