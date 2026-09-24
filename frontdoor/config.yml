@@ -1,0 +1,20 @@
+# config.yml — the named tunnel: how Cloudflare's visitors for the planet reach the front door on Garcks-PC.
+# In:  requests Cloudflare sends down the tunnel (an outbound connection from Garcks-PC; nothing opens on the router).
+# Out: planet.anjaneyaworkshop.co.uk handed to nginx on 127.0.0.1:8090; any other name gets 404 and reaches nothing.
+# Decision: W2-b — the routing lives here in the repo (a locally-managed tunnel), not in Cloudflare's dashboard.
+# Built in W2 — the front door (24 Sep 2026). Installed as /etc/cloudflared/config.yml (RUNBOOK.md step 5).
+#
+# TUNNEL_ID is filled in at install (RUNBOOK.md step 5) and then committed here by laptop Claude so the repo
+# matches the machine. The ID is not a secret: it is the target of the public DNS record. The credentials
+# file it names is, and never enters the repo (CLAUDE.md rule 13; docs/process/secrets-map.md).
+
+tunnel: TUNNEL_ID
+credentials-file: /etc/cloudflared/anjaneya-frontdoor.json
+no-autoupdate: true          # updates come from the apt repository, where the installed version is on record
+
+ingress:
+  - hostname: planet.anjaneyaworkshop.co.uk
+    service: http://127.0.0.1:8090
+    originRequest:
+      connectTimeout: 5s
+  - service: http_status:404

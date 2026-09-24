@@ -1,0 +1,34 @@
+# cloudflared-frontdoor.service — runs the named tunnel on Garcks-PC at boot, on an account of its own.
+# In:  /etc/cloudflared/config.yml and the tunnel's credentials file beside it.
+# Out: one long-lived outbound connection to Cloudflare carrying the planet's visitors to nginx; logs to the journal.
+# Decision: W2-c — a system service on its own restricted account that cannot see /home (not the package's root unit).
+# Built in W2 — the front door (24 Sep 2026). Installed as /etc/systemd/system/cloudflared-frontdoor.service (RUNBOOK.md step 5).
+
+[Unit]
+Description=Anjaneya Workshop front door: the named tunnel to planet.anjaneyaworkshop.co.uk
+After=network-online.target nginx.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=cloudflared
+Group=cloudflared
+ExecStart=/usr/bin/cloudflared --no-autoupdate --config /etc/cloudflared/config.yml tunnel run
+Restart=on-failure
+RestartSec=5s
+TimeoutStartSec=30s
+
+# Sealed off: it reads its two files and talks to the network, nothing else.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target

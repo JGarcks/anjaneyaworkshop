@@ -9,6 +9,7 @@
 | The Planet key's public half (`id_ed25519.pub`) on Garcks-PC | `~/.ssh/authorized_keys` on Garcks-PC | Unused: the laptop's sandbox cannot reach the LAN. Harmless; remove if wanted. | 24 Sep 2026 |
 | Cloudflare account | Jamie's Cloudflare account, signed in with Google as `jamie.garcka@gmail.com` (no separate password). No API token exists: Pages builds by watching the repo (W1-a) | Jamie | 24 Sep 2026 (W1) |
 | Cloudflare's access to GitHub (not a secret; an access grant) | GitHub → Settings → Applications → *Cloudflare Workers and Pages*, installed on `JGarcks` for `anjaneyaworkshop` only | Cloudflare Pages, to build on push | 24 Sep 2026 (W1) |
-| Named tunnel credentials (`<tunnel-id>.json`, `cert.pem`) | `~/.cloudflared/` on Garcks-PC | cloudflared service on Garcks-PC (PC Claude installs) | not yet |
+| Named tunnel credentials (the tunnel's own key; runs this one tunnel only) | `/etc/cloudflared/anjaneya-frontdoor.json` on Garcks-PC, owned by the `cloudflared` account, mode 0400 (moved there from `~/.cloudflared/` by `frontdoor/install.sh tunnel`) | `cloudflared-frontdoor.service` on Garcks-PC | not yet (W2, RUNBOOK step 4) |
+| Cloudflare origin certificate `cert.pem` (account-wide for the zone) | `~/.cloudflared/cert.pem` on Garcks-PC **only between RUNBOOK steps 4 and 7**, then deleted; a fresh `cloudflared tunnel login` re-creates it if ever needed | PC Claude, to create the tunnel and its DNS route | not yet (W2) |
 | Porkbun account | Jamie's; username `Garcks` | Jamie, for nameservers and renewals | 22 Apr 2026 |
 | VPS root key (Phase 4) | to be decided at Phase 4 | — | not yet |
