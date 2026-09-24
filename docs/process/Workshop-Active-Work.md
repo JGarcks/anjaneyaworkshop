@@ -16,7 +16,7 @@
 
 **Pending Jamie, in order:**
 1. Anything about the look to change (size of the globe, how faint the line is) — the W3 walk found it working on both; W4 opens with it.
-2. If not already done: relay the `?embed` request (the very end of `Desktop/for-laptop-claude.txt`, W3-a) to the Planet session working on the zoom request.
+2. Hand `docs/process/requests/planet-embed.md` to a **laptop** Planet session (viewer graphics are done on the laptop): the quiet `?embed` (W3-a) plus W4's two phone items — a lower zoom floor with no snap bigger, and zoom by message so a turn needs no reload.
 3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
 
 **Standing:** teaching is the decision round only; no explain-back during the build — headers in the code (rule 14); laptop Claude commits, PC Claude only `frontdoor/state/` (rule 16); changes to the door go through `install.sh` (Jamie's `sudo`) and PC Claude's checks; Planet is never edited here (rule 8).
