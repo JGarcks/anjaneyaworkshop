@@ -8,12 +8,12 @@
 
 ## Currently working on
 
-**Phase 0 — Ground: gate passed (W1, 24 Sep 2026), closing on Jamie's walk.** The repo is on `github.com/JGarcks/anjaneyaworkshop` (private); Pages builds `site/` on every push to `main` and runs `npm test` first; `check-public.sh` 6/6 (HTTPS, http→https, www→bare, `.com`→`.co.uk` with path). Detail: `progress/2026-09.md` §W1.
+**Phase 0 — Ground: closed (W1, 24 Sep 2026); Jamie's walk passed on the laptop and the phone on cellular.** The repo is on `github.com/JGarcks/anjaneyaworkshop` (private); Pages builds `site/` on every push to `main` and runs `npm test` first; `check-public.sh` 6/6 (HTTPS, http→https, www→bare, `.com`→`.co.uk` with path). Detail: `progress/2026-09.md` §W1.
 
 **Next build session: W2 — Phase 1, the front door** (`Workshop-Coverage-Plan.md` §Phase 1): nginx config, tunnel config and the runbook written here; PC Claude's runbook step on Garcks-PC; `check-public.sh` gains the budget. Its decision round will include: PolicyRAG's quick tunnel (retire, or fold into the named tunnel's ingress).
 
 **Pending Jamie, in order:**
-1. The W1 walk: open `https://anjaneyaworkshop.co.uk` on the laptop and on a phone on mobile data, and try `anjaneyaworkshop.com`; say what you saw; send the phone screenshot for `docs/screens/phase-0/`.
+1. Say which AI-training setting was chosen on the `.co.uk` zone (Allow or Block), for the decisions table.
 2. Hand the §8 amendment request (text in the W1 chat) to a Planet session (WS · D1, rule 8).
 3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
 

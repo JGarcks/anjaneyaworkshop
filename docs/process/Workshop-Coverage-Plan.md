@@ -57,7 +57,7 @@ The dark hub, live.
 ### Phase 3 — The first room: BlockByBlock, renamed (2 sessions)
 
 - **The name first** (WS · D5): applied in its own repo by a BlockByBlock session (rule 8), and to the subdomain, before anything here.
-- **The room:** its built files deployed to Pages at `<name>.anjaneyaworkshop.co.uk` from its own repo; the block graphic as its emblem; the "Not an official Minecraft product" line in the room; its 504 tests in its deploy.
+- **The room:** its built files deployed to Pages at `<name>.anjaneyaworkshop.co.uk` from its own repo (re-run `check-public.sh` after Pages reports the domain Active: W1 saw the bare address with no certificate for a few minutes during the switchover); the block graphic as its emblem; the "Not an official Minecraft product" line in the room; its 504 tests in its deploy.
 - **The hub:** its mark and link appear on the landing page — the first link with a room behind it.
 - **The scan:** the room's build output scanned for Mojang assets before it ships (rule 7).
 
@@ -135,7 +135,7 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 
 | Phase | Status | Opened | Closed | Notes |
 |---|---|---|---|---|
-| 0 Ground | gate passed; closes on Jamie's walk | 24 Sep 2026 (W1) | | check-public 6/6; npm test 1/1 locally and in the Pages build. Limitation: the Phase 0 phone screenshot comes from Jamie's phone (headless Edge crops below ~500 px) |
+| 0 Ground | closed | 24 Sep 2026 (W1) | 24 Sep 2026 (W1) | check-public 6/6; npm test 1/1 locally and in the Pages build; walk passed on laptop and phone (cellular). Limitation: no phone screenshot on file (headless Edge crops below ~500 px) |
 | 1 The front door | not started | | | Needs PC Claude's runbook step |
 | 2 The landing page | not started | | | |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
