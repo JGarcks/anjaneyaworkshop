@@ -49,7 +49,7 @@ Each decision records the choice, the reasoning, and what it would take to overr
 
 ### WS · D4 — One-second cache at the door and at the edge (agreed, W1)
 
-**Choice.** nginx holds each reply for one second and collapses simultaneous misses into one fetch; it replaces the engine's `no-store` with `public, max-age=1` so Cloudflare caches the same way. `/api/grid` is cached for a day. Visitors get a new snapshot about once a second instead of every 400 ms tick.
+**Choice.** nginx holds each reply for one second and collapses simultaneous misses into one fetch; it replaces the engine's `no-store` with `public, max-age=0, s-maxage=1` so Cloudflare caches for a second and browsers keep no copy (W2-f: a browser's own second stacked on the others and made the viewer jump). `/api/grid` is cached for a day. *Measured in W2:* the edge refreshes about every 2.1 s at that setting, so visitors get a new snapshot about every 2.2 s instead of every 400 ms tick — smooth, but the sea's twinkle and plate movement subtler than the kiosk.
 
 **Why.** The engine's tick is 400 ms but Cloudflare's cache works in whole seconds, and sub-second edge caching is not on the free plan. The viewer's glide (Planet's QR · D14) smooths between snapshots already, so the picture stays even, a moment further behind. The kiosk on the LAN is unaffected. See *Budget* for the numbers.
 
@@ -113,7 +113,7 @@ Visitor → Cloudflare (DNS, TLS, edge cache)
                     → Planet engine :8080, LAN only, unchanged
 ```
 
-**The front door (nginx).** About twenty lines. Listens on a local port that only the tunnel talks to; forwards to 8080. Allows GET and HEAD only (405 otherwise, before the engine sees it). Compresses replies (elevation 41 KB → 35 KB, sediment → 21 KB, plate → 1.7 KB, crust → 1.2 KB, measured by PC Claude). Micro-caches each reply for one second on the path alone (so a query string cannot bust it) and collapses simultaneous misses into one upstream fetch. Rewrites `Cache-Control` to `public, max-age=1`; caches `/api/grid` for a day. Passes `X-Planet-Tick` through. Sends `Access-Control-Allow-Origin: https://anjaneyaworkshop.co.uk` so the landing page, on a different origin, may read `/api/meta` for its live line. Rate-limits per address as a backstop behind Cloudflare.
+**The front door (nginx).** About twenty lines. Listens on a local port that only the tunnel talks to; forwards to 8080. Allows GET and HEAD only (405 otherwise, before the engine sees it). Compresses replies (elevation 41 KB → 35 KB, sediment → 21 KB, plate → 1.7 KB, crust → 1.2 KB, measured by PC Claude). Micro-caches each reply for one second on the path alone (so a query string cannot bust it) and collapses simultaneous misses into one upstream fetch. Rewrites `Cache-Control` to `public, max-age=0, s-maxage=1`; caches `/api/grid` for a day. Passes `X-Planet-Tick` through. Sends `Access-Control-Allow-Origin: https://anjaneyaworkshop.co.uk` so the landing page, on a different origin, may read `/api/meta` for its live line. Rate-limits per address as a backstop behind Cloudflare.
 
 **The tunnel (cloudflared).** A named tunnel installed as a systemd service on Garcks-PC, starting at boot, routing `planet.anjaneyaworkshop.co.uk` to nginx's local port. No port opened on the router; the home address never published. It replaces PolicyRAG's quick tunnel, whose address changes on every start.
 
@@ -153,7 +153,7 @@ anjaneyaworkshop/
 Stated as numbers a session can measure, asserted by `scripts/check-public.sh` (CLAUDE.md rule 9).
 
 - **Home upload:** 17.5 Mbps ≈ 2.2 MB/s. Without the door, one viewer drawing elevation alone pulls about 100 KB/s uncompressed, and every viewer pulls separately: five viewers fill the upload. With the door, the house sends each field once per second per Cloudflare location that has a viewer: about 35 KB/s for elevation, roughly 100 KB/s for elevation plus the three river fields the viewer draws. Five busy locations ≈ 0.5 MB/s, a quarter of the upload, whether ten people are watching or ten thousand. **Budget: origin egress under 0.6 MB/s at any audience**, measured at nginx.
-- **The door's replies:** gzip on for JSON and binary fields; `Cache-Control: public, max-age=1` on `/api/meta`, `/api/field/*`, `/api/events`, `/api/log`; a day on `/api/grid`; `X-Planet-Tick` present on fields; POST → 405; the second fetch of the same field within a second a cache hit at the edge.
+- **The door's replies:** gzip on for JSON and binary fields; `Cache-Control: public, max-age=0, s-maxage=1` on `/api/meta`, `/api/field/*`, `/api/events`, `/api/log` (one second at the edge, none in the browser); a day on `/api/grid`; `X-Planet-Tick` present on fields; POST → 405; the second fetch of the same field within a second a cache hit at the edge.
 - **The engine's load:** about one request per URL per second however many browsers watch, read from the engine's serve log.
 - **Time to first picture:** under 2 s on the home connection for a warm load; the still must be on screen before the grid arrives.
 - **Restart:** the page shows "resumed" and carries on within one poll of a lower tick; no reload needed.
@@ -200,7 +200,7 @@ Until Phase 4 the site costs nothing beyond the domains: $16.74 a year ($5.66 fo
 
 ## Success criteria
 
-- **Phase 1 (the front door):** `planet.anjaneyaworkshop.co.uk` shows the live viewer from a phone on mobile data; `curl -I` shows gzip, `max-age=1` and `X-Planet-Tick`; a POST gets 405; the engine's log shows about one request per URL per second while several browsers watch.
+- **Phase 1 (the front door):** `planet.anjaneyaworkshop.co.uk` shows the live viewer from a phone on mobile data; `curl -I` shows gzip, `s-maxage=1` and `X-Planet-Tick`; a POST gets 405; the engine's log shows about one request per URL per second while several browsers watch.
 - **Phase 2 (the landing page):** Jamie opens anjaneyaworkshop.co.uk on the laptop and a phone and the planet is turning within 2 s; unplugging Garcks-PC's network for a minute shows the still and "last seen", and the page recovers by itself.
 - **Phase 4 (if taken):** Garcks-PC switched off for an hour with the site unchanged.
 - **The set:** every room reachable from the hub, each on its own subdomain, nothing Mojang's or Aviva's in any deployed file.

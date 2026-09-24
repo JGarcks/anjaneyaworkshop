@@ -14,40 +14,20 @@ Same discipline as Planet's layers: no side-quests mid-phase. Tempting items go 
 
 ## Phase sequence
 
-### Phase 0 — Ground (1 session)
+### Phase 0 — Ground — closed (W1, 24 Sep 2026)
 
-No site code. Everything the site needs to exist well.
+Git, Cloudflare (both domains, Pages from `site/`), the scaffold and first test, `check-public.sh` Phase 0. Detail: `progress/2026-09.md` §W1.
 
-- **Git.** `git init` in this folder; the quartet, `.gitignore` and this plan as the first commit; a private remote at `github.com/JGarcks/anjaneyaworkshop` (P0-b); laptop Claude's public key added as a read-write deploy key; `git push`. Verify nothing under `.gitignore`'s shapes is tracked before the first push (rule 13).
-- **Cloudflare.** Jamie makes the account and adds both domains; the nameservers at Porkbun are pointed at Cloudflare's; DNS records for the apex and `www`; the `.com` zone set to redirect every path to the `.co.uk`. A holding page (one dark screen, the name, nothing else) deployed to Pages from `site/` so both addresses answer over HTTPS. The holding page is not the landing page and is replaced in Phase 2.
-- **Scaffold.** `site/package.json` with Vitest and one passing test (the restart rule's simplest case); `scripts/check-public.sh` with the Phase 0 checks only (HTTPS on both addresses, the redirect).
-- **Planet's queue.** The request for its §8 amendment (WS · D1) written into Planet's PROGRESS queue by a Planet session at Jamie's word — not by a Workshop session (rule 8).
-- **Quartet in place.** `CLAUDE.md` loads when this folder is the open project; the first session confirms it does and records the decision round in `../decisions.md`.
+### Phase 1 — The front door — closed (W2, 24 Sep 2026)
 
-**Gate:** `https://anjaneyaworkshop.co.uk` and `https://anjaneyaworkshop.com` both answer over HTTPS; the `.com` redirects; `npm test` in `site/` runs one passing test; the repo is on the remote with the quartet in it.
-
-### Phase 1 — The front door (1–2 sessions, one PC Claude step)
-
-Planet on the internet, read-only, with Planet untouched.
-
-- **nginx config** (`frontdoor/nginx.conf`, with its header): local listen port; `proxy_pass` to 8080; GET/HEAD only, 405 otherwise; gzip for JSON and `application/octet-stream`; a one-second micro-cache keyed on the path alone, `proxy_cache_lock` so simultaneous misses collapse; `Cache-Control` rewritten to `public, max-age=1`, a day for `/api/grid`; `X-Planet-Tick` passed through; `Access-Control-Allow-Origin` for the `.co.uk`; a per-address rate limit with a short burst.
-- **Tunnel config** (`frontdoor/config.yml`): the named tunnel's ingress, `planet.anjaneyaworkshop.co.uk` → nginx's local port, everything else 404. The tunnel's credentials never enter the repo (rule 13); `secrets-map.md` says where they live.
-- **Runbook** (`frontdoor/RUNBOOK.md`): install nginx and cloudflared; create the named tunnel and its DNS route; install both as services starting at boot; `nginx -t`; start; the `curl` lines that prove each header; what to write into `frontdoor/state/`. Written for PC Claude, step by step, nothing else in it.
-- **PC Claude's step:** runs the runbook; commits `frontdoor/state/garcks-pc.md` (installed commit, date, `nginx -t` output, service status, the curl results); pushes.
-- **`scripts/check-public.sh`** gains the Phase 1 assertions (the Budget section of the charter): gzip, `max-age=1`, `X-Planet-Tick`, 405 on POST, edge cache hit on the second fetch within a second, and the origin request rate read from the engine's serve log (PC Claude pastes the count into `state/`).
-- **Retire PolicyRAG's quick tunnel** (W2-e: retired; folding it in would put an unstripped work app on the domain before Phase 5) — RUNBOOK step 8.
-- **Cloudflare Cache Rule** on the planet subdomain (W2): without it Cloudflare treats the API as dynamic and caches nothing, whatever the door's label says. Eligible for cache, Edge TTL from the origin's `Cache-Control`, **Browser TTL set to respect origin** (unset, the zone's 4-hour default overrides `max-age=1`), query strings ignored.
-
-**Gate:** `https://planet.anjaneyaworkshop.co.uk/` shows the live viewer from a phone on mobile data; `check-public.sh` passes every Phase 1 assertion; the engine's own log shows about one request per URL per second while three browsers watch; Jamie's walk: the viewer through the door looks the same as on the LAN kiosk, allowing for the once-a-second snapshot (WS · D4).
-
-**If the gate fails:** the session writes up *why* (cache misses? compression? the tunnel? the rate limit?) in `docs/process/progress/`, and the next session changes the approach — not the budget.
+nginx and a named tunnel on Garcks-PC (`frontdoor/`: config, service files, `install.sh`, `RUNBOOK.md`, `state/`); a Cloudflare Cache Rule on `planet.` (eligible, Edge TTL from origin, **Browser TTL respect origin** — unset, the zone's 4 h wins — query strings ignored); meta and fields `public, max-age=0, s-maxage=1` (W2-f); `check-public.sh` Phase 1 (eleven assertions). Gate: 17/17; 28.9 KB/s up and 0.48 engine fetches per address per second with three browsers; walk smooth on laptop and phone. Limits carried: a picture every ~2.2 s (the edge's own refresh), subtler than the kiosk; the budget covers the fields the page draws, not a visitor cycling all thirteen. Detail: `progress/2026-09.md` §W2.
 
 ### Phase 2 — The landing page (2–3 sessions)
 
 The dark hub, live.
 
 - **The page** (`site/index.html`, style and script, with headers): background `#0b0e14`; the viewer framed with the panel hidden; the name top left; the live line under the globe from `/api/meta` every few seconds (age in billions of years, land share, highest peak); the links, low-contrast off-white, brightening on hover, each with a small mark; no scroll; the globe draggable, resuming its own turn when released.
-- **The behaviours:** the still shown before the grid arrives and fading into the live picture; the still with "last seen at" when the door cannot be reached; "resumed" on a lower tick (rule 12); phone layout (globe full width, links beneath).
+- **The behaviours:** the still shown before the grid arrives and fading into the live picture; the still with "last seen at" when the door cannot be reached; "resumed" on a lower tick (rule 12); phone layout (globe full width, links beneath; the frame passes `?zoom=` for its shape, since the viewer sizes the globe to the height — W2 walk).
 - **The still:** `scripts/still-refresh` fetches the viewer's `?still` picture through the door on a schedule (a Pages build hook or a GitHub Action, Jamie's call at the decision round) and commits it, so the fallback is never older than a day.
 - **Tests:** the restart rule, the fallback, the live line's formatting, the link set. `check-public.sh` gains time-to-first-picture and the "resumed" check.
 - **Deploy:** Pages builds from `site/` on every push to `main`; the holding page from Phase 0 is replaced.
@@ -137,7 +117,7 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 | Phase | Status | Opened | Closed | Notes |
 |---|---|---|---|---|
 | 0 Ground | closed | 24 Sep 2026 (W1) | 24 Sep 2026 (W1) | check-public 6/6; npm test 1/1 locally and in the Pages build; walk passed on laptop and phone (cellular). Limitation: no phone screenshot on file (headless Edge crops below ~500 px) |
-| 1 The front door | in progress | 24 Sep 2026 (W2) | | Public since 24 Sep ~17:30 BST; check-public 17/17; waiting on RUNBOOK steps 7–8, the three-browser rate and Jamie's walk. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
+| 1 The front door | closed | 24 Sep 2026 (W2) | 24 Sep 2026 (W2) | Public since ~17:30 BST; check-public 17/17; gate: 28.9 KB/s up, 0.48 engine fetches/address/s with three browsers; walk smooth on laptop and phone (after W2-f). Pictures every ~2.2 s (Cloudflare's edge refresh), subtler than the kiosk — held. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
 | 2 The landing page | not started | | | |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
 | 4 The rented server | not started | | | optional; WS · D7 |
