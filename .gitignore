@@ -1,0 +1,15 @@
+# Workshop — what never enters the repo (CLAUDE.md rule 13, WS · D11)
+node_modules/
+site/dist/
+.env
+.env.*
+*.pem
+*.key
+*credentials*.json
+cert.pem
+.cloudflared/
+frontdoor/secrets/
+.claude-ssh/
+docs/screens/**/*.psd
+.DS_Store
+Thumbs.db

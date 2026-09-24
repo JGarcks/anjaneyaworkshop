@@ -1,0 +1,5 @@
+# Workshop: keep every text file LF in the repo, so scripts run on Garcks-PC as written.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
