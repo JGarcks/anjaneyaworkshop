@@ -1,7 +1,8 @@
 /*
  * main.js — the landing page at work: places the frame and the still, asks the planet for its numbers every two seconds, shows what watch.js decides.
  * In:  the screen's size; /api/meta through the front door; the framed viewer's load (and, once Planet has ?embed, its "drawn" message); still/planet.json.
- * Out: the frame and the still where layout.js puts them; the live line; "last seen at …" or "resumed"; a console warning naming any failure (rule 10).
+ * Out: the frame and the still where layout.js puts them, one or the other on screen; the live line; "last seen at …" or "resumed";
+ *   a console warning naming any failure (rule 10).
  * Decision: every rule lives in the tested modules (watch, line, layout); this file only wires them to the page. It asks with the browser's
  *   ordinary caching, never "no-store", so Cloudflare's one-second copy answers every visitor and the house sees one ask a second.
  * Built in W3 — the landing page (24 Sep 2026).
@@ -56,6 +57,7 @@ function render() {
   const now = Date.now();
   const v = watch.view(now);
   frame.classList.toggle("shown", v.showFrame);
+  still.classList.toggle("gone", v.showFrame);   // never both: style.css hands one to the other through the dark (W4-b)
   const meta = v.meta ?? stillMeta;
   if (meta) setLine(formatLine(meta));
   const note = v.lastSeenAt !== null ? formatLastSeen(new Date(v.lastSeenAt), new Date(now)) : v.resumed ? "resumed" : "";

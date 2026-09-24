@@ -1,10 +1,11 @@
 <!doctype html>
 <!--
-  index.html — the landing page: one dark screen, the live planet behind everything, the name, one line of numbers, the rooms.
+  index.html — the landing page: one dark screen, the live planet behind everything, the name and the rooms top left, one line of numbers at the bottom.
   In:  style.css and js/main.js from here; the still from still/; the viewer framed from the planet's front door.
   Out: the hub at anjaneyaworkshop.co.uk: the planet turning within seconds, or the still with "last seen" if the house is away.
-  Decision: the viewer is framed, never copied (WS · D3), full screen behind the words (Jamie, W3 decision 2); a room's link appears only when the room exists.
-  Built in W1 — Ground as the holding page; became the landing page in W3 (24 Sep 2026).
+  Decision: the viewer is framed, never copied (WS · D3), full screen behind the words (Jamie, W3 decision 2); a room's link appears only when the room exists,
+    under the name, with the line at the very bottom (Jamie, W4-a).
+  Built in W1 — Ground as the holding page; became the landing page in W3 (24 Sep 2026); rooms moved under the name in W4.
 -->
 <html lang="en-GB">
 <head>
@@ -14,21 +15,23 @@
   <meta name="theme-color" content="#0b0e14">
   <title>Anjaneya Workshop</title>
   <link rel="icon" href="data:,">
-  <!-- ?v=w3: the holding page's style.css sat in browsers for 4 hours (the zone's old Browser Cache TTL, fixed by W3-i);
+  <!-- ?v=w4: the holding page's style.css sat in browsers for 4 hours (the zone's old Browser Cache TTL, fixed by W3-i);
        a name no browser has saved makes every one fetch this page's own. -->
-  <link rel="stylesheet" href="style.css?v=w3">
+  <link rel="stylesheet" href="style.css?v=w4">
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
   <img id="still" src="still/planet.webp" alt="" width="1200" height="1200" fetchpriority="high">
   <iframe id="planet" title="The planet, live" sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" tabindex="-1"></iframe>
-  <h1 id="name">Anjaneya Workshop</h1>
-  <div id="words">
-    <p id="line"></p>
-    <p id="status" role="status"></p>
+  <header id="top">
+    <h1 id="name">Anjaneya Workshop</h1>
     <nav aria-label="Rooms">
       <a href="https://planet.anjaneyaworkshop.co.uk/"><svg class="mark" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.4"/><ellipse cx="8" cy="8" rx="7.2" ry="2.4" transform="rotate(-18 8 8)"/></svg>Planet</a>
     </nav>
+  </header>
+  <div id="words">
+    <p id="status" role="status"></p>
+    <p id="line"></p>
   </div>
 </body>
 </html>

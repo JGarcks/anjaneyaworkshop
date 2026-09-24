@@ -1,10 +1,11 @@
 /*
- * page.test.js — the landing page's promises that live in its files, not its script: the link set and the security header.
- * In:  public/index.html and public/_headers as written, and PLANET from public/js/planet.js.
+ * page.test.js — the landing page's promises that live in its files, not its script: the link set, the security header,
+ *   where the words sit, and the still's handover to the live globe.
+ * In:  public/index.html, public/style.css and public/_headers as written, and PLANET from public/js/planet.js.
  * Out: pass or fail; `npm test` runs it, and so does every Pages deploy.
  * Decision: a link appears only when its room exists (Strategic Plan, open question 2), so the set is listed here in full and
  *   a new room changes this test on purpose; the header must open the planet's address and nothing else beyond the site.
- * Built in W3 — the landing page (24 Sep 2026).
+ * Built in W3 — the landing page (24 Sep 2026); the layout and handover tests added in W4.
  */
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
@@ -37,4 +38,25 @@ it("nobody may frame the hub itself", () => {
 
 it("the framed viewer is sandboxed: it may run and read its own address, but not steer the page", () => {
   expect(html).toMatch(/<iframe [^>]*sandbox="allow-scripts allow-same-origin"/);
+});
+
+it("the rooms sit under the name, and the live line is the last thing at the bottom (Jamie, W4-a)", () => {
+  expect(html).toMatch(/<header id="top">\s*<h1 id="name">[^<]*<\/h1>\s*<nav /);
+  expect(html).toMatch(/<div id="words">[\s\S]*<p id="line"><\/p>\s*<\/div>/);
+});
+
+// "opacity <duration>s <easing> <delay>s" from the rule for a selector in style.css.
+const css = read("style.css");
+const fade = (selector) => {
+  const rule = css.match(new RegExp(`^${selector.replace(/[.#]/g, "\\$&")} \\{([^}]*)\\}`, "m"))[1];
+  const [, duration, delay = "0"] = rule.match(/transition: opacity ([\d.]+)s \w+(?: ([\d.]+)s)?;/);
+  return { duration: Number(duration), delay: Number(delay) };
+};
+
+it("the live globe fades in only after the still has faded out: never one world morphing into another (W4-b)", () => {
+  expect(fade("#planet.shown").delay).toBeGreaterThanOrEqual(fade("#still.gone").duration);
+});
+
+it("the still comes back only after the live globe has faded out", () => {
+  expect(fade("#still").delay).toBeGreaterThanOrEqual(fade("#planet").duration);
 });

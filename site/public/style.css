@@ -1,10 +1,11 @@
 /*
  * style.css — the landing page's look: the viewer's own dark, the planet behind everything, the words quiet on top.
- * In:  index.html's still, frame, name and words; main.js sets the frame's and the still's boxes and where the words start.
- * Out: one screen at any width, no scroll; the live line a faint grey (Jamie, W3 decision 3); links brightening on hover.
+ * In:  index.html's still, frame, name, rooms and words; main.js sets the frame's and the still's boxes and which of the two shows.
+ * Out: one screen at any width, no scroll; the name the one bright word, the rooms and the line fainter (Jamie, W3 decision 3; W4-a);
+ *   links brightening on hover; the still and the live globe handing over through the dark (W4-b).
  * Decision: #0b0e14 is the viewer's own background, so the frame's edge is invisible (WS · D3); a soft dark halo keeps the words
  *   readable where the planet runs under them (W3 decision 2). Until main.js runs, the still sits centred by these rules alone.
- * Built in W1 — Ground as the holding page's look; became the landing page's in W3 (24 Sep 2026).
+ * Built in W1 — Ground as the holding page's look; became the landing page's in W3 (24 Sep 2026); rearranged in W4.
  */
 :root {
   --bg: #0b0e14;
@@ -24,6 +25,9 @@ html, body {
   -webkit-text-size-adjust: 100%;
 }
 
+/* The still and the live globe never show at once: each fades out to the dark before the other fades in (Jamie, W4-b),
+   since the planet moves ~0.9 billion years an hour and a crossfade morphs one world into another. Coming back, the still
+   waits out the globe's 0.9 s fade; going live, the globe waits out the still's 0.4 s. */
 #still {
   position: fixed;
   left: 50%;
@@ -34,6 +38,12 @@ html, body {
   z-index: 0;
   pointer-events: none;
   user-select: none;
+  transition: opacity 0.4s ease 0.9s;
+}
+
+#still.gone {
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 #planet {
@@ -48,13 +58,19 @@ html, body {
 #planet.shown {
   opacity: 1;
   pointer-events: auto;
+  transition: opacity 0.9s ease 0.4s;
 }
 
-#name {
+/* The name, and the rooms beneath it (Jamie, W4-a); layout.js keeps the globe below them (TOP). */
+#top {
   position: fixed;
   top: 18px;
   left: 16px;
   z-index: 2;
+  pointer-events: none;
+}
+
+#name {
   margin: 0;
   font-weight: 300;
   font-size: 0.8rem;
@@ -65,7 +81,7 @@ html, body {
   pointer-events: none;
 }
 
-/* At the very bottom (Jamie, W3); layout.js keeps the globe clear of it (TEXT 88 px tall, BOTTOM 12 px up). */
+/* The line at the very bottom, the status note just above it (Jamie, W3; W4-a); layout.js keeps the globe clear (TEXT, BOTTOM). */
 #words {
   position: fixed;
   bottom: 12px;
@@ -90,7 +106,7 @@ html, body {
   min-height: 1.5em;
   font-size: min(0.8rem, 2.75vw);
   line-height: 1.5;
-  opacity: 0.85;
+  opacity: 0.6;
 }
 
 #line span {
@@ -99,7 +115,7 @@ html, body {
 
 #status {
   min-height: 1.4em;
-  margin-top: 2px;
+  margin-bottom: 2px;
   font-size: min(0.72rem, 2.6vw);
   line-height: 1.4;
   opacity: 0;
@@ -107,14 +123,14 @@ html, body {
 }
 
 #status.shown {
-  opacity: 0.8;
+  opacity: 0.6;
 }
 
+/* The mark lines up under the name's first letter: the link's own 4 px padding is taken back. */
 nav {
   display: flex;
-  justify-content: center;
-  gap: 28px;
-  margin-top: 10px;
+  gap: 24px;
+  margin: 4px 0 0 -4px;
 }
 
 nav a {
@@ -123,7 +139,7 @@ nav a {
   gap: 8px;
   padding: 8px 4px;
   color: var(--ink);
-  opacity: 0.5;
+  opacity: 0.35;
   font-size: 0.8rem;
   font-weight: 300;
   letter-spacing: 0.16em;
@@ -157,5 +173,5 @@ nav a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #planet, #status, nav a { transition: none; }
+  #still, #still.gone, #planet, #planet.shown, #status, nav a { transition: none; }
 }
