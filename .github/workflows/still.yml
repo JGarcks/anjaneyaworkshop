@@ -1,0 +1,62 @@
+# still.yml — retakes the landing page's still once a day, on GitHub's own computer, and commits only the picture.
+# In:  the public planet through the front door (scripts/still-refresh.mjs drives the runner's Chrome); a daily clock,
+#      a change to this file or the script, or the "Run workflow" button in GitHub's Actions tab.
+# Out: a commit touching site/public/still/ alone, which Cloudflare Pages deploys; or a red run (GitHub emails Jamie) and
+#      yesterday's still left in place when the house is away (rule 10).
+# Decision: a daily GitHub Action, the third committer of rule 16, allowed only site/public/still/ (W3-e); daily, since no
+#   cadence matches a planet that moves ~0.9 billion years an hour, and the page hands over through the dark instead (W4-b).
+#   No secret exists: GitHub's key for the run lasts only as long as the run.
+# Built in W4 — Phase 2 continued (24 Sep 2026).
+name: The still
+
+on:
+  schedule:
+    - cron: "17 11 * * *"      # 11:17 UTC daily (12:17 in the UK summer); off the hour, when GitHub's clock is least crowded
+  push:
+    branches: [main]
+    paths: [".github/workflows/still.yml", "scripts/still-refresh.mjs"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: still
+  cancel-in-progress: false
+
+jobs:
+  still:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: site/.node-version
+
+      # Ubuntu 24.04 stops Chrome building its own sandbox; this lets it, rather than running Chrome without one.
+      - name: Let Chrome sandbox itself
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Take the still
+        env:
+          BROWSER: /usr/bin/google-chrome
+        run: node scripts/still-refresh.mjs
+
+      - name: Commit the still, and nothing else
+        run: |
+          outside="$(git status --porcelain | grep -v ' site/public/still/' || true)"
+          if [ -n "$outside" ]; then
+            echo "The still's bot may change site/public/still/ only (rule 16); refusing to commit:"
+            echo "$outside"
+            exit 1
+          fi
+          if [ -z "$(git status --porcelain)" ]; then echo "No change to the still."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          summary="$(node -p "const r = require('./site/public/still/planet.json'); 'tick ' + r.tick.toLocaleString('en-GB') + ', ' + (r.year / 1e9).toFixed(4) + ' billion years'")"
+          git add site/public/still/
+          git commit -m "Still — the daily still (W3-e): $summary"
+          git pull --no-rebase --no-edit    # a laptop commit may have landed meanwhile: a merge, never a rebase (rule 3)
+          git push
