@@ -30,6 +30,7 @@
 
 - **Trim CLAUDE.md** from 15.6 KB toward the 12 KB budget (rule 6) at the first session that touches it; the About Jamie section is the long one.
 - **A second, stable planet instance** on `main` with its own world file and port, as a one-line nginx repoint — only if Jamie ever wants the site not to follow the experiments (WS · D2).
+- **Phone zoom** (Jamie's walk, W2): the viewer sizes the globe to the screen's height (`view.zoom` 0.9), so on a portrait phone it overflows the width. Phase 2's frame passes `?zoom=` for its shape (0.42 fits at 375×812, checked); the proper fix — fit the narrower side — is Planet's code: a request for a Planet session at Jamie's word (rule 8).
 - **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
 - **The renamed BlockByBlock's mark** for the hub, and a light room for it using the block graphic. Phase 3.
 - **ClaimsDesk and PolicyRAG**: what to strip is Jamie's list; nothing from them touches the site before Phase 5.
