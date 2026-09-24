@@ -8,14 +8,14 @@
 
 ## Currently working on
 
-**Nothing is open. The quartet is drafted (24 Sep 2026, planning session in Cowork) and awaits Jamie's first decision round before Phase 0.** No code exists; no `package.json`; the folder holds docs only; there is no git repo yet.
+**Phase 0 — Ground: gate passed (W1, 24 Sep 2026), closing on Jamie's walk.** The repo is on `github.com/JGarcks/anjaneyaworkshop` (private); Pages builds `site/` on every push to `main` and runs `npm test` first; `check-public.sh` 6/6 (HTTPS, http→https, www→bare, `.com`→`.co.uk` with path). Detail: `progress/2026-09.md` §W1.
+
+**Next build session: W2 — Phase 1, the front door** (`Workshop-Coverage-Plan.md` §Phase 1): nginx config, tunnel config and the runbook written here; PC Claude's runbook step on Garcks-PC; `check-public.sh` gains the budget. Its decision round will include: PolicyRAG's quick tunnel (retire, or fold into the named tunnel's ingress).
 
 **Pending Jamie, in order:**
-1. The first decision round: rule on WS · D1, D4 and D8 (Claude's proposals) in `../decisions.md`, and P0-a, P0-b.
-2. WS · D5, the new name for BlockByBlock — not needed until Phase 3, but it fixes a subdomain and a repo name, so sooner is cheaper.
-3. Accounts: a Cloudflare account; a read-write deploy key for laptop Claude on the new repo (its public key is in `Desktop/for-laptop-claude.txt`).
-
-**First build session: Phase 0 — Ground** (`Workshop-Coverage-Plan.md` §Phase 0). Its gate: the repo on a private remote with the quartet in it, both domains answering over HTTPS with a holding page, the `.com` redirecting.
+1. The W1 walk: open `https://anjaneyaworkshop.co.uk` on the laptop and on a phone on mobile data, and try `anjaneyaworkshop.com`; say what you saw; send the phone screenshot for `docs/screens/phase-0/`.
+2. Hand the §8 amendment request (text in the W1 chat) to a Planet session (WS · D1, rule 8).
+3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
 
 **Standing:** teaching is the decision round only; no explain-back during the build — headers in the code (rule 14); laptop Claude commits, PC Claude only `frontdoor/state/` (rule 16); Planet's own quartet is *not* edited by Workshop sessions (rule 8) — the §8 amendment for WS · D1 is a request for a Planet session, written when D1 is agreed.
 

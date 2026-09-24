@@ -1,6 +1,6 @@
 # Workshop — Coverage Plan
 
-*Drafted 24 September 2026 alongside `Workshop-Strategic-Plan.md` (the charter — read that first for what the Workshop is and why it is shaped this way). Status: **proposal awaiting Jamie's first decision round.** This doc becomes the active Coverage Plan when a session opens Phase 0 and `Workshop-Active-Work.md` names it. Estimates are evening sessions of the kind Jamie's projects already run; they are sized for "quality always wins", not for speed.*
+*Drafted 24 September 2026 alongside `Workshop-Strategic-Plan.md` (the charter — read that first for what the Workshop is and why it is shaped this way). Status: **active** — Phase 0 opened by W1 (24 Sep 2026) after Jamie's first decision round. Estimates are evening sessions of the kind Jamie's projects already run; they are sized for "quality always wins", not for speed.*
 
 ## What this doc is
 
@@ -135,7 +135,7 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 
 | Phase | Status | Opened | Closed | Notes |
 |---|---|---|---|---|
-| 0 Ground | not started | | | Blocked on Jamie's first decision round |
+| 0 Ground | gate passed; closes on Jamie's walk | 24 Sep 2026 (W1) | | check-public 6/6; npm test 1/1 locally and in the Pages build. Limitation: the Phase 0 phone screenshot comes from Jamie's phone (headless Edge crops below ~500 px) |
 | 1 The front door | not started | | | Needs PC Claude's runbook step |
 | 2 The landing page | not started | | | |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
