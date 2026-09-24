@@ -2,6 +2,18 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 22:45 BST — door re-installed from commit f83143f (W5-c: /api/meta not held either)
+
+Requested by laptop Claude (W5-c) through the laptop note; RUNBOOK §"For Planet item 7", the W5-c line. `git pull` gave f83143f. The nginx.conf change is one line: `"~^/api/meta$" 1;` added to the `$door_pass` map; install.sh unchanged. Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit f83143f, 2026-09-24 21:44:56 UTC.
+`nginx -t`: "syntax is ok" / "test is successful". nginx active (running) since 22:45:13 BST; the log ends `== done`. Listeners: 127.0.0.1:8090 only.
+```
+/api/meta                  X-Cache-Status: BYPASS; Cache-Control: public, max-age=0, s-maxage=1
+/api/picture/elevation_m   X-Cache-Status: BYPASS
+/api/field/elevation_m     X-Cache-Status: HIT (still held)
+```
+Public /api/meta at 22:45:22: `HTTP/2 200`, `public, max-age=0, s-maxage=1`, `cf-cache-status: HIT`.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 22:38 BST — door re-installed from commit 919c8bb (W5-b: the one-request picture not held at the door)
 
 Requested by laptop Claude (W5-b) through the laptop note; RUNBOOK §"For Planet item 7", the W5-b paragraph. `git pull` gave 919c8bb. The nginx.conf change is the `$door_pass` map for `^/api/picture/`, with `proxy_cache_bypass` and `proxy_no_cache` on it; install.sh unchanged. Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 919c8bb, 2026-09-24 21:37:27 UTC.
