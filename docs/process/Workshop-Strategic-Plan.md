@@ -49,7 +49,7 @@ Each decision records the choice, the reasoning, and what it would take to overr
 
 ### WS · D4 — One-second cache at the door and at the edge (agreed, W1; the door's hold on the live numbers removed, W4-e)
 
-*W4's probe (60 s, ten asks a second through London): Cloudflare refreshes about every 1.1 s, but nginx counts its second in whole seconds and held each copy 1–2 s, so 14 of 42 refreshes repeated the last picture — a new one every ~2.1 s. W4-e: the door no longer holds meta, fields, events or log; expected a picture every ~1.4 s. A paid Cloudflare plan would not change this, as far as W4 could tell: edge times are whole seconds on every plan, and the free one already gives one second.*
+*W4's probe (60 s, ten asks a second through London): Cloudflare refreshes about every 1.1 s, but nginx counts its second in whole seconds and held each copy 1–2 s, so 14 of 42 refreshes repeated the last picture — a new one every ~2.1 s. W4-e: the door no longer holds meta, fields, events or log. Measured after (same probe, 60 s): a new picture every **1,068 ms** (median; max 1,218), 2–3 ticks each, every refresh a new tick (41 of 41) — twice as lively, free. A paid Cloudflare plan would not change this, as far as W4 could tell: edge times are whole seconds on every plan, and the free one already gives one second.*
 
 **Choice.** nginx holds each reply for one second and collapses simultaneous misses into one fetch; it replaces the engine's `no-store` with `public, max-age=0, s-maxage=1` so Cloudflare caches for a second and browsers keep no copy (W2-f: a browser's own second stacked on the others and made the viewer jump). `/api/grid` is cached for a day. *Measured in W2:* the edge refreshes about every 2.1 s at that setting, so visitors get a new snapshot about every 2.2 s instead of every 400 ms tick — smooth, but the sea's twinkle and plate movement subtler than the kiosk.
 
@@ -74,6 +74,8 @@ One place to remember; each room independent of the hub and of each other.
 **Booked (Jamie, 24 Sep 2026):** put at the decision round after Phase 2 closes, with WS · D13, rather than waiting for a trigger.
 
 ### WS · D13 — A livelier public picture (open; booked for the decision round after Phase 2)
+
+*Since W4-e a visitor gets a picture about every 1.1 s, 2–3 ticks at a time (the door's own hold was half the gap; see WS · D4); the rest of this paragraph is the W2 state it started from, and the kiosk's 400 ms still needs a push relay.*
 
 **The trade.** Through Cloudflare a visitor gets a picture about every 2.2 s (the edge's own refresh at `s-maxage=1`, measured in W2), 5–6 ticks at a time; the viewer glides smoothly between them, but the sea's twinkle and plate movement are subtler than on the kiosk, which shows every 400 ms tick. A paid Cloudflare plan may shorten the edge's refresh (check what each tier really changes before paying); a push relay — every tick sent to each visitor over one connection — would match the kiosk but is a new moving part that likely wants a server (WS · D7). Neither is needed for the site to work.
 
