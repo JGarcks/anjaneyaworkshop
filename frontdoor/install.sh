@@ -12,8 +12,10 @@ case "$STAGE" in door|tunnel|close) ;; *) echo "Usage: sudo bash $0 door|tunnel|
 if [[ "$(id -u)" != 0 ]]; then echo "This needs the admin password: sudo bash $0 $STAGE" >&2; exit 1; fi
 
 LOG="/var/tmp/frontdoor-install-$STAGE.log"
+# Create the log (readable by PC Claude) before tee starts: tee opens it in the background, so a chmod after
+# the exec could run before the file exists and stop the script (found by PC Claude on Garcks-PC, W2).
+install -m 0644 /dev/null "$LOG"
 exec > >(tee "$LOG") 2>&1
-chmod 0644 "$LOG"
 COMMIT="$(git -c safe.directory="$REPO" -C "$REPO" rev-parse --short HEAD)"
 echo "== frontdoor install, stage '$STAGE', repo commit $COMMIT, $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
