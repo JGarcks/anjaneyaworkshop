@@ -12,11 +12,11 @@
 
 **Next build session: W5 — the planet's movement, then the gate.** Start here:
 0. **Done 24 Sep (W5-a…c):** Planet items 7 (`/api/picture/`, one request per picture) and 10 (the spin's catch: pictures prepared a slice a frame; glide 1.5 behind) live; the door no longer holds `/api/picture/` or `/api/meta`. A picture reaches the hub every ~1.05 s, none over 3 s (was 2.1 s, freezes to 38 s). Detail: `progress/2026-09.md` §W5-a.
-1. **Open from it:** Jamie's walk after item 10 (is the spin smooth, laptop and phone?) not yet recorded; the frame-rate numbers from Jamie's Chrome for Planet Claude not taken (the tab was hidden, then closed). `check-public.sh` does not yet assert `/api/picture/` (200, gzip, tick, BYPASS at the door). W5-c is Claude's, by the numbers — confirm or undo at the next round.
+1. **Open from it:** Jamie's walk after item 10 on the laptop: "best it's been by far — not perfect, good enough for now" (a small catch left, held); the phone not yet walked; the frame-rate numbers from Jamie's Chrome for Planet Claude not taken (the tab was hidden, then closed). `check-public.sh` does not yet assert `/api/picture/` (200, gzip, tick, BYPASS at the door). W5-c is Claude's, by the numbers — confirm or undo at the next round.
 2. **The hub's side of `?embed`:** drop the 56 px crop; send `{ planet: 'zoom' }` on a phone turn instead of reloading; re-time the live globe with "drawn" (unloaded laptop — W4's try ran under three browsers).
 3. **The gate's rest:** the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk incl. pinch-out on the phone. The restart half passed in W4 ("resumed" 2 s after the restart, no reload).
 
-**Pending Jamie:** the walk after item 10 · W5-c (meta not held) to confirm · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
+**Pending Jamie:** the phone walk after item 10 · W5-c (meta not held) to confirm · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
 
 **Who's who:** laptop Claude writes and commits; Desktop Claude (the docs' "PC Claude") runs runbook steps on Garcks-PC and commits only `frontdoor/state/`; Planet Claude does Planet's code (rule 8: never edited here). Requests go through `Desktop/for-laptop-claude.txt`.
 
