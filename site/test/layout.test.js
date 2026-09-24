@@ -7,7 +7,7 @@
  * Built in W3 — the landing page (24 Sep 2026).
  */
 import { describe, expect, it } from "vitest";
-import { layout, BOTTOM, CROP, SIDE, TEXT, TOP } from "../public/js/layout.js";
+import { layout, reshapes, BOTTOM, CROP, SIDE, TEXT, TOP } from "../public/js/layout.js";
 
 const screens = { laptop: [1440, 900], phone: [390, 844], "phone turned": [844, 390], "small laptop": [1280, 720] };
 
@@ -45,4 +45,16 @@ for (const [name, [w, h]] of Object.entries(screens)) {
 
 it("on an upright phone the globe spans the width, less the gutters", () => {
   expect(layout(390, 844).globe.d).toBe(390 - 2 * SIDE);
+});
+
+it("turning a phone needs the viewer reloaded (its zoom lives in its address)", () => {
+  expect(reshapes(layout(390, 844).zoom, layout(844, 390).zoom)).toBe(true);
+});
+
+it("a window a few pixels shorter does not reload the viewer", () => {
+  expect(reshapes(layout(1440, 900).zoom, layout(1440, 896).zoom)).toBe(false);
+});
+
+it("the first load always loads the viewer", () => {
+  expect(reshapes(null, layout(1440, 900).zoom)).toBe(true);
 });

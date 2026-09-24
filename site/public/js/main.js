@@ -7,7 +7,7 @@
  *   ordinary caching, never "no-store", so Cloudflare's one-second copy answers every visitor and the house sees one ask a second.
  * Built in W3 — the landing page (24 Sep 2026).
  */
-import { layout } from "./layout.js";
+import { layout, reshapes } from "./layout.js";
 import { formatLastSeen, formatLine } from "./line.js";
 import { PLANET, viewerAddress } from "./planet.js";
 import { createWatch } from "./watch.js";
@@ -15,7 +15,6 @@ import { createWatch } from "./watch.js";
 const POLL_MS = 2000;          // how often the page asks for the live line
 const ASK_TIMEOUT_MS = 4000;   // an ask with no answer by then counts as a failure
 const RESHAPE_AFTER_MS = 400;  // a resize settles this long before the frame is reshaped
-const RESHAPE_SHARE = 0.02;    // the zoom must change by more than this to reload the frame (a phone turned, a window resized)
 
 const $ = (id) => document.getElementById(id);
 const frame = $("planet"), still = $("still"), line = $("line"), status = $("status");
@@ -26,16 +25,23 @@ let stillMeta = null;          // the numbers the still was taken with: the line
 let frameZoom = null;
 let timer = null, asking = false;
 
-function place() {
-  const L = layout(window.innerWidth, window.innerHeight);
-  const px = (n) => n + "px";
-  Object.assign(frame.style, { left: px(L.frame.left), top: px(L.frame.top), width: px(L.frame.width), height: px(L.frame.height) });
+const px = (n) => n + "px";
+function placeStill(L) {
   const size = L.globe.d / stillZoom;
   Object.assign(still.style, { left: px(L.globe.x), top: px(L.globe.y), width: px(size), height: px(size) });
+}
+
+function place() {
+  const L = layout(window.innerWidth, window.innerHeight);
+  Object.assign(frame.style, { left: px(L.frame.left), top: px(L.frame.top), width: px(L.frame.width), height: px(L.frame.height) });
+  placeStill(L);
   return L;
 }
 
+let turning = false;           // the screen changed shape and the frame showing is the old shape's: hidden until reloaded
 function loadFrame(L) {
+  turning = false;
+  frame.classList.remove("turning");
   frameZoom = L.zoom;
   watch.frameReloaded(Date.now());
   frame.src = viewerAddress(L.zoom);
@@ -106,12 +112,22 @@ window.addEventListener("message", (event) => {
   if (event.data && event.data.planet === "drawn") { watch.frameDrawn(Date.now()); render(); }
 });
 
+// A phone turned: the old picture would show stretched into a corner until the frame reloads, so it goes at once
+// (no fade) and the still moves to the new shape straight away; the frame reloads when the resize settles.
 let reshape = null;
 window.addEventListener("resize", () => {
+  const now = layout(window.innerWidth, window.innerHeight);
+  if (!turning && reshapes(frameZoom, now.zoom)) {
+    turning = true;
+    frame.classList.add("turning");
+    watch.frameReloaded(Date.now());
+    placeStill(now);
+    render();
+  }
   clearTimeout(reshape);
   reshape = setTimeout(() => {
     const L = place();
-    if (Math.abs(L.zoom - frameZoom) / frameZoom > RESHAPE_SHARE && !watch.view(Date.now()).still) loadFrame(L);
+    if (turning || (reshapes(frameZoom, L.zoom) && !watch.view(Date.now()).still)) loadFrame(L);
     render();
   }, RESHAPE_AFTER_MS);
 });

@@ -61,6 +61,13 @@ html, body {
   transition: opacity 0.9s ease 0.4s;
 }
 
+/* A phone turned: the old shape's picture goes at once rather than fading out stretched into a corner (W4). */
+#planet.turning {
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+
 /* The name, and the rooms beneath it (Jamie, W4-a); layout.js keeps the globe below them (TOP). */
 #top {
   position: fixed;
