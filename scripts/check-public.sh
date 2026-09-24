@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # check-public.sh — the public check: asserts, against the live addresses, what each closed phase promised.
-# In:  nothing but the internet; optional first argument overrides the site (default https://anjaneyaworkshop.co.uk).
+# In:  nothing but the internet; optional first argument overrides the site; THROUGH=<n> runs phases 0..n (default 1).
 # Out: one PASS/FAIL line per assertion with the number behind it; exit 0 only if every assertion passed.
 # Decision: the budget is a test (CLAUDE.md rule 9) — a FAIL here blocks the commit exactly as a red npm test does.
-# Built in W1 — Ground (24 Sep 2026): Phase 0's assertions only (HTTPS on both domains, the redirects); Phase 1 adds the budget.
+# Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door).
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
 HOST="${SITE#https://}"
 COM="anjaneyaworkshop.com"
+PLANET="${PLANET:-https://planet.anjaneyaworkshop.co.uk}"
+THROUGH="${THROUGH:-1}"   # before the door is live (W2, until RUNBOOK step 6): THROUGH=0, and the log says so
 failures=0
 
 pass() { printf 'PASS  %s\n' "$1"; }
@@ -32,7 +34,9 @@ expect_redirect() {
   fi
 }
 
-echo "Public check, Phase 0 — $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo "Public check, phases 0 to $THROUGH — $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo
+echo "Phase 0 — Ground ($SITE)"
 
 # 1. The site answers over HTTPS with the page, and says how long it took.
 body="$(curl -sS --max-time 15 -w '\n%{http_code} %{time_total}' "$SITE/" 2>/dev/null)"
@@ -54,9 +58,68 @@ expect_redirect "https://$COM/" "https://$HOST/"
 expect_redirect "https://$COM/some/path?x=1" "https://$HOST/some/path?x=1"
 expect_redirect "https://www.$COM/" "https://$HOST/"
 
+# ---- Phase 1 — the front door: the Budget section of the Strategic Plan, asserted at the public address.
+# headers URL [curl options…] -> the reply's status line and headers, lower-cased, one per line.
+headers() { local url="$1"; shift; curl -sS -o /dev/null -D - --max-time 15 "$@" "$url" 2>/dev/null | tr -d '\r' | tr 'A-Z' 'a-z'; }
+# header NAME HEADERS -> the value of that header, or nothing.
+header() { grep -m1 "^$1:" <<<"$2" | cut -d' ' -f2-; }
+status_of() { head -1 <<<"$1" | awk '{print $2}'; }
+
+if (( THROUGH >= 1 )); then
+  echo
+  echo "Phase 1 — the front door ($PLANET)"
+
+  # 5. A field arrives compressed, labelled one second, with the tick (the restart signal, rule 12).
+  h="$(headers "$PLANET/api/field/elevation_m" -H 'Accept-Encoding: gzip')"
+  wire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/field/elevation_m" 2>/dev/null)"
+  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -lt 41000 ]]; then
+    pass "field elevation_m → 200, gzip, $wire bytes on the wire (41,000 uncompressed)"
+  else
+    fail "field elevation_m → expected 200 gzip under 41,000 bytes, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes"
+  fi
+  tick="$(header x-planet-tick "$h")"
+  if [[ "$tick" =~ ^[0-9]+$ ]]; then pass "X-Planet-Tick present on a field ($tick)"; else fail "X-Planet-Tick missing on a field"; fi
+
+  # 6. One second on meta and fields; a day on the grid.
+  for path in /api/meta /api/field/elevation_m; do
+    cc="$(header cache-control "$(headers "$PLANET$path")")"
+    if [[ "$cc" == "public, max-age=1" ]]; then pass "$path Cache-Control: $cc"; else fail "$path Cache-Control: expected public, max-age=1, got ${cc:-none}"; fi
+  done
+  cc="$(header cache-control "$(headers "$PLANET/api/grid")")"
+  if [[ "$cc" == "public, max-age=86400" ]]; then pass "/api/grid Cache-Control: $cc"; else fail "/api/grid Cache-Control: expected public, max-age=86400, got ${cc:-none}"; fi
+
+  # 7. Read-only (rule 11): a POST is refused; HEAD still works.
+  code="$(curl -sS -o /dev/null --max-time 15 -w '%{http_code}' -X POST -d x=1 "$PLANET/api/meta" 2>/dev/null)"
+  if [[ "$code" == 405 ]]; then pass "POST /api/meta → 405"; else fail "POST /api/meta → expected 405, got $code"; fi
+  code="$(curl -sS -o /dev/null --max-time 15 -w '%{http_code}' -I "$PLANET/" 2>/dev/null)"
+  if [[ "$code" == 200 ]]; then pass "HEAD / → 200"; else fail "HEAD / → expected 200, got $code"; fi
+
+  # 8. The second fetch within a second is answered by Cloudflare's edge (three tries, since a pair can straddle a second).
+  hit=""
+  for try in 1 2 3; do
+    headers "$PLANET/api/meta" >/dev/null
+    second="$(header cf-cache-status "$(headers "$PLANET/api/meta")")"
+    if [[ "$second" == hit ]]; then hit="try $try"; break; fi
+  done
+  if [[ -n "$hit" ]]; then pass "second fetch of /api/meta within a second → edge HIT ($hit)"; else fail "second fetch of /api/meta → expected edge HIT, got ${second:-no cf-cache-status}"; fi
+
+  # 9. The hub may read the API, and only our pages may frame the planet (W2-a).
+  h="$(headers "$PLANET/")"
+  acao="$(header access-control-allow-origin "$(headers "$PLANET/api/meta")")"
+  if [[ "$acao" == "https://anjaneyaworkshop.co.uk" ]]; then pass "Access-Control-Allow-Origin: $acao"; else fail "Access-Control-Allow-Origin: expected https://anjaneyaworkshop.co.uk, got ${acao:-none}"; fi
+  csp="$(header content-security-policy "$h")"
+  if [[ "$csp" == "frame-ancestors 'self' https://anjaneyaworkshop.co.uk" ]]; then pass "framing: $csp"; else fail "framing: expected frame-ancestors 'self' https://anjaneyaworkshop.co.uk, got ${csp:-none}"; fi
+
+  # 10. Anything but Planet's own addresses stops at the door.
+  code="$(curl -sS -o /dev/null --max-time 15 -w '%{http_code}' "$PLANET/not-a-planet-address" 2>/dev/null)"
+  if [[ "$code" == 404 ]]; then pass "an unknown path → 404 at the door"; else fail "an unknown path → expected 404, got $code"; fi
+
+  echo "(The engine's load and the house's upload are measured at nginx: frontdoor/door-rate.sh, pasted into frontdoor/state/.)"
+fi
+
 echo
 if (( failures == 0 )); then
-  echo "All Phase 0 assertions passed."
+  echo "All assertions for phases 0 to $THROUGH passed."
 else
   echo "$failures assertion(s) failed."
 fi
