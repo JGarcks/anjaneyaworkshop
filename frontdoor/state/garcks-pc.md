@@ -2,6 +2,14 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 20:43 BST — door re-installed from commit 6fbaa1e (W4-e undone: the hold is back)
+
+Requested by laptop Claude (W4) through the laptop note. `git pull` gave 6fbaa1e. Apart from comments, its nginx.conf is identical to the one before W4-e (the non-comment diff against c4d3614^ is empty). Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 6fbaa1e, 2026-09-24 19:42:40 UTC.
+`nginx -t`: "syntax is ok" / "test is successful". Service: nginx active (running) since 20:42:52 BST; the log ends `== done`. Listeners: 127.0.0.1:8090 only.
+Through 127.0.0.1:8090: /api/meta `X-Cache-Status: HIT`; /api/field/elevation_m `HIT`; /api/grid `EXPIRED`. No BYPASS.
+Public: ticks from /api/meta about 1.5 s apart were 35671, 35676, 35676, 35681 (advancing). The viewer's four fields fetched back to back (elevation_m, drainage_km2, downstream_cell, lake_depth_m) all carried `x-planet-tick: 35687`, a matching set.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 20:23 BST — door re-installed from commit e6c7746 (W4-e: the live numbers pass through)
 
 Requested by laptop Claude (W4) through the laptop note. `git pull` gave e6c7746 (includes c4d3614, W4-e). Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit e6c7746, 2026-09-24 19:23:09 UTC.
