@@ -63,6 +63,23 @@ A 5-minute run of the hub in a browser (24 Sep, ~21:30; every request logged; no
 
 **Checks:** the spin smooth through several picture arrivals on the laptop and a phone (Jamie's eye is the bar); `planet.anjaneyaworkshop.co.uk/` without `?embed` unchanged unless Planet chooses otherwise. Live at Jamie's word, as before.
 
+## Item 11 — the laptop runs hot on the hub: less GPU work, same picture (Jamie, 25 Sep 2026, Workshop W5-e)
+
+**Jamie's brief:** "keep on the GPU if possible but save where we can without losing quality." So: `powerPreference: 'high-performance'` stays (WEB · D8), 60 frames a second stays, the 2× sharpness cap stays. Only savings the eye cannot see; Jamie's side-by-side look is the bar.
+
+**Measured on the laptop (Dell XPS 15 7590: Intel UHD 630 drives the 3840×2160 panel at 250% scale, 1536×864 CSS px; GTX 1650 draws), the hub open in Chrome, 25 Sep ~00:40, 10 s:** processor ~30% overall, Chrome 1–2% — not the processor. NVIDIA 58–59 °C, 7–11 W, 23–40% busy, Chrome its only user. Intel 3D: Chrome ~13%, dwm ~21%. The viewer's canvas is 3072×1728 (5.3 M px, `drawRatio` 2); the globe, air included, fills about a 1,400 px square of it (~2 M px).
+
+**Where the work goes.** On a laptop with two graphics chips, every frame drawn on the NVIDIA is copied whole to the Intel chip that owns the screen: at this canvas ~21 MB a frame, ~1.3 GB a second at 60 fps, and dwm then composites it at 4K. About two thirds of each copied frame is the flat background colour.
+
+**Candidates (Planet's call; measure before choosing):**
+1. **Size the canvas to the globe, not the screen** (the likely big one). The canvas covers only the globe's square plus the air's reach, centred; the page behind paints the same colour as `clearColor` (0.043, 0.055, 0.078 → `#0b0e14`) so nothing shows a seam; the pointer area stays the full screen, so dragging anywhere works as now. It follows zoom (pinch, wheel, the hub's zoom message): resized on a settled zoom, or sized for the most the view can reach. Expected: ~60% less to copy and composite on the laptop, the picture identical.
+2. **Antialiasing where it no longer shows.** `antialias: true` at 2× sharpness multiplies the frame's memory work; on a screen of `devicePixelRatio` ≥ 2 it may be invisible — except perhaps on the river hairlines. Only if a side-by-side on Jamie's laptop cannot tell (it is fixed at context creation, so chosen at load).
+3. Anything else Planet's own frame timing finds costing GPU time without changing a pixel.
+
+**Not asked for (each would show, so each is Jamie's decision, not this item):** fewer frames a second (the turn is ~0.6 px a frame on the laptop; 30 fps doubles each step), sharpness below 2×, pausing the turn when idle, the Intel chip.
+
+**Checks:** the picture the same side by side (Jamie's eye), the spin as smooth; `planet.anjaneyaworkshop.co.uk/` without `?embed` unchanged unless Planet chooses otherwise. After it is live, laptop Claude re-takes the same 10 s measurement on the laptop and logs before and after. Live at Jamie's word, as before.
+
 ## What the hub does when these land
 
 - 1: drops the 56 px crop. 4: already listens for `{ planet: 'drawn' }` from the planet's origin and drops the 2.5 s wait by itself; then re-times the Phase 2 gate (live within 2 s). 5: nothing — pinch just works. 6: sends the zoom on a turn instead of reloading. 8–9: nothing; the Workshop re-runs its 5-minute pause monitor to confirm. 7: the pause monitor re-run (freezes gone?); `check-public.sh` gains the picture address (200, gzip, tick, one second at the edge); then, measured, the door's hold on it tried off again (W4-e); then the glide retuned to what is left (W5).
