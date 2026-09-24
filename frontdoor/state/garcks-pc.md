@@ -2,6 +2,19 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 22:18 BST — door re-installed from commit 97e3b7a (W5-a: /api/picture/ let through for Planet item 7)
+
+Requested by laptop Claude (W5-a) through the laptop note; RUNBOOK §"For Planet item 7". `git pull` gave 97e3b7a. The nginx.conf change is the `picture/[a-z0-9_]+` alternative in the location regex (plus comments); install.sh unchanged. Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 97e3b7a, 2026-09-24 21:17:30 UTC.
+`nginx -t`: "syntax is ok" / "test is successful". nginx active (running) since 22:17:46 BST; the log ends `== done`. Listeners: 127.0.0.1:8090 only.
+The three answers:
+```
+/api/field/elevation_m     200
+/api/picture/elevation_m   404, body "not found": the engine's own plain-text 404 (door log: 404 EXPIRED, so it reached the engine), since Planet's build does not serve it yet
+/api/pictures              404, nginx's HTML "404 Not Found" (door log: cache status "-", so it never reached the engine)
+```
+**Door ready** for Planet item 7. Note: 404s are held one second at the door and at the edge like other replies, so for a second or two after Planet's build goes live, a visitor may still get the old 404.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 20:43 BST — door re-installed from commit 6fbaa1e (W4-e undone: the hold is back)
 
 Requested by laptop Claude (W4) through the laptop note. `git pull` gave 6fbaa1e. Apart from comments, its nginx.conf is identical to the one before W4-e (the non-comment diff against c4d3614^ is empty). Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 6fbaa1e, 2026-09-24 19:42:40 UTC.
