@@ -34,11 +34,12 @@ for (const [name, [w, h]] of Object.entries(screens)) {
       expect(L.frame.top + L.frame.height / 2).toBeCloseTo(L.globe.y, 0);
     });
 
-    it("the frame runs past every edge far enough to hide the viewer's corner buttons", () => {
+    it("the frame covers the whole screen (and no more than CROP past it, since ?embed hides the buttons — W5-d)", () => {
       expect(L.frame.left).toBeLessThanOrEqual(-CROP);
       expect(L.frame.top).toBeLessThanOrEqual(-CROP);
       expect(L.frame.left + L.frame.width).toBeGreaterThanOrEqual(w + CROP);
       expect(L.frame.top + L.frame.height).toBeGreaterThanOrEqual(h + CROP);
+      expect(L.frame.width).toBe(w + 2 * CROP);
     });
   });
 }
