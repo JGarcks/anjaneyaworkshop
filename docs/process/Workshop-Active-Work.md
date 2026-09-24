@@ -8,28 +8,26 @@
 
 ## Currently working on
 
-**Phase 0 — Ground: closed (W1).** **Phase 1 — the front door: closed (W2, 24 Sep 2026).** The planet is public at `planet.anjaneyaworkshop.co.uk` through nginx and a named tunnel on Garcks-PC (`frontdoor/`, installed state in `frontdoor/state/garcks-pc.md`). `check-public.sh` 17/17; the gate with three browsers: 28.9 KB/s up the line (budget 600), 0.48 engine fetches per address per second; Jamie's walk: smooth on the laptop and the phone. Detail: `progress/2026-09.md` §W2.
+**Phases 0–1 closed (W1, W2).** **Phase 2 — the landing page: open.** Live at `anjaneyaworkshop.co.uk`: the name and the Planet link top left, the line at the bottom, the planet full screen behind, the still handing over through the dark, the still retaken daily by GitHub (11:17 UTC). 57 tests; check-public 24/24. Planet's `?embed` (WEB · D5) live since 21:45 on 24 Sep. Detail: `progress/2026-09.md` §W3, §W4.
 
-**Phase 2 — the landing page: open (W3, 24 Sep 2026).** The hub is live at `anjaneyaworkshop.co.uk`: the planet full screen behind the words, the still before it and when the house is away, the live line at the bottom. Decisions W3-a…g all taken (`decisions.md`); 51 tests; check-public 21/21 (Phase 2 begun: browsers re-check the hub's files, W3-i). Detail: `progress/2026-09.md` §W3.
+**Next build session: W5 — the planet's movement, then the gate.** Start here:
+1. **The glide's feel (Jamie, end of W4): "too drawn out — too slow and still not keeping up with itself"** after Planet's `?embed` glide change (2.5 pictures behind, 5 s). Measure before touching anything: `scripts/hub-monitor.mjs` (pictures reaching the viewer; before the change: median 2.1 s apart, 7 stalls of 3.1–3.5 s and one 14 s freeze in 5 min) plus the viewer's own timing readout (share of frames at rest). Any fix is Planet's (`docs/process/requests/planet-embed.md`); item 7 (the four fields as one request) is the real cure for both pace and freezes.
+2. **The hub's side of `?embed`:** drop the 56 px crop; send `{ planet: 'zoom' }` on a phone turn instead of reloading; re-time the live globe with "drawn" (unloaded laptop — W4's try ran under three browsers).
+3. **The gate's rest:** the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk incl. pinch-out on the phone. The restart half passed in W4 ("resumed" 2 s after the restart, no reload).
 
-**Next build session: W4 — Phase 2 continued** (Coverage Plan §Phase 2): the daily GitHub Action for the still (W3-e; rule 16 gains a still-only bot), `check-public.sh` Phase 2 (framing allowed, still under a day old, time to first picture — W3-f), screens of the still and "resumed" states, the gate. Its decision round: **how often the still is retaken** (the planet moves ~0.9 billion years an hour, so a day-old still is another world and the fade morphs one into the other); **drop the 56 px crop and the 2.5 s wait** once Planet's `?embed` lands.
+**Pending Jamie:** who takes Planet item 7, and when · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
 
-**Pending Jamie, in order:**
-1. Anything about the look to change (size of the globe, how faint the line is) — the W3 walk found it working on both; W4 opens with it.
-2. Hand `docs/process/requests/planet-embed.md` to a **laptop** Planet session (viewer graphics are done on the laptop): the quiet `?embed` (W3-a) plus W4's two phone items — a lower zoom floor with no snap bigger, and zoom by message so a turn needs no reload.
-3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
-
-**Standing:** teaching is the decision round only; no explain-back during the build — headers in the code (rule 14); laptop Claude commits, PC Claude only `frontdoor/state/` (rule 16); changes to the door go through `install.sh` (Jamie's `sudo`) and PC Claude's checks; Planet is never edited here (rule 8).
+**Who's who:** laptop Claude writes and commits; Desktop Claude (the docs' "PC Claude") runs runbook steps on Garcks-PC and commits only `frontdoor/state/`; Planet Claude does Planet's code (rule 8: never edited here). Requests go through `Desktop/for-laptop-claude.txt`.
 
 ---
 
 ## Booked for the decision round after Phase 2 closes (Jamie, 24 Sep 2026)
 
-1. **A livelier picture — WS · D13** (paid Cloudflare plan, checked first, or a push relay). 2. **Not local — WS · D7** (a rented server: the engine, or only the door). Trade-offs and prices: Strategic Plan §WS · D7, D13; priced with that day's numbers.
+1. **A livelier picture — WS · D13** (W4: a paid Cloudflare plan would not help; Planet item 7, the fields as one request, or a push relay). 2. **Not local — WS · D7** (a rented server: the engine, or only the door). Trade-offs and prices: Strategic Plan §WS · D7, D13; priced with that day's numbers.
 
 ## Queued (cross-session, ride-alongside — pick when a session is already in the relevant file)
 
-- **Trim CLAUDE.md** from 15.6 KB toward the 12 KB budget (rule 6) at the first session that touches it; the About Jamie section is the long one.
+- **Trim CLAUDE.md** from 16.2 KB toward the 12 KB budget (rule 6) at the first session that touches it; the About Jamie section is the long one.
 - **A second, stable planet instance** on `main` with its own world file and port, as a one-line nginx repoint — only if Jamie ever wants the site not to follow the experiments (WS · D2).
 - **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
 
