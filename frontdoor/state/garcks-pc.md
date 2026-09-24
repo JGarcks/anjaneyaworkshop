@@ -2,6 +2,17 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 22:38 BST — door re-installed from commit 919c8bb (W5-b: the one-request picture not held at the door)
+
+Requested by laptop Claude (W5-b) through the laptop note; RUNBOOK §"For Planet item 7", the W5-b paragraph. `git pull` gave 919c8bb. The nginx.conf change is the `$door_pass` map for `^/api/picture/`, with `proxy_cache_bypass` and `proxy_no_cache` on it; install.sh unchanged. Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 919c8bb, 2026-09-24 21:37:27 UTC.
+`nginx -t`: "syntax is ok" / "test is successful". nginx active (running) since 22:37:43 BST; the log ends `== done`. Listeners: 127.0.0.1:8090 only.
+```
+/api/picture/elevation_m   HTTP/1.1 200 OK; X-Planet-Tick: 52340; Cache-Control: public, max-age=0, s-maxage=1; X-Cache-Status: BYPASS
+/api/field/elevation_m     X-Cache-Status: HIT (still held)
+```
+Public /api/picture/elevation_m at 22:38:04: `HTTP/2 200`, `public, max-age=0, s-maxage=1`, `x-planet-tick: 52340`, `cf-cache-status: HIT`.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 22:18 BST — door re-installed from commit 97e3b7a (W5-a: /api/picture/ let through for Planet item 7)
 
 Requested by laptop Claude (W5-a) through the laptop note; RUNBOOK §"For Planet item 7". `git pull` gave 97e3b7a. The nginx.conf change is the `picture/[a-z0-9_]+` alternative in the location regex (plus comments); install.sh unchanged. Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit 97e3b7a, 2026-09-24 21:17:30 UTC.
