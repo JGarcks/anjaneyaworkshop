@@ -36,7 +36,7 @@ Planet on the internet, read-only, with Planet untouched.
 - **PC Claude's step:** runs the runbook; commits `frontdoor/state/garcks-pc.md` (installed commit, date, `nginx -t` output, service status, the curl results); pushes.
 - **`scripts/check-public.sh`** gains the Phase 1 assertions (the Budget section of the charter): gzip, `max-age=1`, `X-Planet-Tick`, 405 on POST, edge cache hit on the second fetch within a second, and the origin request rate read from the engine's serve log (PC Claude pastes the count into `state/`).
 - **Retire PolicyRAG's quick tunnel** (W2-e: retired; folding it in would put an unstripped work app on the domain before Phase 5) — RUNBOOK step 8.
-- **Cloudflare Cache Rule** on the planet subdomain (W2): without it Cloudflare treats the API as dynamic and caches nothing, whatever the door's label says. Eligible for cache, Edge TTL from the origin's `Cache-Control`, query strings ignored.
+- **Cloudflare Cache Rule** on the planet subdomain (W2): without it Cloudflare treats the API as dynamic and caches nothing, whatever the door's label says. Eligible for cache, Edge TTL from the origin's `Cache-Control`, **Browser TTL set to respect origin** (unset, the zone's 4-hour default overrides `max-age=1`), query strings ignored.
 
 **Gate:** `https://planet.anjaneyaworkshop.co.uk/` shows the live viewer from a phone on mobile data; `check-public.sh` passes every Phase 1 assertion; the engine's own log shows about one request per URL per second while three browsers watch; Jamie's walk: the viewer through the door looks the same as on the LAN kiosk, allowing for the once-a-second snapshot (WS · D4).
 
@@ -137,7 +137,7 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 | Phase | Status | Opened | Closed | Notes |
 |---|---|---|---|---|
 | 0 Ground | closed | 24 Sep 2026 (W1) | 24 Sep 2026 (W1) | check-public 6/6; npm test 1/1 locally and in the Pages build; walk passed on laptop and phone (cellular). Limitation: no phone screenshot on file (headless Edge crops below ~500 px) |
-| 1 The front door | in progress | 24 Sep 2026 (W2) | | Laptop half done (configs, runbook, check, Cache Rule); waiting on PC Claude's runbook run. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
+| 1 The front door | in progress | 24 Sep 2026 (W2) | | Public since 24 Sep ~17:30 BST; check-public 17/17; waiting on RUNBOOK steps 7–8, the three-browser rate and Jamie's walk. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
 | 2 The landing page | not started | | | |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
 | 4 The rented server | not started | | | optional; WS · D7 |

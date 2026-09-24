@@ -12,9 +12,9 @@
 
 **In flight: W2 — Phase 1, the front door.** Laptop Claude's half is done and pushed: `frontdoor/` (nginx.conf, config.yml, the two service files, install.sh, door-rate.sh, RUNBOOK.md), `check-public.sh` Phase 1, and the Cloudflare Cache Rule "Planet: cache the door's replies (W2)" — **in place, Active** (so RUNBOOK step 6 may run). Decisions W2-a…e in `../decisions.md`.
 
-**Hand-off to PC Claude** (Jamie starts it on Garcks-PC): *"Read `frontdoor/RUNBOOK.md` in github.com/JGarcks/anjaneyaworkshop (commit W2 or later) and run it step by step; stop at any failed check."* Jamie is needed at Garcks-PC for the two `sudo` lines (steps 3 and 5) and one sign-in link (step 4). Report comes back in `frontdoor/state/garcks-pc.md`.
+**The planet is public** at `planet.anjaneyaworkshop.co.uk` (RUNBOOK steps 1–6 done by PC Claude; tunnel ID committed; Cache Rule's Browser TTL fixed to respect origin). `check-public.sh` 17/17 at 16:34 UTC.
 
-**After PC Claude's report, laptop Claude:** commit the tunnel ID into `frontdoor/config.yml`; `check-public.sh` (all phases); Jamie's walk (the viewer through the door vs the LAN kiosk, phone on mobile data); the gate's three-browser `door-rate.sh`; close Phase 1 or write up why not.
+**Still to do:** PC Claude runs RUNBOOK steps 7 (delete `cert.pem`) and 8 (retire the quick tunnel) and reports; then Jamie's walk (the viewer through the door vs the LAN kiosk, phone on mobile data); the gate's three-browser `door-rate.sh`; close Phase 1 or write up why not.
 
 **Pending Jamie, in order:**
 1. Run the hand-off above with PC Claude.
@@ -42,4 +42,5 @@
 - **A restart caught mid-visit** — trigger: the "resumed" state showing more than once a day in the check log. Action: read Planet's `journalctl --user -u planet` with PC Claude; nothing on the site changes.
 - **The world moving to a new build or seed** — trigger: PC Claude reporting a restart from year zero in `frontdoor/state/`. Action: the still refreshes itself; nothing else to do; note it in the log.
 - **Planet's resolution changes** (a restart with a different `--f`) — trigger: PC Claude's note of a new `f`, or `/api/meta`'s `frequency` not 32. Action: purge `planet.anjaneyaworkshop.co.uk/api/grid` at Cloudflare (the edge keeps the grid a day; nginx only a second). A new seed at f=32 needs nothing.
+- **The bare `.co.uk` answered by 207.207.210.229** (`openresty`, not Cloudflare) from the laptop — seen once for a few minutes at 16:33 UTC on 24 Sep while every DNS server said Cloudflare. Trigger: `check-public.sh` Phase 0 failing again with `000`/`openresty`, or Jamie seeing a certificate error. Action: `curl -w '%{remote_ip}'` from the laptop and from Garcks-PC, and look up who holds the address before changing anything.
 - **A `.com` visitor** — trigger: the redirect log showing real traffic to the `.com`. Action: none; it is working.
