@@ -13,9 +13,8 @@
 **Next build session: W2 — Phase 1, the front door** (`Workshop-Coverage-Plan.md` §Phase 1): nginx config, tunnel config and the runbook written here; PC Claude's runbook step on Garcks-PC; `check-public.sh` gains the budget. Its decision round will include: PolicyRAG's quick tunnel (retire, or fold into the named tunnel's ingress).
 
 **Pending Jamie, in order:**
-1. Say which AI-training setting was chosen on the `.co.uk` zone (Allow or Block), for the decisions table.
-2. Hand the §8 amendment request (text in the W1 chat) to a Planet session (WS · D1, rule 8).
-3. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
+1. Point a Planet session at the §8 amendment request, now at the end of `Desktop/for-laptop-claude.txt` (WS · D1, rule 8).
+2. WS · D5, the new name for BlockByBlock — needed by Phase 3; it fixes a subdomain and a repo name.
 
 **Standing:** teaching is the decision round only; no explain-back during the build — headers in the code (rule 14); laptop Claude commits, PC Claude only `frontdoor/state/` (rule 16); Planet's own quartet is *not* edited by Workshop sessions (rule 8) — the §8 amendment for WS · D1 is a request for a Planet session, written when D1 is agreed.
 
