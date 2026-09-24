@@ -4,6 +4,8 @@
 
 *Items 1–4 were first sent 24 Sep 2026 (W3, via `Desktop/for-laptop-claude.txt`) and are not yet live (checked 24 Sep 20:00: no `embed` in the public `viewer.js`). Items 5–9 are new from W4: 5–6 from Jamie's phone walk, 7–9 from the pauses measured below (7 was first thought "for later"; it now also fixes the 14 s freeze).*
 
+**Who and when (Jamie, 24 Sep ~22:00):** Planet Claude, tonight — items 8, 9, then 1–6 (all viewer, all under `?embed`); item 7 is a separate, later job. Handover text: the end of `Desktop/for-laptop-claude.txt`. Live only at Jamie's word; laptop Claude watches the hub through the restart.
+
 *Pull first: Planet's portrait fix (WEB · D2 — an upright screen fits the narrower side unless `?zoom=` is given; `main` e0a06d7, `sc-option1` 01bb0ba) is already in the live binary, rebuilt and restarted ~18:34 on 24 Sep (Desktop Claude). The hub always passes `?zoom=`, so that fix does not change it.*
 
 ## Why
