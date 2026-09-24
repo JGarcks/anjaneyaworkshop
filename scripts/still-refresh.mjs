@@ -6,7 +6,7 @@
  *      exit 1 with the reason in plain words if anything failed, leaving the old still in place.
  * Decision: no libraries — it drives the browser over the browser's own debugging protocol, so the daily GitHub Action
  *   (W3 decision 5) needs nothing installed but the browser. STILL_RESOLVE=<ip> pins the planet's address (the held BT leftover).
- * Built in W3 — the landing page (24 Sep 2026).
+ * Built in W3 — the landing page (24 Sep 2026); W4 keeps the browser's own error output, for the Action's log.
  */
 import { spawn } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
@@ -78,12 +78,21 @@ async function main() {
     `--window-size=${SIZE},${SIZE}`, "about:blank",
   ];
   if (process.env.STILL_RESOLVE) args.push(`--host-resolver-rules=MAP ${new URL(PLANET).host} ${process.env.STILL_RESOLVE}`);
-  const child = spawn(browser, args, { stdio: "ignore" });
+  // The browser's own complaints are kept, so a failure to start says why (rule 10).
+  const child = spawn(browser, args, { stdio: ["ignore", "ignore", "pipe"] });
+  let said = "", exited = null;
+  child.stderr.on("data", (chunk) => { said = (said + chunk).slice(-2000); });
+  child.once("exit", (code, signal) => { exited = signal ?? code; });
+  const lastWords = () => said.trim().split("\n").slice(-8).join("\n    ");
   let page;
   try {
-    const port = await until("the browser to start", 20_000, () => {
+    const port = await until("the browser to start", 30_000, () => {
+      if (exited !== null) throw new Error(`the browser (${browser}) quit at once (${exited}); it said:\n    ${lastWords() || "nothing"}`);
       const file = join(profile, "DevToolsActivePort");
       return existsSync(file) && readFileSync(file, "utf8").split("\n")[0].trim();
+    }).catch((error) => {
+      if (error.message.startsWith("gave up")) error.message += `; ${browser} said:\n    ${lastWords() || "nothing"}`;
+      throw error;
     });
     const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
     const target = targets.find((t) => t.type === "page");
@@ -124,7 +133,7 @@ async function main() {
     console.log(`still taken at tick ${meta.tick}: ${Math.round(Buffer.from(shot.data, "base64").length / 1024)} KB → site/public/still/`);
   } finally {
     // Close the browser and wait for it to go, or Windows keeps its profile folder locked.
-    const gone = new Promise((r) => child.once("exit", r));
+    const gone = exited !== null ? Promise.resolve() : new Promise((r) => child.once("exit", r));
     try { await page?.send("Browser.close"); } catch { child.kill(); }
     page?.close();
     await Promise.race([gone, sleep(10_000)]);
