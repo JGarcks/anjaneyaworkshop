@@ -4,7 +4,8 @@
 # Out: one PASS/FAIL line per assertion with the number behind it; exit 0 only if every assertion passed.
 # Decision: the budget is a test (CLAUDE.md rule 9) — a FAIL here blocks the commit exactly as a red npm test does.
 # Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door);
-#   W3 — the landing page began Phase 2 (browsers re-check the hub's files; W4 adds the rest).
+#   W3 — the landing page began Phase 2 (browsers re-check the hub's files); W4 added the hub's framing, the still's age and
+#   time to first picture.
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
@@ -129,6 +130,41 @@ if (( THROUGH >= 2 )); then
     cc="$(header cache-control "$(headers "$SITE$path")")"
     if [[ "$cc" == *"max-age=0"* ]]; then pass "$path Cache-Control: $cc"; else fail "$path Cache-Control: expected max-age=0 (browsers re-check), got ${cc:-none} — is the zone's Browser Cache TTL back from \"Respect Existing Headers\"?"; fi
   done
+
+  # 12. The hub, as served, may frame the planet and nothing else, and nobody may frame the hub (the planet's side is check 9).
+  csp="$(header content-security-policy "$(headers "$SITE/")")"
+  if [[ "$csp" == *"frame-src $PLANET"* && "$csp" != *"frame-src $PLANET "* && "$csp" == *"frame-ancestors 'none'"* ]]; then
+    pass "the hub frames the planet only, and is framed by nobody"
+  else
+    fail "the hub's framing: expected frame-src $PLANET and frame-ancestors 'none', got ${csp:-no Content-Security-Policy}"
+  fi
+
+  # 13. The still is under 26 hours old: a day, plus slack for GitHub starting its daily run late (W4-c). Red means the house
+  #     was away at 11:17 UTC; re-run "The still" in GitHub's Actions tab once the planet answers.
+  taken="$(curl -sS --max-time 15 "$SITE/still/planet.json" 2>/dev/null | grep -o '"takenAt": *"[^"]*"' | cut -d'"' -f4)"
+  if [[ -n "$taken" ]] && age=$(( $(date -u +%s) - $(date -u -d "$taken" +%s) )); then
+    hours="$(awk -v s="$age" 'BEGIN { printf "%.1f", s / 3600 }')"
+    if (( age < 26 * 3600 )); then pass "the still is ${hours} h old (taken $taken)"; else fail "the still is ${hours} h old (taken $taken): over 26 h — re-run \"The still\" in GitHub's Actions tab"; fi
+  else
+    fail "the still's record (still/planet.json) could not be read"
+  fi
+
+  # 14. Time to first picture, as timed fetches (W3-f): the page, its style and the still one after another — slower than a
+  #     browser, which fetches the last two together — must be under 2 s (Strategic Plan §Budget). The grid, which the viewer
+  #     fetches only after its own page and script, is timed alongside to show the still comes first.
+  style="$(curl -sS --max-time 15 "$SITE/" 2>/dev/null | grep -o 'style\.css?v=[^"]*' | head -1)"
+  total=0
+  for path in / "/${style:-style.css}" /still/planet.webp; do
+    t="$(curl -sS -o /dev/null --max-time 15 -w '%{http_code} %{time_total}' "$SITE$path" 2>/dev/null)"
+    [[ "${t%% *}" == 200 ]] || t="000 99"
+    total="$(awk -v a="$total" -v b="${t#* }" 'BEGIN { printf "%.3f", a + b }')"
+  done
+  grid="$(curl -sS -o /dev/null --max-time 15 -w '%{time_total}' -H 'Accept-Encoding: gzip' "$PLANET/api/grid" 2>/dev/null)"
+  if awk -v t="$total" 'BEGIN { exit !(t < 2.0) }'; then
+    pass "time to first picture (page + style + still, one after another): ${total}s (budget 2 s; the grid alone ${grid}s)"
+  else
+    fail "time to first picture (page + style + still, one after another): ${total}s, over the 2 s budget (the grid alone ${grid}s)"
+  fi
 fi
 
 echo
