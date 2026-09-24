@@ -42,6 +42,9 @@ export function createWatch({ startedAt }) {
       return { wentStill, failingFor: at - s.failingSince };
     },
 
+    // The tab went into the background and stops asking: a run of failures from before cannot carry over to its return.
+    paused() { if (!s.still) s.failingSince = null; },
+
     // When the still was taken (from still/planet.json, which arrives while the frame loads): "last seen" if the door never answers.
     stillTaken(at) { s.stillTakenAt = at; },
 

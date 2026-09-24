@@ -22,9 +22,9 @@ Git, Cloudflare (both domains, Pages from `site/`), the scaffold and first test,
 
 nginx and a named tunnel on Garcks-PC (`frontdoor/`: config, service files, `install.sh`, `RUNBOOK.md`, `state/`); a Cloudflare Cache Rule on `planet.` (eligible, Edge TTL from origin, **Browser TTL respect origin** — unset, the zone's 4 h wins — query strings ignored); meta and fields `public, max-age=0, s-maxage=1` (W2-f); `check-public.sh` Phase 1 (eleven assertions). Gate: 17/17; 28.9 KB/s up and 0.48 engine fetches per address per second with three browsers; walk smooth on laptop and phone. Limits carried: a picture every ~2.2 s (the edge's own refresh), subtler than the kiosk; the budget covers the fields the page draws, not a visitor cycling all thirteen. Detail: `progress/2026-09.md` §W2.
 
-### Phase 2 — The landing page (2–3 sessions)
+### Phase 2 — The landing page (2–3 sessions) — open (W3, 24 Sep 2026)
 
-The dark hub, live.
+The dark hub, live. *W3 built and deployed the page, the line, the fallbacks and a hand-taken still (decisions W3-a…g: full-screen frame, words at the very bottom, still after ~10 s of failures, a daily GitHub Action for the still). Limitations until Planet's `?embed` lands: the frame is cropped 56 px past every edge to hide the viewer's corner buttons, a tap on the globe can still open the viewer's cell table (partly visible), and the live picture waits a fixed 2.5 s after the frame loads (live at ~3.5 s; the still at 0.7 s). W4: the Action, check-public Phase 2, the three-state screens, the gate.*
 
 - **The page** (`site/index.html`, style and script, with headers): background `#0b0e14`; the viewer framed with the panel hidden; the name top left; the live line under the globe from `/api/meta` every few seconds (age in billions of years, land share, highest peak); the links, low-contrast off-white, brightening on hover, each with a small mark; no scroll; the globe draggable, resuming its own turn when released.
 - **The behaviours:** the still shown before the grid arrives and fading into the live picture; the still with "last seen at" when the door cannot be reached; "resumed" on a lower tick (rule 12); phone layout (globe full width, links beneath; the frame passes `?zoom=` for its shape, since the viewer sizes the globe to the height — W2 walk).
@@ -121,7 +121,7 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 |---|---|---|---|---|
 | 0 Ground | closed | 24 Sep 2026 (W1) | 24 Sep 2026 (W1) | check-public 6/6; npm test 1/1 locally and in the Pages build; walk passed on laptop and phone (cellular). Limitation: no phone screenshot on file (headless Edge crops below ~500 px) |
 | 1 The front door | closed | 24 Sep 2026 (W2) | 24 Sep 2026 (W2) | Public since ~17:30 BST; check-public 17/17; gate: 28.9 KB/s up, 0.48 engine fetches/address/s with three browsers; walk smooth on laptop and phone (after W2-f). Pictures every ~2.2 s (Cloudflare's edge refresh), subtler than the kiosk — held. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
-| 2 The landing page | not started | | | |
+| 2 The landing page | open | 24 Sep 2026 (W3) | | Live at the public address; 51 tests; check-public 17/17 (Phase 2 assertions come in W4). Still at 0.7 s, live at ~3.5 s (a fixed 2.5 s wait until Planet's `?embed` "drawn" message). Words at the very bottom (Jamie's first look). Walk on laptop and phone pending |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
 | 4 The rented server | not started | | | optional; WS · D7 |
 | 5 The work apps | not started | | | Needs Jamie's strip list per app |

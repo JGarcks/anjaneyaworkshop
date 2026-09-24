@@ -114,7 +114,7 @@ window.addEventListener("resize", () => {
   }, RESHAPE_AFTER_MS);
 });
 
-document.addEventListener("visibilitychange", () => { if (!document.hidden) soon(0); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) watch.paused(); else soon(0); });
 
 fetch("still/planet.json")
   .then((reply) => { if (!reply.ok) throw new Error("HTTP " + reply.status); return reply.json(); })

@@ -95,6 +95,14 @@ it("the replayed ticks after a restart count as advancing, not as more restarts"
   expect(w.metaOk(meta(605), 4500).change).toBe("advanced");
 });
 
+it("a tab back from the background starts its ten seconds afresh: one failure on return does not bring the still", () => {
+  const w = livePage();
+  w.metaFailed("network error", 3000);
+  w.paused();
+  expect(w.metaFailed("network error", 300_000).wentStill).toBe(false);
+  expect(w.view(300_000).still).toBe(false);
+});
+
 it("the line keeps the last numbers the door sent while the still is showing", () => {
   const w = livePage();
   for (let at = 3000; at <= 13_000; at += 2000) w.metaFailed("network error", at);
