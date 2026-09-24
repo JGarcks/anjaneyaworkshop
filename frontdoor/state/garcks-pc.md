@@ -2,6 +2,13 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 17:40 BST — steps 6 (re-check), 7 and 8 from commit 4eaf777: installed
+
+**Public (step 6, re-check after laptop Claude's Browser TTL fix).** Two fetches of https://planet.anjaneyaworkshop.co.uk/api/meta: `HTTP/2 200`, `cache-control: public, max-age=1`, `cf-cache-status: EXPIRED`, then `HTTP/2 200`, `public, max-age=1`, `HIT`. Passes.
+**cert.pem (step 7).** Deleted: yes. `~/.cloudflared` is now empty (the tunnel's credentials are in `/etc/cloudflared/`, owned by the `cloudflared` user). The tunnel still runs without it.
+**Quick tunnel (step 8).** Nothing was left to stop. Step 2 found it started by hand (`/home/garcks/bin/cloudflared tunnel --url http://localhost:8000`, pid 3689623) in a GNOME Terminal tab (bash pid 3644886 on pts/3). By step 8 that process, its shell and pts/3 were all gone: the terminal tab was closed at some point after 17:07. Nothing starts it again (no unit, crontab line or PolicyRAG script, per step 2), so it is retired; no pkill was needed. `pgrep -af cloudflared` now shows only `/usr/bin/cloudflared --no-autoupdate --config /etc/cloudflared/config.yml tunnel run` (the `cloudflared-frontdoor` service). PolicyRAG still answers: `http://127.0.0.1:8000/` gives 200, and `http://192.168.1.157:8000/` on the LAN gives 200. Its old trycloudflare.com address is dead. `~/bin/cloudflared` (2026.9.1, standalone) is still on disk and unused, so it can be deleted whenever; `/usr/bin/cloudflared` from apt is the one that counts.
+**For laptop Claude.** Nothing blocking. RUNBOOK steps 1–8 are done, and Jamie's walk and the gate are next. Small items: the step 5 "rule 1" wording (cloudflared prints "#0"); and whether to delete the stray `~/bin/cloudflared`.
+
 ## 2026-09-24 17:30 BST — steps 3–6 from commit c56ea06: door, tunnel and public name up; STOPPED after step 6 (browser TTL)
 
 **Door (step 3), third run.** Log from commit c56ea06 ends `== done`. nginx 1.24.0 (Ubuntu); cloudflared 2026.9.3 (apt; the earlier run had installed 2026.9.2). `nginx -t`: "syntax is ok" / "test is successful". Listeners after: nginx on 127.0.0.1:8090 only; nothing on 80 (the stock welcome page from the second run is gone). The eight curl checks: (1) 200, `Cache-Control: public, max-age=1`, `X-Planet-Tick: 6597`, `Content-Encoding: gzip`, `X-Cache-Status: MISS`, `Access-Control-Allow-Origin: https://anjaneyaworkshop.co.uk`, `Content-Security-Policy: frame-ancestors 'self' https://anjaneyaworkshop.co.uk`; (2) 35,653 bytes compressed; (3) HIT; (4) `public, max-age=86400`; (5) HEAD 200; (6) POST 405; (7) 404; (8) 000 from 192.168.1.157:8090. All pass.
