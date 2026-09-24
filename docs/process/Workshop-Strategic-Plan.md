@@ -47,7 +47,9 @@ Each decision records the choice, the reasoning, and what it would take to overr
 
 **Why.** Nothing maintained twice; the look is the viewer's look; and Planet's brief plans a three.js 3D viewer after Layer 3, which the landing page adopts when it exists rather than pre-empting.
 
-### WS · D4 — One-second cache at the door and at the edge (agreed, W1)
+### WS · D4 — One-second cache at the door and at the edge (agreed, W1; the door's hold on the live numbers removed, W4-e)
+
+*W4's probe (60 s, ten asks a second through London): Cloudflare refreshes about every 1.1 s, but nginx counts its second in whole seconds and held each copy 1–2 s, so 14 of 42 refreshes repeated the last picture — a new one every ~2.1 s. W4-e: the door no longer holds meta, fields, events or log; expected a picture every ~1.4 s. A paid Cloudflare plan would not change this, as far as W4 could tell: edge times are whole seconds on every plan, and the free one already gives one second.*
 
 **Choice.** nginx holds each reply for one second and collapses simultaneous misses into one fetch; it replaces the engine's `no-store` with `public, max-age=0, s-maxage=1` so Cloudflare caches for a second and browsers keep no copy (W2-f: a browser's own second stacked on the others and made the viewer jump). `/api/grid` is cached for a day. *Measured in W2:* the edge refreshes about every 2.1 s at that setting, so visitors get a new snapshot about every 2.2 s instead of every 400 ms tick — smooth, but the sea's twinkle and plate movement subtler than the kiosk.
 
@@ -160,7 +162,7 @@ Stated as numbers a session can measure, asserted by `scripts/check-public.sh` (
 
 - **Home upload:** 17.5 Mbps ≈ 2.2 MB/s. Without the door, one viewer drawing elevation alone pulls about 100 KB/s uncompressed, and every viewer pulls separately: five viewers fill the upload. With the door, the house sends each field once per second per Cloudflare location that has a viewer: about 35 KB/s for elevation, roughly 100 KB/s for elevation plus the three river fields the viewer draws. Five busy locations ≈ 0.5 MB/s, a quarter of the upload, whether ten people are watching or ten thousand. **Budget: origin egress under 0.6 MB/s at any audience**, measured at nginx.
 - **The door's replies:** gzip on for JSON and binary fields; `Cache-Control: public, max-age=0, s-maxage=1` on `/api/meta`, `/api/field/*`, `/api/events`, `/api/log` (one second at the edge, none in the browser); a day on `/api/grid`; `X-Planet-Tick` present on fields; POST → 405; the second fetch of the same field within a second a cache hit at the edge.
-- **The engine's load:** about one request per URL per second however many browsers watch, read from the engine's serve log.
+- **The engine's load:** about one request per URL per second per Cloudflare location with a viewer, however many browsers watch there, read at nginx (`frontdoor/door-rate.sh`). *Amended W4-e (Jamie, 24 Sep 2026): was "per URL per second" overall while the door held a second too; the door's hold made a third of Cloudflare's refreshes repeat the last picture.*
 - **Time to first picture:** under 2 s on the home connection for a warm load; the still must be on screen before the grid arrives.
 - **Restart:** the page shows "resumed" and carries on within one poll of a lower tick; no reload needed.
 
