@@ -44,6 +44,9 @@ door)
   install -d -m 0755 /etc/systemd/system/nginx.service.d
   install -m 0644 "$REPO/frontdoor/nginx-protecthome.conf" /etc/systemd/system/nginx.service.d/protecthome.conf
   rm -f /etc/nginx/sites-enabled/default
+  # The one-second memory's folder: the package has no /var/cache/nginx, and nginx makes only the last folder
+  # of a proxy_cache_path (found by PC Claude on Garcks-PC, W2). nginx's workers run as www-data.
+  install -d -o www-data -g www-data -m 0700 /var/cache/nginx/planet
 
   echo "== 5. nginx -t"
   nginx -t || fail "nginx -t refused the config; nothing restarted. Hand this log to PC Claude."
