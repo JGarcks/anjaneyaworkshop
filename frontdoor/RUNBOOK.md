@@ -171,6 +171,8 @@ curl -s -o /dev/null -D - $D/api/picture/elevation_m | grep -iE '^(HTTP|x-cache-
 curl -s -o /dev/null -D - $D/api/field/elevation_m | grep -i x-cache-status                                            #   HIT, MISS or EXPIRED (still held — never BYPASS)
 ```
 
+**W5-c — meta not held either** (same steps, from the W5-c commit or later): expect `$D/api/meta` → `X-Cache-Status: BYPASS` as well; `/api/field/elevation_m` still held.
+
 Record them in the state file; commit and push as in step 9. **To undo** (if laptop Claude or Jamie asks): laptop Claude reverts the commit; the same `git pull` and `sudo` line.
 
 ## Changing the door later
