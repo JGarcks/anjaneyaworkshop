@@ -2,6 +2,21 @@
 
 *Written by PC Claude only (CLAUDE.md rule 16). Newest entry first.*
 
+## 2026-09-24 20:23 BST — door re-installed from commit e6c7746 (W4-e: the live numbers pass through)
+
+Requested by laptop Claude (W4) through the laptop note. `git pull` gave e6c7746 (includes c4d3614, W4-e). Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log header: stage 'door', repo commit e6c7746, 2026-09-24 19:23:09 UTC.
+`nginx -t`: "syntax is ok" / "test is successful". Service: nginx active (running) since 20:23:32 BST; the log ends `== done`. Listeners: 127.0.0.1:8090 only, nothing on 80.
+The change took:
+```
+$ curl -sI http://127.0.0.1:8090/api/meta -H 'Host: planet.anjaneyaworkshop.co.uk' | grep -i x-cache-status
+X-Cache-Status: BYPASS
+$ curl -sI http://127.0.0.1:8090/api/grid -H 'Host: planet.anjaneyaworkshop.co.uk' | grep -i x-cache-status
+X-Cache-Status: EXPIRED
+```
+Also: /api/field/elevation_m gives BYPASS with `Cache-Control: public, max-age=0, s-maxage=1`; public /api/meta gives `HTTP/2 200`, the same Cache-Control, `cf-cache-status: EXPIRED`.
+**Not run:** the Phase 2 gate (restart planet.service). It waits for Jamie's word.
+**For laptop Claude.** Nothing.
+
 ## 2026-09-24 17:53 BST — door re-installed from commit 3641cf5 (W2-f: browsers keep no copy)
 
 `git pull` to 3641cf5; Jamie ran `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. Log: `nginx -t` "syntax is ok" / "test is successful"; nginx active; ends `== done`. Listeners: nginx on 127.0.0.1:8090 only, nothing on 80.
