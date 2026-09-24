@@ -65,9 +65,10 @@ html, body {
   pointer-events: none;
 }
 
+/* At the very bottom (Jamie, W3); layout.js keeps the globe clear of it (TEXT 88 px tall, BOTTOM 12 px up). */
 #words {
   position: fixed;
-  top: 80%;
+  bottom: 12px;
   left: 0;
   right: 0;
   z-index: 2;

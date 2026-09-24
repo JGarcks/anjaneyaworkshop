@@ -17,7 +17,7 @@ const RESHAPE_AFTER_MS = 400;  // a resize settles this long before the frame is
 const RESHAPE_SHARE = 0.02;    // the zoom must change by more than this to reload the frame (a phone turned, a window resized)
 
 const $ = (id) => document.getElementById(id);
-const frame = $("planet"), still = $("still"), words = $("words"), line = $("line"), status = $("status");
+const frame = $("planet"), still = $("still"), line = $("line"), status = $("status");
 
 const watch = createWatch({ startedAt: Date.now() });
 let stillZoom = 0.9;           // replaced by still/planet.json's own figure when it arrives
@@ -31,7 +31,6 @@ function place() {
   Object.assign(frame.style, { left: px(L.frame.left), top: px(L.frame.top), width: px(L.frame.width), height: px(L.frame.height) });
   const size = L.globe.d / stillZoom;
   Object.assign(still.style, { left: px(L.globe.x), top: px(L.globe.y), width: px(size), height: px(size) });
-  words.style.top = px(L.textTop);
   return L;
 }
 

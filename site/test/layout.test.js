@@ -7,7 +7,7 @@
  * Built in W3 — the landing page (24 Sep 2026).
  */
 import { describe, expect, it } from "vitest";
-import { layout, CROP, SIDE, TEXT, TOP } from "../public/js/layout.js";
+import { layout, BOTTOM, CROP, SIDE, TEXT, TOP } from "../public/js/layout.js";
 
 const screens = { laptop: [1440, 900], phone: [390, 844], "phone turned": [844, 390], "small laptop": [1280, 720] };
 
@@ -20,9 +20,9 @@ for (const [name, [w, h]] of Object.entries(screens)) {
       expect(L.globe.y - L.globe.d / 2).toBeGreaterThanOrEqual(TOP);
     });
 
-    it("the words start below the globe and still fit on the screen", () => {
+    it("the words sit at the very bottom of the screen, clear of the globe", () => {
+      expect(L.textTop + TEXT + BOTTOM).toBe(h);
       expect(L.textTop).toBeGreaterThan(L.globe.y + L.globe.d / 2);
-      expect(L.textTop + TEXT).toBeLessThanOrEqual(h);
     });
 
     it("the viewer's zoom makes its globe exactly the chosen width (width = zoom × frame height)", () => {
