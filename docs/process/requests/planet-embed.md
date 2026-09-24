@@ -6,6 +6,8 @@
 
 **Who and when (Jamie, 24 Sep ~22:00):** Planet Claude, tonight — items 8, 9, then 1–6 (all viewer, all under `?embed`); item 7 is a separate, later job. Handover text: the end of `Desktop/for-laptop-claude.txt`. Live only at Jamie's word; laptop Claude watches the hub through the restart.
 
+**Item 7 (Jamie, 24 Sep, W5-a):** now, ahead of the glide's retuning, as **one request per picture** (`/api/picture/<field>`, the contract in §Item 7). Planet Claude; the door learns the address first (Desktop Claude, runbook §For Planet item 7). Handover: the end of `Desktop/for-laptop-claude.txt`.
+
 *Pull first: Planet's portrait fix (WEB · D2 — an upright screen fits the narrower side unless `?zoom=` is given; `main` e0a06d7, `sc-option1` 01bb0ba) is already in the live binary, rebuilt and restarted ~18:34 on 24 Sep (Desktop Claude). The hub always passes `?zoom=`, so that fix does not change it.*
 
 ## Why
@@ -33,12 +35,24 @@ A 5-minute run of the hub in a browser (24 Sep, ~21:30; every request logged; no
 
 **After items 8, 9 and 1–6 went live (21:45, 24 Sep) — measured 11 min:** pictures still median 2.1 s apart; 22 gaps of 3–4 s (8 should bridge them); but freezes of 10, 11, 13 and 38 s, with elevation 2–4 ticks out of step with the river fields throughout — beyond 9's one tick. Likely: after a split, `fetchOneTick` re-asks only the fields behind, which moves them to another refresh phase at Cloudflare's shared copy, so the split persists. Worth trying first: **re-ask all four together** (so Cloudflare refreshes them at one moment again) — or item 7, which ends it. Jamie also finds the new glide "too drawn out — too slow": GLIDE_BEHIND 2.5 may be more than needed once the freezes go.
 
-## For later (the Workshop's WS · D13 round, not now)
+## Item 7 — now (Jamie, 24 Sep 2026, Workshop W5-a: "A go ahead")
 
-7. **A livelier public picture — and no split sets — needs the fields fetched as one.** *(Now also the real fix for the 14 s freeze above; worth doing with 8 rather than later, if it is not large.)* The viewer draws only when its field and the three river fields share a tick (Planet's WEB · D3). Through the public door it gets a matching set every ~2.1 s; W4 tried taking the door's own one-second hold off and the four fields never matched again (0 sets in 40 s), so the hold stays. A picture every ~1 s (or better) would need either one request returning all four fields from one tick, or fields addressable by tick (`/api/field/<name>?tick=N`, unchanging once published, so Cloudflare could keep them for good). Recorded in the Workshop's Strategic Plan, WS · D4 and D13.
+7. **One request per picture: the shown field and the three river fields, from one tick.** The viewer draws only when its field and the three river fields share a tick (Planet's WEB · D3). Four separate requests can straddle a tick change, and the freezes above (10–38 s) are that split persisting. One reply built from one tick cannot split, so the freezes end, and the re-ask/skip machinery has nothing left to do on this path. It also reopens a livelier picture: W4 tried taking the door's one-second hold off (pictures ~1.1 s apart instead of ~2.1 s) and had to undo it only because the four fields then never matched. With one reply the Workshop can try that again (its own step, measured).
+
+   *Jamie chose this over fields addressed by tick (`/api/field/<name>/<tick>`): no history for the engine to keep, no more upload than today (the same bytes in one reply instead of four), and nothing new for the edge to cache. Not `?tick=`: the door and Cloudflare both key on the path alone and ignore the query.*
+
+   **What the Workshop's side needs from it (the contract; everything else is Planet's call):**
+   - **The address: `GET /api/picture/<field>`**, where `<field>` is any name `/api/field/<field>` takes (`[a-z0-9_]+`). The Workshop's door lets exactly this shape through (W5-a, installed before Planet's build goes live). If Planet would rather another name, say so in the handover file **before** going live: the door refuses any address it has not been told about.
+   - **One tick for all four**, and `X-Planet-Tick` on the reply equal to that tick (the restart signal; Workshop rule 12).
+   - **Content type `application/octet-stream` or `application/json`**, so the door compresses it. The layout inside (a small header with the tick and the four lengths, then the four arrays, or whatever suits) is Planet's.
+   - **An unknown field → 404**, like `/api/field/`. GET only; nothing after `?` changes the reply.
+   - **`/api/field/<name>` stays as it is.** The Workshop's public check, the still's daily Action and anything else may still use it.
+   - **In the viewer:** every viewer, or only under `?embed`, is Planet's call (item 9 went to every viewer). If the picture request fails (a door that doesn't know it yet answers 404), the viewer says so in the console and goes back to the four-request way, never a blank or a silent freeze.
+
+   **Checks before it goes live (Planet's own, plus):** through the door on Garcks-PC, `curl -s -D - -o /dev/null -H 'Accept-Encoding: gzip' http://127.0.0.1:8090/api/picture/elevation_m` → 200, gzip, an `X-Planet-Tick`; the planet at `planet.anjaneyaworkshop.co.uk/` and in the hub keeps drawing; `/api/field/elevation_m` unchanged. Rebuild and restart `planet.service` only at Jamie's word, as for D5.
 
 ## What the hub does when these land
 
-- 1: drops the 56 px crop. 4: already listens for `{ planet: 'drawn' }` from the planet's origin and drops the 2.5 s wait by itself; then re-times the Phase 2 gate (live within 2 s). 5: nothing — pinch just works. 6: sends the zoom on a turn instead of reloading. 7–9: nothing; the Workshop re-runs its 5-minute pause monitor to confirm.
+- 1: drops the 56 px crop. 4: already listens for `{ planet: 'drawn' }` from the planet's origin and drops the 2.5 s wait by itself; then re-times the Phase 2 gate (live within 2 s). 5: nothing — pinch just works. 6: sends the zoom on a turn instead of reloading. 8–9: nothing; the Workshop re-runs its 5-minute pause monitor to confirm. 7: the pause monitor re-run (freezes gone?); `check-public.sh` gains the picture address (200, gzip, tick, one second at the edge); then, measured, the door's hold on it tried off again (W4-e); then the glide retuned to what is left (W5).
 
 *Written in Workshop W4 — Phase 2 continued (24 Sep 2026).*

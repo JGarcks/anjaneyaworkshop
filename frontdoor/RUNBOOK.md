@@ -150,6 +150,19 @@ systemctl --user status planet.service --no-pager | head -5
 
 This restarts Planet's own service and changes nothing in Planet (rule 8). If the tick after is **not** lower, say so: the page has nothing to show. Paste the four outputs under **The Phase 2 gate** in the state file with the time; commit and push as in step 9. (The other half of the gate — Garcks-PC's network pulled for a minute — is Jamie's hands alone; nothing to run.)
 
+## For Planet item 7 (W5-a, before Planet's build goes live)
+
+The door learns one new address, `/api/picture/<field>`, so Planet's one-request picture can pass when it lands. `git pull` (the commit named in the handover or later); then **Jamie**: `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door`. PC Claude reads the install log as in step 3 (`nginx -t` ok, `== done`), then:
+
+```bash
+D=http://127.0.0.1:8090
+curl -s -o /dev/null -w '%{http_code}\n' $D/api/field/elevation_m        #   200 (unchanged)
+curl -s -o /dev/null -w '%{http_code}\n' $D/api/picture/elevation_m      #   whatever the engine says to an address it doesn't know yet (write it down); after Planet's build, 200
+curl -s -o /dev/null -w '%{http_code}\n' $D/api/pictures                 #   404 (the door still refuses everything else)
+```
+
+Record the commit, the log's checks and the three answers in the state file; commit and push as in step 9. Then tell Planet Claude (via the handover file) that the door is ready.
+
 ## Changing the door later
 
 `git pull`; then **Jamie** runs `sudo bash ~/anjaneyaworkshop/frontdoor/install.sh door` (for `nginx.conf` or the nginx add-on) or `… install.sh tunnel` (for `config.yml` or the tunnel's service). PC Claude records the commit and the log's checks in the state file.
