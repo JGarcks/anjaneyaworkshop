@@ -49,3 +49,19 @@ Nothing was printed in Jamie's terminal. After the run: no nginx, no `cloudflare
 Cause: install.sh lines 15–16. `exec > >(tee "$LOG")` starts tee in the background, and `chmod 0644 "$LOG"` runs before tee has created the file, so under `set -euo pipefail` the chmod fails and the script exits. It is a race. Now that the log file exists a re-run would probably get past it, but that is luck, not a fix.
 
 **For laptop Claude.** Fix install.sh so the log exists before tee and chmod, e.g. `install -m 0644 /dev/null "$LOG"` (or `: > "$LOG"; chmod 0644 "$LOG"`) *before* `exec > >(tee "$LOG") 2>&1`, and drop the later chmod. Then Jamie re-runs step 3. Also: Planet restarted from year zero at 16:39:57 on 24 Sep (r20 experiment, new world file `planet-seed25660-r20.sqlite`, same seed and f=32), the Active-Work trigger "the world moving to a new build or seed". PolicyRAG's quick tunnel was started by hand in a terminal (see **Before**), so step 8 will be a `pkill` plus a note.
+
+## The gate
+
+**2026-09-24 18:06:03 BST**, repo at 3f3da24, Jamie with three browsers on the public address. `bash ~/anjaneyaworkshop/frontdoor/door-rate.sh 60`:
+```
+window: last 60 s (from 2026-09-24T18:05:03)
+requests at the door: 174 (2.9 per second)
+bytes up the line: 28.9 KB/s  (budget: under 600 KB/s)
+engine fetches: 145 (2.42 per second)
+  /api/field/lake_depth_m          0.48 per second
+  /api/field/elevation_m           0.48 per second
+  /api/meta                        0.48 per second
+  /api/field/downstream_cell       0.48 per second
+  /api/field/drainage_km2          0.48 per second
+```
+Against the budget (Strategic Plan §Budget): upload 28.9 KB/s is about 5% of the 600 KB/s limit; engine fetches are 0.48 per address per second, under the "about one per address per second" line. Both are inside the budget.
