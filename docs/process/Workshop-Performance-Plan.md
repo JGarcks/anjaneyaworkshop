@@ -2,6 +2,8 @@
 
 *Written in the W6 planning session, 25 Sep 2026, from a read of Planet's live viewer (WEB · D8, `viewer2d/viewer.js` on Garcks-PC over SSH), the hub's scripts and the public headers measured that afternoon. Jamie's brief: "optimise for any user on whatever device they may be using", not the laptop. Nothing here is built yet; every decision below is open until Jamie takes it at the next decision round, and every Planet item goes to Planet Claude as a request under rule 8. Read at the W6 decision round; after that the Coverage Plan and Active-Work carry the pointer.*
 
+*W7 (25 Sep, Jamie): performance and quality only — data use on phones is not a concern (W7-a), so P-B is settled at one picture a second and finding 9 is dropped; P-D becomes a steady 30 fps only where a device cannot hold 60. P-H (colour per cell) was taken first and alone (W7-b): Planet request item 16, `requests/planet-performance.md`. The rest goes to W8's round.*
+
 ## What one visitor costs today
 
 | Cost | Today (WEB · D8, W5-d hub) |

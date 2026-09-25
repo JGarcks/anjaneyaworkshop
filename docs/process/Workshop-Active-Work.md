@@ -10,15 +10,14 @@
 
 **Phases 0–1 closed (W1, W2).** **Phase 2 — the landing page: open.** Live at `anjaneyaworkshop.co.uk`: the name and the Planet link top left, the line at the bottom, the planet full screen behind, the still handing over through the dark, the still retaken daily by GitHub (11:17 UTC). 57 tests; check-public 24/24. Planet's `?embed` (WEB · D5) live since 21:45 on 24 Sep. Detail: `progress/2026-09.md` §W3, §W4.
 
-**W6 planning session (25 Sep):** the graphics and performance review for any visitor is in `Workshop-Performance-Plan.md`: nine findings, decisions P-A…P-H for the next decision round, Planet items 12–17 to request once Jamie decides, and the device matrix that replaces the laptop as the yardstick. Read it at the next build session's decision round.
+**In flight — W7, colour per cell (25 Sep):** Planet request item 16 (`requests/planet-performance.md`) handed over at the end of `Desktop/for-laptop-claude.txt`. Planet Claude builds and measures it on Garcks-PC; live at Jamie's word with Jamie watching the spin (W7-c). When the reply lands: log its numbers, run the hub monitor and W5-e's 10 s laptop measurement, record Jamie's look. Brief (W7-a): performance and quality on any device; data use not a concern. The live viewer is WEB · D8 (D9 withdrawn 01:21, 25 Sep).
 
-**Next build session: W5 — the planet's movement, then the gate.** Start here:
-0. **Done 24 Sep (W5-a…c):** Planet items 7 (`/api/picture/`, one request per picture) and 10 (the spin's catch: pictures prepared a slice a frame; glide 1.5 behind) live; the door no longer holds `/api/picture/` or `/api/meta`. A picture reaches the hub every ~1.05 s, none over 3 s (was 2.1 s, freezes to 38 s). Detail: `progress/2026-09.md` §W5-a.
-1. **Open from it:** Jamie's walk after item 10 on the laptop: "best it's been by far — not perfect, good enough for now" (a small catch left, held); the phone not yet walked; the frame-rate numbers from Jamie's Chrome for Planet Claude not taken (the tab was hidden, then closed). `check-public.sh` does not yet assert `/api/picture/` (200, gzip, tick, BYPASS at the door). W5-c is Claude's, by the numbers — confirm or undo at the next round.
-2. **The hub's side of `?embed`:** drop the 56 px crop; send `{ planet: 'zoom' }` on a phone turn instead of reloading; re-time the live globe with "drawn" (unloaded laptop — W4's try ran under three browsers).
-3. **The gate's rest:** the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk incl. pinch-out on the phone. The restart half passed in W4 ("resumed" 2 s after the restart, no reload).
+**Next build session: W8 — the rest of the performance round, then the gate.** Put at its decision round, with W6's recommendations as revised in W7 (`progress/2026-09.md` §W7):
+1. Planet items 12 (culling, after a winding check), 13 (D9 retried, the stutter measured), 14 (a steady 30 fps only where 60 cannot be held; `prefers-reduced-motion`; meta poll 500 ms, Claude's by the numbers), 15 (`viewer.js` cached with a version) — the baseline first (device matrix, `Workshop-Performance-Plan.md`).
+2. The hub: the still kept until "drawn" (P-F, one test); `{ planet: 'zoom' }` on a phone turn instead of reloading (agreed W5); `check-public.sh` asserts `/api/picture/` (200, gzip, tick, BYPASS at the door). W5-c (meta not held) to confirm.
+3. The gate's rest: the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk on the laptop and phone incl. pinch-out, after the Planet items. The restart half passed in W4.
 
-**Pending Jamie:** Planet item 11 (less GPU work, same picture — W5-e) live at Jamie's word, then laptop Claude re-measures · the phone walk after item 10 · W5-c (meta not held) to confirm · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
+**Pending Jamie:** item 16 live and watched · the phone walk · W5-c to confirm · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
 
 **Who's who:** laptop Claude writes and commits; Desktop Claude (the docs' "PC Claude") runs runbook steps on Garcks-PC and commits only `frontdoor/state/`; Planet Claude does Planet's code (rule 8: never edited here). Requests go through `Desktop/for-laptop-claude.txt`.
 
