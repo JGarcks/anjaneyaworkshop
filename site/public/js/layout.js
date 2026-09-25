@@ -1,11 +1,12 @@
 /*
  * layout.js — where the globe, the framed viewer and the words go, for any screen size.
  * In:  the screen's width and height in CSS pixels.
- * Out: the globe's centre and width, the frame's box (larger than the screen), the viewer's ?zoom=, and whether a new shape needs a reload.
+ * Out: the globe's centre and width, the frame's box, the viewer's ?zoom=, and how a new shape reaches the viewer (a message or a reload).
  * Decision: the viewer fills the screen behind everything (Jamie, W3 decision 2); since it centres the globe and sizes it
  *   to its own height (width = zoom × height), the page sets the frame's box and the zoom so the globe lands where it chooses:
  *   centred between the name and rooms at the top and the line at the very bottom (Jamie, W3 first look; W4-a).
- * Built in W3 — the landing page (24 Sep 2026); bands re-measured in W4 when the rooms moved under the name; W5-d drops the crop.
+ * Built in W3 — the landing page (24 Sep 2026); bands re-measured in W4 when the rooms moved under the name; W5-d drops the crop;
+ *   W8 sends a turned phone's zoom by message (Jamie, W8-b).
  */
 export const SIDE = 16;     // the gutter at the screen's sides
 export const TOP = 80;      // the band the name and the rooms beneath it sit in (style.css #top: 72 px measured, W4)
@@ -18,12 +19,20 @@ export const BOTTOM = 12;   // the words' distance from the screen's bottom edge
 export const CROP = 0;
 export const MOST = 0.78;   // the globe's width at most, as a share of the screen's height
 export const LEAST = 120;   // the globe's width at least, on the smallest screens
-export const RESHAPE_SHARE = 0.02;   // the zoom must change by more than this to reload the frame (a phone turned, a window resized)
+export const RESHAPE_SHARE = 0.02;   // the zoom must change by more than this to reshape the viewer (a phone turned, a window resized)
 
-// Whether a new screen shape needs the viewer reloaded: its zoom is fixed in its address, and the frame is from another
-// address, so a new zoom means a new load (until Planet's ?embed takes a zoom by message).
+// Whether a new screen shape needs the viewer's zoom changed (a smaller change leaves a visitor's own pinch alone).
 export function reshapes(fromZoom, toZoom) {
   return fromZoom === null || Math.abs(toZoom - fromZoom) / fromZoom > RESHAPE_SHARE;
+}
+
+// How a new shape reaches the viewer. Planet's ?embed takes a new zoom by message, so the globe keeps turning through a
+// phone's turn (W8-b) — but only from the Workshop's own address and only once it has drawn (listening, and with a picture
+// to keep); otherwise the frame reloads at the new zoom, as before W8. While the still shows, nothing: the frame reloads
+// at the right shape when the door answers again.
+export function howToReshape(fromZoom, toZoom, { fromHub, drawn, still }) {
+  if (still || !reshapes(fromZoom, toZoom)) return "none";
+  return fromHub && drawn ? "message" : "reload";
 }
 
 export function layout(width, height) {

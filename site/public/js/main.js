@@ -5,11 +5,11 @@
  *   a console warning naming any failure (rule 10).
  * Decision: every rule lives in the tested modules (watch, line, layout); this file only wires them to the page. It asks with the browser's
  *   ordinary caching, never "no-store", so Cloudflare's one-second copy answers every visitor and the house sees one ask a second.
- * Built in W3 — the landing page (24 Sep 2026).
+ * Built in W3 — the landing page (24 Sep 2026); W8 keeps the still until "drawn" and turns a phone by message.
  */
-import { layout, reshapes } from "./layout.js";
+import { howToReshape, layout, reshapes } from "./layout.js";
 import { formatLastSeen, formatLine } from "./line.js";
-import { PLANET, viewerAddress } from "./planet.js";
+import { HUB, PLANET, viewerAddress } from "./planet.js";
 import { createWatch, DRAWN_LATE_MS } from "./watch.js";
 
 const POLL_MS = 2000;          // how often the page asks for the live line
@@ -118,12 +118,23 @@ window.addEventListener("message", (event) => {
   if (event.data && event.data.planet === "drawn") { watch.frameDrawn(Date.now()); render(); }
 });
 
-// A phone turned: the old picture would show stretched into a corner until the frame reloads, so it goes at once
-// (no fade) and the still moves to the new shape straight away; the frame reloads when the resize settles.
+// A phone turned. Drawn, and on the Workshop's own address: the frame takes its new box and the viewer its new zoom by
+// message, and the globe keeps turning through it (W8-b; a squash for a frame or two is the accepted cost). Otherwise the old
+// picture would show stretched into a corner until the frame reloads, so it goes at once (no fade), the still moves to the
+// new shape straight away, and the frame reloads when the resize settles.
 let reshape = null;
 window.addEventListener("resize", () => {
   const now = layout(window.innerWidth, window.innerHeight);
-  if (!turning && reshapes(frameZoom, now.zoom)) {
+  const v = watch.view(Date.now());
+  const how = howToReshape(frameZoom, now.zoom, { fromHub: location.origin === HUB, drawn: v.drawn, still: v.still });
+  if (how === "message") {
+    place();
+    frameZoom = now.zoom;
+    frame.contentWindow.postMessage({ planet: "zoom", zoom: now.zoom }, PLANET);
+  }
+  if (!turning && how === "reload") {
+    console.info(location.origin === HUB ? "The screen changed shape before the live picture was drawn: reloading it at the new shape."
+      : `The screen changed shape: reloading the live picture (the viewer takes a new zoom by message only from ${HUB}).`);
     turning = true;
     frame.classList.add("turning");
     watch.frameReloaded(Date.now());
