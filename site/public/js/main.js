@@ -1,6 +1,6 @@
 /*
  * main.js — the landing page at work: places the frame and the still, asks the planet for its numbers every two seconds, shows what watch.js decides.
- * In:  the screen's size; /api/meta through the front door; the framed viewer's load (and, once Planet has ?embed, its "drawn" message); still/planet.json.
+ * In:  the screen's size; /api/meta through the front door; the framed viewer's load and its "drawn" message (Planet's ?embed); still/planet.json.
  * Out: the frame and the still where layout.js puts them, one or the other on screen; the live line; "last seen at …" or "resumed";
  *   a console warning naming any failure (rule 10).
  * Decision: every rule lives in the tested modules (watch, line, layout); this file only wires them to the page. It asks with the browser's
@@ -10,7 +10,7 @@
 import { layout, reshapes } from "./layout.js";
 import { formatLastSeen, formatLine } from "./line.js";
 import { PLANET, viewerAddress } from "./planet.js";
-import { createWatch } from "./watch.js";
+import { createWatch, DRAWN_LATE_MS } from "./watch.js";
 
 const POLL_MS = 2000;          // how often the page asks for the live line
 const ASK_TIMEOUT_MS = 4000;   // an ask with no answer by then counts as a failure
@@ -24,6 +24,7 @@ let stillZoom = 0.9;           // replaced by still/planet.json's own figure whe
 let stillMeta = null;          // the numbers the still was taken with: the line before the door first answers
 let frameZoom = null;
 let timer = null, asking = false;
+let warnedLate = false;        // the "not drawn" warning, once per load of the frame
 
 const px = (n) => n + "px";
 function placeStill(L) {
@@ -43,6 +44,7 @@ function loadFrame(L) {
   turning = false;
   frame.classList.remove("turning");
   frameZoom = L.zoom;
+  warnedLate = false;
   watch.frameReloaded(Date.now());
   frame.src = viewerAddress(L.zoom);
 }
@@ -62,6 +64,10 @@ function setLine(text) {
 function render() {
   const now = Date.now();
   const v = watch.view(now);
+  if (v.drawnLate && !warnedLate) {
+    warnedLate = true;
+    console.warn(`The live viewer (${PLANET}) loaded ${DRAWN_LATE_MS / 1000} s ago and has not said "drawn": it could not draw here (no 3D graphics, or an error inside it). The still stays (W8-a).`);
+  }
   frame.classList.toggle("shown", v.showFrame);
   still.classList.toggle("gone", v.showFrame);   // never both: style.css hands one to the other through the dark (W4-b)
   const meta = v.meta ?? stillMeta;
@@ -106,7 +112,7 @@ async function ask() {
 
 frame.addEventListener("load", () => { watch.frameLoaded(Date.now()); render(); });
 
-// Planet's ?embed (requested, W3 decision 1A) will say when its first picture is on screen; until then watch.js waits a fixed time.
+// Planet's ?embed says when its first picture is on screen (W3 decision 1A, live 24 Sep); the still stays until it does (W8-a).
 window.addEventListener("message", (event) => {
   if (event.origin !== PLANET || event.source !== frame.contentWindow) return;
   if (event.data && event.data.planet === "drawn") { watch.frameDrawn(Date.now()); render(); }

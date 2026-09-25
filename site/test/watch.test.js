@@ -6,12 +6,12 @@
  * Built in W3 — the landing page (24 Sep 2026).
  */
 import { expect, it } from "vitest";
-import { createWatch, DRAWN_GUESS_MS, RESUMED_FOR_MS } from "../public/js/watch.js";
+import { createWatch, DRAWN_LATE_MS, RESUMED_FOR_MS } from "../public/js/watch.js";
 
 const meta = (tick) => ({ tick, year: tick * 100_000 });
 
-// A page that loaded its frame at 0 ms and heard from the door at 500 ms.
-function livePage() {
+// A page that began loading its frame at 0 ms, saw it load at 300 ms and heard from the door at 500 ms.
+function loadingPage() {
   const w = createWatch({ startedAt: 0 });
   w.stillTaken(-86_400_000);
   w.frameLoaded(300);
@@ -19,16 +19,34 @@ function livePage() {
   return w;
 }
 
-it("the still stays on top until the frame has had time to draw", () => {
-  const w = livePage();
-  expect(w.view(300 + DRAWN_GUESS_MS - 1).showFrame).toBe(false);
-  expect(w.view(300 + DRAWN_GUESS_MS).showFrame).toBe(true);
+// The same page once the viewer has said "drawn" (900 ms).
+function livePage() {
+  const w = loadingPage();
+  w.frameDrawn(900);
+  return w;
+}
+
+it("the still stays on top until the viewer says it has drawn, however long that takes", () => {
+  const w = loadingPage();
+  expect(w.view(60_000).showFrame).toBe(false);
 });
 
-it("the frame shows as soon as the viewer says it has drawn, without waiting for the guess", () => {
-  const w = livePage();
+it("the frame shows as soon as the viewer says it has drawn", () => {
+  const w = loadingPage();
   w.frameDrawn(900);
   expect(w.view(900).showFrame).toBe(true);
+});
+
+it("a viewer that never draws (no 3D graphics) keeps the still for good and is reported late, not as an outage", () => {
+  const w = loadingPage();
+  for (let at = 2500; at <= 60_000; at += 2000) w.metaOk(meta(1000 + at / 1000), at);
+  expect(w.view(300 + DRAWN_LATE_MS - 1)).toMatchObject({ showFrame: false, drawnLate: false, still: false, lastSeenAt: null });
+  expect(w.view(300 + DRAWN_LATE_MS)).toMatchObject({ showFrame: false, drawnLate: true, still: false, lastSeenAt: null });
+});
+
+it("a viewer that has drawn is never reported late", () => {
+  const w = livePage();
+  expect(w.view(300 + DRAWN_LATE_MS).drawnLate).toBe(false);
 });
 
 it("a frame that loaded while the door never answered is never shown (it may hold an error page)", () => {
@@ -73,7 +91,8 @@ it("when the door answers again the page leaves the still and reloads the frame 
   w.frameReloaded(60_000);
   w.frameLoaded(60_400);
   expect(w.view(60_400).showFrame).toBe(false);
-  expect(w.view(60_400 + DRAWN_GUESS_MS)).toMatchObject({ showFrame: true, still: false, lastSeenAt: null });
+  w.frameDrawn(61_200);
+  expect(w.view(61_200)).toMatchObject({ showFrame: true, still: false, lastSeenAt: null });
 });
 
 it("a live page never asks for the frame to be reloaded", () => {
