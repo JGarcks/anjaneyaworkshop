@@ -4,6 +4,8 @@
 
 *W7 (25 Sep, Jamie): performance and quality only — data use on phones is not a concern (W7-a), so P-B is settled at one picture a second and finding 9 is dropped; P-D becomes a steady 30 fps only where a device cannot hold 60. P-H (colour per cell) was taken first and alone (W7-b): Planet request item 16, `requests/planet-performance.md`. The rest goes to W8's round.*
 
+*W8 (25 Sep): the hub's half built — P-F (the still until "drawn"; if never drawn it stays, W8-a) and the turn by message (W8-b). Items 12–15 and the baseline are W9, after item 16, on a quiet Garcks-PC (W8-d).*
+
 ## What one visitor costs today
 
 | Cost | Today (WEB · D8, W5-d hub) |
