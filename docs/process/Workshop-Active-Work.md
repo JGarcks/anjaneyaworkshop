@@ -14,7 +14,7 @@
 
 **Next build session: W9 — the Planet half of the performance round, then the gate (W8, the hub's half, done; split W8-d). Waits for item 16 live and measured.** At its decision round, W6's recommendations as revised in W7:
 1. Planet items 12 (culling, after a winding check), 13 (D9 retried, the stutter measured), 14 (a steady 30 fps only where 60 cannot be held; `prefers-reduced-motion`; meta poll 500 ms, Claude's by the numbers), 15 (`viewer.js` cached with a version) — the baseline first, on a quiet Garcks-PC (device matrix, `Workshop-Performance-Plan.md`).
-2. The gate's rest: the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk on the laptop and phone incl. pinch-out and a turn (W8-b: a squash seen → the dip), after the Planet items. The restart half passed in W4; the live globe at 1.76 s headless (W8).
+2. The gate's rest: the network unplugged a minute, `door-rate.sh 60` (Desktop Claude), Jamie's walk on the laptop and phone incl. pinch-out, after the Planet items (the turn passed on Jamie's Android, W8). The restart half passed in W4; the live globe at 1.76 s headless (W8).
 
 **Pending Jamie:** the daily still did not commit on 25 Sep — re-run "The still" in GitHub's Actions tab (and read why) before ~22:18 BST, when check-public turns red · item 16 live and watched · the phone walk · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
 
