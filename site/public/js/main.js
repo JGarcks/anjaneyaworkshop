@@ -32,9 +32,9 @@ function placeStill(L) {
   Object.assign(still.style, { left: px(L.globe.x), top: px(L.globe.y), width: px(size), height: px(size) });
 }
 
+// The frame's box is style.css's (it turns with the page); only the still and the viewer's zoom follow the screen from here.
 function place() {
   const L = layout(window.innerWidth, window.innerHeight);
-  Object.assign(frame.style, { left: px(L.frame.left), top: px(L.frame.top), width: px(L.frame.width), height: px(L.frame.height) });
   placeStill(L);
   return L;
 }

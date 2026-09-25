@@ -6,8 +6,9 @@
  *   not the arithmetic behind it, so the numbers can be tuned at Jamie's walk without rewriting the tests.
  * Built in W3 — the landing page (24 Sep 2026); W8 adds how a turn reaches the viewer.
  */
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { howToReshape, layout, reshapes, BOTTOM, CROP, SIDE, TEXT, TOP } from "../public/js/layout.js";
+import { howToReshape, layout, reshapes, BELOW, BOTTOM, SIDE, TEXT, TOP } from "../public/js/layout.js";
 
 const screens = { laptop: [1440, 900], phone: [390, 844], "phone turned": [844, 390], "small laptop": [1280, 720] };
 
@@ -31,15 +32,11 @@ for (const [name, [w, h]] of Object.entries(screens)) {
 
     it("the frame is centred on the globe, so the viewer's centred globe lands there", () => {
       expect(L.frame.left + L.frame.width / 2).toBeCloseTo(L.globe.x, 5);
-      expect(L.frame.top + L.frame.height / 2).toBeCloseTo(L.globe.y, 0);
+      expect(L.frame.top + L.frame.height / 2).toBeCloseTo(L.globe.y, 5);
     });
 
-    it("the frame covers the whole screen (and no more than CROP past it, since ?embed hides the buttons — W5-d)", () => {
-      expect(L.frame.left).toBeLessThanOrEqual(-CROP);
-      expect(L.frame.top).toBeLessThanOrEqual(-CROP);
-      expect(L.frame.left + L.frame.width).toBeGreaterThanOrEqual(w + CROP);
-      expect(L.frame.top + L.frame.height).toBeGreaterThanOrEqual(h + CROP);
-      expect(L.frame.width).toBe(w + 2 * CROP);
+    it("the frame covers the whole screen and only BELOW more at the bottom (no crop since ?embed hides the buttons — W5-d)", () => {
+      expect(L.frame).toEqual({ left: 0, top: 0, width: w, height: h + BELOW });
     });
   });
 }
@@ -83,4 +80,11 @@ describe("a phone turning (W8-b)", () => {
   it("a window a few pixels shorter sends nothing, so a visitor's own pinch stays", () => {
     expect(howToReshape(layout(1440, 900).zoom, layout(1440, 896).zoom, live)).toBe("none");
   });
+});
+
+it("style.css sizes the frame exactly as layout.js reckons it, so the frame turns with the page and the zoom still fits (W8 walk)", () => {
+  const css = readFileSync(new URL("../public/style.css", import.meta.url), "utf8");
+  const rule = css.match(/^#planet \{([^}]*)\}/m)[1];
+  expect(BELOW).toBeGreaterThanOrEqual(0);
+  for (const line of ["left: 0;", "top: 0;", "width: 100%;", `height: calc(100% + ${BELOW}px);`]) expect(rule).toContain(line);
 });

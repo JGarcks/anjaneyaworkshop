@@ -6,17 +6,19 @@
  *   to its own height (width = zoom × height), the page sets the frame's box and the zoom so the globe lands where it chooses:
  *   centred between the name and rooms at the top and the line at the very bottom (Jamie, W3 first look; W4-a).
  * Built in W3 — the landing page (24 Sep 2026); bands re-measured in W4 when the rooms moved under the name; W5-d drops the crop;
- *   W8 sends a turned phone's zoom by message (Jamie, W8-b).
+ *   W8 sends a turned phone's zoom by message (Jamie, W8-b), and the frame's box moves to style.css (below).
  */
 export const SIDE = 16;     // the gutter at the screen's sides
 export const TOP = 80;      // the band the name and the rooms beneath it sit in (style.css #top: 72 px measured, W4)
 export const GAP = 20;      // at least this between the globe and the words
 export const TEXT = 44;     // the status note and the live line (style.css #words: 37 px measured, W4)
 export const BOTTOM = 12;   // the words' distance from the screen's bottom edge (style.css #words)
-// How far the frame runs past every edge. W3 ran it 56 px out to hide the viewer's corner buttons (decision 1A); Planet's
-// ?embed hides them itself since 24 Sep, and the hidden margin cost the viewer 22–46% more pixels a frame (Jamie: the spin
-// smoother on planet. than on the hub), so none (W5-d).
-export const CROP = 0;
+// The frame is the whole screen and BELOW pixels more at the bottom, whatever the screen's shape: the name's band is that
+// much taller than the words', so this puts the frame's centre (where the viewer centres its globe) at the band's centre.
+// Because the box never depends on the shape, style.css holds it (#planet) and Chrome turns it with the page in one step;
+// set from here after each resize, the globe showed off centre, resized and jumped back on Jamie's Android (W8 walk).
+// (W3 ran the frame 56 px past every edge to hide the viewer's buttons; ?embed hides them, and W5-d dropped it.)
+export const BELOW = TOP - (BOTTOM + TEXT + GAP);
 export const MOST = 0.78;   // the globe's width at most, as a share of the screen's height
 export const LEAST = 120;   // the globe's width at least, on the smallest screens
 export const RESHAPE_SHARE = 0.02;   // the zoom must change by more than this to reshape the viewer (a phone turned, a window resized)
@@ -41,9 +43,8 @@ export function layout(width, height) {
   const fits = Math.min(width - 2 * SIDE, bandBottom - bandTop, MOST * height);
   const d = Math.max(LEAST, Math.round(fits));
   const x = width / 2;
-  const y = Math.round((bandTop + bandBottom) / 2);
-  // The frame is centred on the globe and reaches CROP past the screen's nearer and further edges alike.
-  const half = Math.max(y, height - y) + CROP;
-  const frame = { left: -CROP, top: Math.round(y - half), width: width + 2 * CROP, height: Math.round(2 * half) };
+  const y = (bandTop + bandBottom) / 2;
+  // What style.css sets for #planet: the screen, and BELOW more at the bottom; its centre is (x, y).
+  const frame = { left: 0, top: 0, width, height: height + BELOW };
   return { globe: { x, y, d }, frame, zoom: d / frame.height, textTop: height - BOTTOM - TEXT };
 }
