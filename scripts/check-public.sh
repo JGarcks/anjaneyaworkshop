@@ -5,7 +5,7 @@
 # Decision: the budget is a test (CLAUDE.md rule 9) — a FAIL here blocks the commit exactly as a red npm test does.
 # Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door);
 #   W3 — the landing page began Phase 2 (browsers re-check the hub's files); W4 added the hub's framing, the still's age and
-#   time to first picture.
+#   time to first picture; W8 the one-request picture and what the door holds.
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
@@ -115,6 +115,26 @@ if (( THROUGH >= 1 )); then
   # 10. Anything but Planet's own addresses stops at the door.
   code="$(curl -sS -o /dev/null --max-time 15 -w '%{http_code}' "$PLANET/not-a-planet-address" 2>/dev/null)"
   if [[ "$code" == 404 ]]; then pass "an unknown path → 404 at the door"; else fail "an unknown path → expected 404, got $code"; fi
+
+  # 15. The one-request picture (Planet item 7, W5-a) — what the viewer actually draws from: 200, compressed, carrying the tick,
+  #     one second at the edge. The door passes it and meta straight through (W5-b; W5-c, confirmed W8-c: X-Cache-Status BYPASS)
+  #     but still holds the separate fields, which only its hold keeps in step (W4-e). Checked W8.
+  h="$(headers "$PLANET/api/picture/elevation_m" -H 'Accept-Encoding: gzip')"
+  wire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/picture/elevation_m" 2>/dev/null)"
+  tick="$(header x-planet-tick "$h")"
+  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -lt 164000 && "$tick" =~ ^[0-9]+$ ]]; then
+    pass "picture elevation_m → 200, gzip, $wire bytes on the wire (164,000 uncompressed), tick $tick"
+  else
+    fail "picture elevation_m → expected 200 gzip under 164,000 bytes with X-Planet-Tick, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes, tick ${tick:-none}"
+  fi
+  cc="$(header cache-control "$h")"
+  if [[ "$cc" == "public, max-age=0, s-maxage=1" ]]; then pass "/api/picture/ Cache-Control: $cc"; else fail "/api/picture/ Cache-Control: expected public, max-age=0, s-maxage=1, got ${cc:-none}"; fi
+  for path in /api/picture/elevation_m /api/meta; do
+    door="$(header x-cache-status "$(headers "$PLANET$path")")"
+    if [[ "$door" == bypass ]]; then pass "$path not held at the door (X-Cache-Status BYPASS)"; else fail "$path held at the door: expected X-Cache-Status BYPASS (W5-b/c), got ${door:-none}"; fi
+  done
+  door="$(header x-cache-status "$(headers "$PLANET/api/field/elevation_m")")"
+  if [[ -n "$door" && "$door" != bypass ]]; then pass "/api/field/ held at the door, keeping the fields in step (X-Cache-Status ${door^^})"; else fail "/api/field/ not held at the door (X-Cache-Status ${door:-none}): the separate fields fall out of step without it (W4-e)"; fi
 
   echo "(The engine's load and the house's upload are measured at nginx: frontdoor/door-rate.sh, pasted into frontdoor/state/.)"
 fi
