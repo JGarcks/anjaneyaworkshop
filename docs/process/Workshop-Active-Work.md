@@ -10,6 +10,8 @@
 
 **Phases 0–1 closed (W1, W2).** **Phase 2 — the landing page: open.** Live at `anjaneyaworkshop.co.uk`: the name and the Planet link top left, the line at the bottom, the planet full screen behind, the still handing over through the dark, the still retaken daily by GitHub (11:17 UTC). 57 tests; check-public 24/24. Planet's `?embed` (WEB · D5) live since 21:45 on 24 Sep. Detail: `progress/2026-09.md` §W3, §W4.
 
+**W6 planning session (25 Sep):** the graphics and performance review for any visitor is in `Workshop-Performance-Plan.md`: nine findings, decisions P-A…P-H for the next decision round, Planet items 12–17 to request once Jamie decides, and the device matrix that replaces the laptop as the yardstick. Read it at the next build session's decision round.
+
 **Next build session: W5 — the planet's movement, then the gate.** Start here:
 0. **Done 24 Sep (W5-a…c):** Planet items 7 (`/api/picture/`, one request per picture) and 10 (the spin's catch: pictures prepared a slice a frame; glide 1.5 behind) live; the door no longer holds `/api/picture/` or `/api/meta`. A picture reaches the hub every ~1.05 s, none over 3 s (was 2.1 s, freezes to 38 s). Detail: `progress/2026-09.md` §W5-a.
 1. **Open from it:** Jamie's walk after item 10 on the laptop: "best it's been by far — not perfect, good enough for now" (a small catch left, held); the phone not yet walked; the frame-rate numbers from Jamie's Chrome for Planet Claude not taken (the tab was hidden, then closed). `check-public.sh` does not yet assert `/api/picture/` (200, gzip, tick, BYPASS at the door). W5-c is Claude's, by the numbers — confirm or undo at the next round.
