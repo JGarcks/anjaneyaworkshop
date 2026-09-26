@@ -205,3 +205,27 @@ Record them in the state file; commit and push as in step 9. **To undo** (if lap
 ## The gate
 <door-rate.sh output, with the time, when asked>
 ```
+
+---
+
+## The move to the rented server (W9, 26 Sep 2026)
+
+*The engine, nginx and the tunnel move to the OVH server (WS · D7). Laptop Claude does the server over SSH (`frontdoor/server.sh`, `install.sh door`, `scripts/planet-release.sh`). Only two steps happen on Garcks-PC, both needing the admin password, so both are **Jamie's**, typed at Garcks-PC when laptop Claude says the server is ready. PC Claude is not needed for this section.*
+
+**M1. Hand the tunnel's key over.** **Jamie**, in a terminal on Garcks-PC:
+
+```bash
+sudo install -o garcks -m 0400 /etc/cloudflared/anjaneya-frontdoor.json /home/garcks/tunnel-handover.json
+```
+
+Laptop Claude copies it straight to the server (it passes through the laptop's memory, never its disk or this repo) and deletes `~/tunnel-handover.json`. **Check:** `ls ~/tunnel-handover.json` says *No such file* afterwards.
+
+**M2. The switch.** **Jamie**, straight after laptop Claude says "go":
+
+```bash
+sudo bash ~/anjaneyaworkshop/frontdoor/install.sh close
+```
+
+Garcks-PC's tunnel stops and will not start at boot; laptop Claude starts the server's within the minute. For those seconds the page keeps its last picture (and the still after ~10 s): nobody sees a blank (rule 10). nginx stays installed on the PC, idle on 127.0.0.1; `planet.service` is untouched — the kiosk and Planet's experiments go on as before, just not in public.
+
+**To go back** (if the server fails and cannot be mended quickly): laptop Claude stops the server's tunnel, then **Jamie** runs `sudo systemctl enable --now cloudflared-frontdoor` on Garcks-PC. The public planet is then the PC's again.

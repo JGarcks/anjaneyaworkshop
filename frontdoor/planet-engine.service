@@ -1,0 +1,45 @@
+# planet-engine.service — runs the public planet on the rented server, on an account of its own, reachable from the server itself only.
+# In:  the Planet program in /opt/planet/planet and its settings in /etc/planet/engine.env, both put there by scripts/planet-release.sh.
+# Out: the engine on port 8080, answering nginx on this machine and nobody else; the world saved into /var/lib/planet every 500 ticks.
+# Decision: WS · D7 (the engine moves to the server) and W9-b (only the tunnel's door is public; rule 11: the engine never is).
+# Built in W9 — the rented server (26 Sep 2026). Installed as /etc/systemd/system/planet-engine.service by frontdoor/server.sh base.
+#
+# The engine listens on every address and has no setting to change that (Planet's own code; a bind setting would be a
+# request to Planet, rule 8). So this unit fences it in two ways: IPAddressDeny/Allow drops every packet to or from
+# the engine that is not this machine talking to itself, and the firewall (server.sh base) lets nothing in but SSH.
+# The program and its arguments change with each Planet release; this file does not.
+
+[Unit]
+Description=Planet: the public world, served to nginx on this machine only
+After=network.target
+
+[Service]
+User=planet
+Group=planet
+StateDirectory=planet
+WorkingDirectory=/var/lib/planet
+EnvironmentFile=/etc/planet/engine.env
+# PLANET_ARGS is split into words here (unbraced $): serve, seed, f, port, tps and the world file under /var/lib/planet.
+ExecStart=/opt/planet/planet $PLANET_ARGS
+Restart=on-failure
+RestartSec=10s
+MemoryMax=2G
+
+# Nothing but loopback can reach it (the public reaches nginx only through the tunnel).
+IPAddressDeny=any
+IPAddressAllow=localhost
+
+# Sealed off: it reads its program and writes its world, nothing else.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target
