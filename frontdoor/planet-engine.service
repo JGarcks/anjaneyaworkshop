@@ -19,6 +19,11 @@ Group=planet
 StateDirectory=planet
 WorkingDirectory=/var/lib/planet
 EnvironmentFile=/etc/planet/engine.env
+# The same planet as Garcks-PC's (Planet's rule 4): this server's newer C library picks faster rounding paths for
+# sin, exp and the like on a processor with FMA/AVX2, which Garcks-PC's i7-3820 lacks, and the world drifts from the
+# first ticks (seed 2 f 8 at 2,000 ticks: 784394f0… here, f7ebff07… there). With those paths off the hashes match
+# (also seed 25660 f 32 at 3,000 ticks: b1461de6… on both). Found and measured in W9, 26 Sep 2026.
+Environment=GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2,-FMA,-AVX
 # PLANET_ARGS is split into words here (unbraced $): serve, seed, f, port, tps and the world file under /var/lib/planet.
 ExecStart=/opt/planet/planet $PLANET_ARGS
 Restart=on-failure

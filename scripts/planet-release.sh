@@ -56,7 +56,11 @@ echo "== 3b. the same planet on both machines? (Planet's rule 4 promises its has
 # server's processor would grow a different world from the same save: stop, and tell Jamie and Planet Claude.
 HASH_RUN='d=$(mktemp -d) && cd "$d" && "$0" run --seed 2 --f 8 --ticks 2000 | sed -n "s/^world hash //p"; rm -rf "$d"'
 PC_HASH="$("${SSH[@]}" "$PC" "sh -c '$HASH_RUN' '$BIN'")"
-VPS_HASH="$("${SSH[@]}" "$VPS" "chmod +x /tmp/planet-release/planet && sh -c '$HASH_RUN' /tmp/planet-release/planet")"
+# On the server, with the same setting the engine's service runs under (planet-engine.service: the maths library's
+# fast paths off, without which this server rounds differently from Garcks-PC — W9).
+TUNE="$("${SSH[@]}" "$VPS" 'systemctl show planet-engine -p Environment --value' | tr ' ' '\n' | grep '^GLIBC_TUNABLES=' || true)"
+[[ -n "$TUNE" ]] || { echo "STOPPED: planet-engine.service on the server has no GLIBC_TUNABLES; run server.sh base first." >&2; exit 1; }
+VPS_HASH="$("${SSH[@]}" "$VPS" "chmod +x /tmp/planet-release/planet && $TUNE sh -c '$HASH_RUN' /tmp/planet-release/planet")"
 echo "Garcks-PC: $PC_HASH"; echo "server:    $VPS_HASH"
 [[ -n "$PC_HASH" && "$PC_HASH" == "$VPS_HASH" ]] || { echo "STOPPED: the hashes differ; nothing installed. Tell Jamie and Planet Claude." >&2; exit 1; }
 NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC"
