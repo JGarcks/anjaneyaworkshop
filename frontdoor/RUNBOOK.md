@@ -226,6 +226,6 @@ Laptop Claude copies it straight to the server (it passes through the laptop's m
 sudo bash ~/anjaneyaworkshop/frontdoor/install.sh close
 ```
 
-Garcks-PC's tunnel stops and will not start at boot; laptop Claude starts the server's within the minute. For those seconds the page keeps its last picture (and the still after ~10 s): nobody sees a blank (rule 10). nginx stays installed on the PC, idle on 127.0.0.1; `planet.service` is untouched — the kiosk and Planet's experiments go on as before, just not in public.
+Garcks-PC's tunnel stops and will not start at boot; laptop Claude starts the server's within the minute. For those seconds the page keeps its last picture (and the still after ~10 s): nobody sees a blank (rule 10). nginx stays installed on the PC, idle on 127.0.0.1; the Workshop does not touch `planet.service`: at the switch Planet Claude or Jamie stops it and keeps it stopped (W9-d), its files kept as the fallback; experiments on the PC go on whenever wanted, never public.
 
 **To go back** (if the server fails and cannot be mended quickly): laptop Claude stops the server's tunnel, then **Jamie** runs `sudo systemctl enable --now cloudflared-frontdoor` on Garcks-PC. The public planet is then the PC's again.
