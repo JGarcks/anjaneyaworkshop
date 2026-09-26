@@ -51,6 +51,17 @@ NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM
   echo "args: $SARGS"
 } | "${SSH[@]}" "$VPS" 'cat > /tmp/planet-release/RELEASE.txt'
 
+echo "== 3b. the same planet on both machines? (Planet's rule 4 promises its hash on Garcks-PC only; Planet Claude's check, 26 Sep)"
+# A short run of seed 2 in an empty folder on each machine (about a second; writes nothing). Different hashes mean the
+# server's processor would grow a different world from the same save: stop, and tell Jamie and Planet Claude.
+HASH_RUN='d=$(mktemp -d) && cd "$d" && "$0" run --seed 2 --f 8 --ticks 2000 | sed -n "s/^world hash //p"; rm -rf "$d"'
+PC_HASH="$("${SSH[@]}" "$PC" "sh -c '$HASH_RUN' '$BIN'")"
+VPS_HASH="$("${SSH[@]}" "$VPS" "chmod +x /tmp/planet-release/planet && sh -c '$HASH_RUN' /tmp/planet-release/planet")"
+echo "Garcks-PC: $PC_HASH"; echo "server:    $VPS_HASH"
+[[ -n "$PC_HASH" && "$PC_HASH" == "$VPS_HASH" ]] || { echo "STOPPED: the hashes differ; nothing installed. Tell Jamie and Planet Claude." >&2; exit 1; }
+NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC"
+"${SSH[@]}" "$VPS" "echo 'hash: seed 2, f 8, 2000 ticks = $PC_HASH on both machines' >> /tmp/planet-release/RELEASE.txt"
+
 echo "== 4. install and start on the server"
 "${SSH[@]}" "$VPS" 'sudo bash ~/anjaneyaworkshop/frontdoor/server.sh engine'
 echo "== for frontdoor/state/server.md:"
