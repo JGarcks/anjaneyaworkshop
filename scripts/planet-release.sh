@@ -25,7 +25,8 @@ echo "program: $BIN"; echo "world:   $PC_WORLD"; echo "args:    ${ARGS[*]}"; ech
 # The same arguments with the world moved to the server's folder.
 SARGS="$(printf '%s ' "${ARGS[@]}" | sed "s#--world [^ ]*#--world /var/lib/planet/$NAME#; s/ $//")"
 SUM="$("${SSH[@]}" "$PC" "sha256sum '$BIN'" | cut -c1-16)"
-TICK="$("${SSH[@]}" "$PC" 'curl -s --max-time 3 http://127.0.0.1:8080/api/meta' | sed -n 's/.*"tick":\([0-9]*\).*/\1/p')"
+# The PC's engine is normally stopped since the move (W9-d), so no tick is an answer, not a failure.
+TICK="$("${SSH[@]}" "$PC" 'curl -s --max-time 3 http://127.0.0.1:8080/api/meta || true' | sed -n 's/.*"tick":\([0-9]*\).*/\1/p')"
 
 echo "== 2. a consistent copy of the world, taken while the engine runs (SQLite's own backup; the original is only read)"
 "${SSH[@]}" "$VPS" 'rm -rf /tmp/planet-release && mkdir -p /tmp/planet-release'
