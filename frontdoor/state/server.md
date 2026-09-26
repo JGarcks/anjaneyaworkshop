@@ -4,6 +4,10 @@
 
 **The machine.** OVHcloud VPS-1 (order 259163206), Erith (London). `vps-5e97d8be.vps.ovh.net`, IPv4 57.129.161.57 (IPv6 2001:41d0:801:2000::2595, unused). Ubuntu 26.04.1 LTS, kernel 7.0.0-28, glibc 2.43; 2 vCores (Intel Haswell, with FMA and AVX2), 3.8 GB, 38 GB disk. Login: `ubuntu`, the laptop's key only (`docs/process/secrets-map.md`).
 
+## 26 Sep 2026, 20:41 UTC — item 16 live: planet-d16-web11, program only (Jamie's word)
+
+`released 2026-09-26 20:41 UTC: planet-d16-web11 (sha256 aac7b6e0512c4959…), the server's own world planet-seed25660-d16.sqlite kept, settings none; seed-2 hash f7ebff07… matches Garcks-PC`. Planet WEB · D11 (item 16, W7): colours and slopes sent per cell as a texture, looked up in the vertex shader; the old per-corner way kept as the fallback (`?percorner` forces it). Resumed from the save at tick 38,000; listening on 127.0.0.1:8080 only. The public `viewer.js` carries WEB · D11. `check-public.sh` 29/29. Way back if the spin stutters: planet-d16-web10.
+
 ## 26 Sep 2026, 18:30 UTC — the first release: planet-d16-web10, program only (Jamie's word)
 
 `released 2026-09-26 18:30 UTC: planet-d16-web10 (sha256 3b84392b3de73058…), the server's own world planet-seed25660-d16.sqlite kept, settings none; seed-2 hash f7ebff07… matches Garcks-PC`. Planet WEB · D10 (items 18–20): the engine now runs `--bind 127.0.0.1` and listens on 127.0.0.1:8080 only (nginx reaches it; the unit's IP fence stays); the viewer opens at zoom 0.65 and starts its glide again on a lower tick. Resumed from the save at tick 19,003 (from ~19,130). The first run stopped at its first step, the PC's engine being stopped (a failed ask for its tick): fixed in `planet-release.sh`. **The restart test (item 19):** headless Edge on `planet.` across a deliberate `systemctl restart planet-engine` at 18:32:19 UTC — the world's tick 19,191 → 19,002, the shown picture 19,188 → 19,002 within the second and gliding on (1–4 ticks behind, as before). `check-public.sh` 29/29; ports 8080 and 8090 shut from outside.
