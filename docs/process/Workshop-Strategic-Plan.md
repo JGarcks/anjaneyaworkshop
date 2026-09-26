@@ -35,7 +35,9 @@ Each decision records the choice, the reasoning, and what it would take to overr
 
 **Overrule if.** Jamie decides the planet should stay private after all; then the landing page shows a nightly still instead of a live frame, and everything else in this plan stands.
 
-### WS · D2 — The public planet is Jamie's own, experiments included (agreed)
+### WS · D2 — The public planet is Jamie's own, experiments included (agreed; amended W9, 26 Sep 2026)
+
+**Amended (Jamie, 26 Sep 2026).** With the engine on the rented server (WS · D7), the public planet no longer follows Garcks-PC: it changes only by a release (`scripts/planet-release.sh`), at Jamie's word — the program, settings and world `planet.service` runs, or the program alone. First release: `planet-d16`, seed 25660 from year zero. Experiments on Garcks-PC go on, never public (W9-d). The text below is the choice as first made.
 
 **Choice.** The site shows whatever is on 8080. When Jamie moves it to a new build or restarts it from year zero, the site follows; the page says "resumed" quietly on a restart and refreshes its still.
 
@@ -67,7 +69,9 @@ Each decision records the choice, the reasoning, and what it would take to overr
 
 One place to remember; each room independent of the hub and of each other.
 
-### WS · D7 — The rented server: move the engine, or only the front door (deferred to Phase 4)
+### WS · D7 — The rented server: move the engine, or only the front door (decided W9, 26 Sep 2026: the engine moved)
+
+**Decided (Jamie, 26 Sep 2026).** Move the engine: "I'd ideally like to not have to keep my desktop running 24/7", which only moving the engine gives. OVHcloud VPS-1 in London (2 vCores, 4 GB, unlimited traffic, £3.90 ex VAT a month, no commitment; W9-a), the same named tunnel (W9-b). Planet's rule 4 was the cost foreseen below: it held, but only with glibc's FMA/AVX2 paths off on the server (W9-e). The way back is RUNBOOK §M2. The text below is the trade as put.
 
 **The trade.** Moving the engine makes the site independent of the house and costs a VPS (about €4 to €8 a month runs it: 6 ms per tick at 2.5 ticks a second is under 2% of one core); Planet's rule 4 promises its hash on Garcks-PC only, so a world file resumed elsewhere may diverge from that point, harmless for a public view and recorded if it happens. Leaving the engine home keeps Jamie's kiosk and experiments as they are and keeps the tunnel. Decide with the numbers then.
 
@@ -201,7 +205,7 @@ Stated as numbers a session can measure, asserted by `scripts/check-public.sh` (
 
 ## Costs
 
-Until Phase 4 the site costs nothing beyond the domains: $16.74 a year ($5.66 for the `.co.uk`, $11.08 for the `.com`, Porkbun's renewal estimates from the order of 22 Apr 2026). Cloudflare's DNS, TLS, cache, Pages and named tunnel are all on the free plan. The rented server, if Phase 4 happens, is about €50 to €100 a year (a small European VPS at roughly €4 to €8 a month, approximate; price it then).
+Until Phase 4 the site costs nothing beyond the domains: $16.74 a year ($5.66 for the `.co.uk`, $11.08 for the `.com`, Porkbun's renewal estimates from the order of 22 Apr 2026). Cloudflare's DNS, TLS, cache, Pages and named tunnel are all on the free plan. The rented server (Phase 4, from 26 Sep 2026): OVHcloud VPS-1, £3.90 a month ex VAT (£4.68 with VAT; a discounted price, £4.21 ex VAT without the offer), no commitment — about £56 a year, inside the €50–€100 first estimated.
 
 ## Open questions for Jamie
 

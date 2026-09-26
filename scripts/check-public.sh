@@ -136,7 +136,7 @@ if (( THROUGH >= 1 )); then
   door="$(header x-cache-status "$(headers "$PLANET/api/field/elevation_m")")"
   if [[ -n "$door" && "$door" != bypass ]]; then pass "/api/field/ held at the door, keeping the fields in step (X-Cache-Status ${door^^})"; else fail "/api/field/ not held at the door (X-Cache-Status ${door:-none}): the separate fields fall out of step without it (W4-e)"; fi
 
-  echo "(The engine's load and the house's upload are measured at nginx: frontdoor/door-rate.sh, pasted into frontdoor/state/.)"
+  echo "(The engine's load and the door's egress are measured at nginx on the server: frontdoor/door-rate.sh, pasted into frontdoor/state/server.md.)"
 fi
 
 # ---- Phase 2 — the landing page.

@@ -44,7 +44,9 @@ The dark hub, live. *W3 built and deployed the page, the line, the fallbacks and
 
 **Gate:** a schematic drops in and a guide builds, on the public address, on the laptop and a phone; the scan is clean; the hub's link works; Jamie's walk.
 
-### Phase 4 — The rented server (2–3 sessions, optional)
+### Phase 4 — The rented server — live (W9, 26 Sep 2026); the gate's last half open
+
+*Done in one session, brought forward at Jamie's word (WS · D7: the engine moved; W9-a…e): OVHcloud VPS-1 London, Ubuntu 26.04; the same tunnel kept (W9-b, not retired as first planned); `frontdoor/server.sh`, `planet-engine.service`, `scripts/planet-release.sh`, RUNBOOK §M1–M2 (the move and the way back); the golden-seed hash matched only with glibc's FMA/AVX2 paths off (W9-e). WS · D13 is put after a few days of the server's numbers. Open: Garcks-PC off an hour. Detail: `progress/2026-09.md` §W9. The plan as first written:*
 
 *Booked (Jamie, 24 Sep 2026): WS · D7 and WS · D13 (a livelier picture) are put at the decision round after Phase 2 closes, priced then; if Jamie says go, this phase may run before Phase 3.*
 
@@ -121,9 +123,9 @@ Live in `Workshop-Active-Work.md` (ride-alongside items and held-for-triggers) �
 |---|---|---|---|---|
 | 0 Ground | closed | 24 Sep 2026 (W1) | 24 Sep 2026 (W1) | check-public 6/6; npm test 1/1 locally and in the Pages build; walk passed on laptop and phone (cellular). Limitation: no phone screenshot on file (headless Edge crops below ~500 px) |
 | 1 The front door | closed | 24 Sep 2026 (W2) | 24 Sep 2026 (W2) | Public since ~17:30 BST; check-public 17/17; gate: 28.9 KB/s up, 0.48 engine fetches/address/s with three browsers; walk smooth on laptop and phone (after W2-f). Pictures every ~2.2 s (Cloudflare's edge refresh), subtler than the kiosk — held. Limitation: the "any audience" budget holds for the fields the page draws; a visitor switching the full viewer through all 13 fields adds ~20–35 KB/s per field per Cloudflare location — measured at the gate |
-| 2 The landing page | open | 24 Sep 2026 (W3) | | Live; 64 tests; check-public 29/29 (Phase 2: browsers re-check, framing, still under 26 h, time to first picture 0.37–0.53 s by fetches; W8: the picture and what the door holds). W8: the still until "drawn" (live at 1.76 s headless, upright phone), a turn by message, no reload. Daily still Action green. Gate: restart half passed (W4); network half, the 2 s line and the walk open. Limitation: the public picture's pace and pauses (W4 monitor; Planet request items 7–9; items 7 and 10 live 24 Sep, W5-a…c: a picture every ~1.05 s, no freezes; the spin awaits Jamie's walk). W7: colour per cell requested (Planet item 16, parked). W8 did the hub's half; the Planet half and the gate's rest are W9, after item 16 |
+| 2 The landing page | open | 24 Sep 2026 (W3) | | Live; 64 tests; check-public 29/29 (Phase 2: browsers re-check, framing, still under 26 h, time to first picture 0.37–0.53 s by fetches; W8: the picture and what the door holds). W8: the still until "drawn" (live at 1.76 s headless, upright phone), a turn by message, no reload. Daily still Action green. Gate: restart half passed (W4); network half, the 2 s line and the walk open. Limitation: the public picture's pace and pauses (W4 monitor; Planet request items 7–9; items 7 and 10 live 24 Sep, W5-a…c: a picture every ~1.05 s, no freezes; the spin awaits Jamie's walk). W7: colour per cell requested (Planet item 16, parked). W8 did the hub's half; the Planet half and the gate's rest are W10 (W9 was the move), after item 16; the network half now means the server's engine stopped a minute |
 | 3 BlockByBlock's room | not started | | | Needs the new name (WS · D5) |
-| 4 The rented server | not started | | | optional; WS · D7 |
+| 4 The rented server | live; gate half open | 26 Sep 2026 (W9) | | Public from the server since 17:19:52 UTC; check-public 29/29 from it; the door's eight checks on it; ports shut from outside; the seed-2 hash matches Garcks-PC under W9-e. Jamie: "all working". Open: Garcks-PC off an hour with the site unchanged |
 | 5 The work apps | not started | | | Needs Jamie's strip list per app |
 
 — end —
