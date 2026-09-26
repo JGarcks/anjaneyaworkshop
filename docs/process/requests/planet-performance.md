@@ -4,7 +4,7 @@
 
 *Jamie's brief (25 Sep 2026): performance and quality on whatever device a visitor has; data use on phones is not a concern ("no one is realistically going to leave this running on their phone for long").*
 
-**Sent so far:** item 16 only (Jamie, 25 Sep 2026, Workshop W7). Items 12–15 (back-face culling after a winding check; D9 retried with the laptop's stutter measured; under `?embed` a steady 30 fps only where 60 cannot be held, `prefers-reduced-motion`, the meta poll at 500 ms; `viewer.js` cached with a version in its address) are queued for a later Workshop session and are **not** asked for yet.
+**Sent so far:** item 16 (Jamie, 25 Sep 2026, Workshop W7; live as WEB · D11 on 26 Sep) and item 13 (Jamie, 26 Sep 2026, Workshop W7). Items 12, 14 and 15 (back-face culling after a winding check; D9 retried with the laptop's stutter measured; under `?embed` a steady 30 fps only where 60 cannot be held, `prefers-reduced-motion`, the meta poll at 500 ms; `viewer.js` cached with a version in its address) are queued for a later Workshop session and are **not** asked for yet.
 
 ## Item 16 — colour per cell: a picture landing costs almost nothing (Jamie, 25 Sep 2026, Workshop W7)
 
@@ -36,3 +36,22 @@ Two shapes we can see; choose, or find a better:
 **Going live:** at Jamie's word. Jamie watches the spin on the laptop through the hub, and if it stutters the item is withdrawn back to WEB · D8 as D9 was. Reply at the end of `Desktop/for-laptop-claude.txt` with the Planet commit, the restart time and the numbers. Laptop Claude then runs the hub monitor and the laptop's 10 s GPU measurement (the W5-e method; the W5-e numbers at 00:40 on 25 Sep were taken on this same WEB · D8 viewer, so they are the laptop's baseline) and logs before and after.
 
 *Written in Workshop W7 — colour per cell (25 Sep 2026).*
+
+## Item 13 — D9 again: the canvas the size of the globe, on top of D11 (Jamie, 26 Sep 2026, Workshop W7)
+
+**Why.** The canvas is the whole screen and the globe about a third of it. On a laptop with two graphics chips every frame is copied whole from the NVIDIA to the Intel chip that owns the screen: on Jamie's laptop 3072×1728 (5.3 M px) a frame at 60 fps, where the globe's square is ~2 M. That copy, not the drawing, is where the laptop's heat is: with WEB · D11 live, NVIDIA 60–64 °C, ~7 W, ~40% busy, Chrome's NVIDIA→Intel copy engine 14% (laptop, 26 Sep 23:11) — the same as before D11. WEB · D9 cut exactly that and was withdrawn at 01:21 on 25 Sep after a stutter every 7–12 s on the laptop, not seen on Garcks-PC, cause never proven.
+
+**Jamie's view (26 Sep):** the stutter may not have been D9's at all, but the plates moving faster as the world got older. Since D11 a picture landing also costs less. So a retry is a fairer test than the first.
+
+**The ask (the design is yours):** D9 back, on top of D11 — the canvas sized to the square that holds the globe, air included (a canvas cannot be round; the square is the least a frame can copy). Everything else as in D11: 60 fps, the 2× cap, antialiasing, `high-performance`, the glide 2.2 behind, the step-down, per cell with its fallback. `?embed` at least; the plain viewer your call. The flat map may keep the whole canvas.
+
+**Things to watch (from our side):**
+- A canvas resize reallocates its buffers and can itself cost a frame: while zooming, on a window resize, on a phone's turn. If D9 resizes often, please resize in steps (or only when the globe outgrows the canvas by some margin), and say which.
+- The globe's edge and air must never be clipped: at the opening zoom 0.65, zoomed right in (the canvas then caps at the screen), mid-zoom, and on an upright phone.
+- Under `?timing=log`, please log each canvas resize and each picture's landing with a timestamp alongside the frame times, so a stutter can be matched to its cause. And note the world's tick and plate speed during the runs, for Jamie's theory.
+
+**Numbers, before and after (the baseline is today's live WEB · D11):** as item 16 — Garcks-PC, the public feed at 1536×734 CSS px, 60 s each at normal speed and 4× and 6× throttled: fps, frames over 25 ms, the longest gap; the canvas size in pixels; resizes counted; the stutter, if any, with what it lined up with. **The picture must not change:** old and new screenshotted on a held tick, globe and flat, compared as in D11.
+
+**Going live:** at Jamie's word, Jamie watching the spin on the laptop through the hub; if it stutters, back to `planet-d16-web11`. Reply at the end of `Desktop/for-laptop-claude.txt` with the commit, the program's name and the numbers. Laptop Claude then takes 60 s on the laptop with one long-running `nvidia-smi` (a fresh one every few seconds wakes the NVIDIA and warms it), against the 23:11 reading above.
+
+*Written in Workshop W7 — colour per cell, its sequel (26 Sep 2026).*
