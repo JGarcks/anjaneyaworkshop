@@ -17,7 +17,7 @@
 2. The gate's rest: the server's engine stopped a minute (the still and "last seen", then recovery by itself), `door-rate.sh 60` on the server (laptop Claude), Jamie's walk on the laptop and phone incl. pinch-out, after the Planet items (the turn passed on Jamie's Android, W8). The restart half passed in W4; the live globe at 1.76 s headless (W8).
 3. Confirm or undo W9-e (glibc's fast paths off on the server; Claude's, settled by the hash).
 
-**Pending Jamie:** Garcks-PC off an hour (Phase 4's gate) · item 16 live and watched · the phone walk · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
+**Pending Jamie:** Garcks-PC off an hour (Phase 4's gate) · Planet's held question: the simulation's maths from a pure-Rust library so every machine rounds alike without W9-e's setting (it changes every world: not before a planned restart) · item 16 live and watched · the phone walk · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3).
 
 **Who's who:** laptop Claude writes and commits, and runs the server over SSH (key only, sudo without a password); Desktop Claude (the docs' "PC Claude") runs runbook steps on Garcks-PC and commits only `frontdoor/state/`; Planet Claude does Planet's code (rule 8: never edited here). Requests go through `Desktop/for-laptop-claude.txt`.
 
