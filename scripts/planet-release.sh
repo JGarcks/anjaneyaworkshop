@@ -44,7 +44,8 @@ scp -q -3 "$PC:$BIN" "$VPS:/tmp/planet-release/planet"
   for kv in $ENVS; do echo "$kv"; done
   echo "PLANET_ARGS=\"$SARGS\""
 } | "${SSH[@]}" "$VPS" 'cat > /tmp/planet-release/engine.env'
-NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM…), world $NAME from Garcks-PC at tick ${TICK:-?}, settings ${ENVS:-none}"
+if [[ "$KEEP" == --keep-world ]]; then WORLD_NOTE="the server's own world $NAME kept"; else WORLD_NOTE="world $NAME from Garcks-PC at tick ${TICK:-?}"; fi
+NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM…), $WORLD_NOTE, settings ${ENVS:-none}"
 {
   echo "$NOTE"
   [[ "$KEEP" == --keep-world ]] && echo "keep-world: yes"
