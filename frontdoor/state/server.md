@@ -4,6 +4,10 @@
 
 **The machine.** OVHcloud VPS-1 (order 259163206), Erith (London). `vps-5e97d8be.vps.ovh.net`, IPv4 57.129.161.57 (IPv6 2001:41d0:801:2000::2595, unused). Ubuntu 26.04.1 LTS, kernel 7.0.0-28, glibc 2.43; 2 vCores (Intel Haswell, with FMA and AVX2), 3.8 GB, 38 GB disk. Login: `ubuntu`, the laptop's key only (`docs/process/secrets-map.md`).
 
+## 26 Sep 2026, 23:34 UTC — item 13 live: planet-d16-web12, program only (Jamie's word)
+
+`released 2026-09-26 23:34 UTC: planet-d16-web12 (sha256 f8b459252f1dc23f…), the server's own world planet-seed25660-d16.sqlite kept, settings none; seed-2 hash f7ebff07… matches Garcks-PC`. Planet WEB · D12 (item 13, D9 again on top of D11; Planet main f2a57cf): the drawing only the globe's square out to 1.16 radii, grown with 10% to spare, shrunk after a 0.5 s rest; `?timing=log` logs resizes, pictures and plate changes. Resumed at tick 63,500. The public `viewer.js` carries WEB · D12. `check-public.sh` 29/29. Way back: planet-d16-web11.
+
 ## 26 Sep 2026, 20:41 UTC — item 16 live: planet-d16-web11, program only (Jamie's word)
 
 `released 2026-09-26 20:41 UTC: planet-d16-web11 (sha256 aac7b6e0512c4959…), the server's own world planet-seed25660-d16.sqlite kept, settings none; seed-2 hash f7ebff07… matches Garcks-PC`. Planet WEB · D11 (item 16, W7): colours and slopes sent per cell as a texture, looked up in the vertex shader; the old per-corner way kept as the fallback (`?percorner` forces it). Resumed from the save at tick 38,000; listening on 127.0.0.1:8080 only. The public `viewer.js` carries WEB · D11. `check-public.sh` 29/29. Way back if the spin stutters: planet-d16-web10.
