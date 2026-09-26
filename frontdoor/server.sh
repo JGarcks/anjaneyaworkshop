@@ -35,7 +35,8 @@ base)
   printf '# Workshop (W9): keys only, never root.\nPasswordAuthentication no\nKbdInteractiveAuthentication no\nPermitRootLogin no\n' \
     > /etc/ssh/sshd_config.d/10-workshop.conf
   sshd -t || fail "sshd -t refused the change; nothing reloaded."
-  systemctl reload ssh
+  # Ubuntu 26.04 starts sshd per connection (ssh.socket), so there is often no service to reload: the next login reads it.
+  if systemctl is-active --quiet ssh; then systemctl reload ssh; else echo "ssh starts per connection (ssh.socket): the change applies from the next login"; fi
 
   echo "== 3. the firewall: SSH in, nothing else (the tunnel only goes out)"
   ufw default deny incoming
