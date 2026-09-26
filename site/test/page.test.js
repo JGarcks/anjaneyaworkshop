@@ -9,7 +9,7 @@
  */
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
-import { PLANET } from "../public/js/planet.js";
+import { PLANET, PLANET_ROOM } from "../public/js/planet.js";
 
 const read = (name) => readFileSync(new URL(`../public/${name}`, import.meta.url), "utf8");
 const html = read("index.html");
@@ -18,7 +18,11 @@ const directive = (name) => csp.split(";").map((d) => d.trim()).find((d) => d.st
 
 it("the hub links to exactly the rooms that exist: Planet alone in Phase 2", () => {
   const links = [...html.matchAll(/<a [^>]*href="([^"]+)"/g)].map((m) => m[1]);
-  expect(links).toEqual([PLANET + "/"]);
+  expect(links).toEqual([PLANET_ROOM]);
+});
+
+it("the Planet room opens with the globe at zoom 0.65, smaller than the viewer's own 0.9 (Jamie, W9-f)", () => {
+  expect(PLANET_ROOM).toBe(PLANET + "/?zoom=0.65");
 });
 
 it("the page still carries the name, which the public check looks for", () => {

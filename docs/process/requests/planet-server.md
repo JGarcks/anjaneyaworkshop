@@ -14,3 +14,17 @@ Jamie decided (Workshop WS · D7, D2 amended) that the public planet at `planet.
 ## Item 18 — optional: a listen-address setting (no rush)
 
 `planet serve` listens on every address (0.0.0.0:8080). The server fences that in from outside, which is enough. A setting such as `--bind 127.0.0.1` would make the engine itself refuse outsiders too — one more wall. Only if it is small and fits your plans; the Workshop needs nothing from it to move.
+
+## Item 19 — the viewer holds its picture when the tick goes back (Jamie, 26 Sep 2026)
+
+**Seen.** After the switch to the server (the tick went 9,032 → 8,553), a planet page left open looked stuck and behind the hub. In `viewer.js` (`glideStep`): `if (!glide.on || glide.showTick >= newest) … return;` — with the shown tick above every new picture's, the glide rests on the old picture until the world passes the old tick again (about three minutes here; longer after a bigger step back). The status line moves on (it shows `fieldTick`), the globe does not.
+
+**The ask (the design is yours):** when a picture arrives with a lower tick than the one shown — a restart from a save, a release, a new world — the glide starts again from it (drop the waiting queue, show the new picture, glide on from there), as a lower tick means a restart, never an error (Workshop rule 12; the hub's own line already does this). It matters at every release that copies a world across.
+
+## Item 20 — the viewer opens a little further out: zoom 0.65 (Jamie, 26 Sep 2026)
+
+**Seen.** `planet.anjaneyaworkshop.co.uk` opens at the viewer's own `zoom: 0.9` (`view`, line ~63), the globe nearly filling the screen top to bottom; Jamie finds it closer than they would like, and chose 0.65 after trying `?zoom=0.75` and `?zoom=0.65`.
+
+**The ask:** the viewer's opening globe zoom 0.65 (the portrait scaling after it unchanged; `?zoom=` still wins; `?embed` unaffected, since the hub always passes its own zoom). Meanwhile the hub's link opens the room at `?zoom=0.65` (Workshop W9-f), so both agree once this is released.
+
+*Both reach the public with the next release, when Jamie asks for one (item 17).*
