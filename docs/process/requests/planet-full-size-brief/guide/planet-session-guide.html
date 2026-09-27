@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Planet Session Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EEF1F3; --surface:#FAFBFC; --ink:#15202B; --ink-2:#3F4D59; --muted:#5A6873;
+  --rule:#D3DAE0; --accent:#1F5C8A; --accent-soft:#DCE8F1; --range:#8C5430; --on-accent:#FFFFFF;
+  --serif:"Literata", Georgia, "Times New Roman", serif;
+  --sans:"Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0D151D; --surface:#15202B; --ink:#E6ECF1; --ink-2:#BCC7D1; --muted:#8C9BA8;
+    --rule:#263442; --accent:#7DB9E4; --accent-soft:#1B3246; --range:#D9A06E; --on-accent:#0D151D;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0D151D; --surface:#15202B; --ink:#E6ECF1; --ink-2:#BCC7D1; --muted:#8C9BA8;
+  --rule:#263442; --accent:#7DB9E4; --accent-soft:#1B3246; --range:#D9A06E; --on-accent:#0D151D;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}
+section{display:flex;flex-direction:column;gap:18px}
+p,ul,ol,dl,dd,h1,h2,h3,h4,figure{margin:0}
+h1,h2,h3{font-family:var(--serif);font-weight:650;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(2rem,5.4vw,3rem);letter-spacing:-0.01em}
+h2{font-size:clamp(1.4rem,3vw,1.8rem)}
+h3{font-size:1.22rem}
+h4{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.85em;background:var(--accent-soft);padding:.05em .3em;border-radius:3px;overflow-wrap:anywhere}
+.eyebrow{font-family:var(--mono);font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.standfirst{font-size:1.2rem;line-height:1.45;color:var(--ink-2);max-width:60ch}
+.top{display:flex;flex-direction:column;gap:14px}
+.here{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:1.08rem}
+.here .label,.chip.nextchip{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--on-accent);padding:3px 8px;border-radius:3px}
+.here a{font-weight:600}
+.muted{color:var(--muted);font-size:.95rem;max-width:60ch}
+
+/* the route */
+.routewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:10px 6px}
+.routewrap:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#route{display:block;min-width:1000px;width:100%;height:auto}
+#route .track{stroke:var(--rule);stroke-width:3}
+#route .track.side{stroke-width:2}
+#route .mark{fill:var(--surface);stroke:var(--muted);stroke-width:2}
+#route .end{fill:var(--muted)}
+#route .code{font-family:var(--mono);font-size:12px;fill:var(--ink-2)}
+#route .name{font-family:var(--sans);font-size:12.5px;fill:var(--muted)}
+#route .aside{font-family:var(--sans);font-size:12.5px;fill:var(--muted)}
+#route a:hover .name,#route a:focus .name{fill:var(--ink)}
+#route .stop.done .mark{fill:var(--accent);stroke:var(--accent)}
+#route .stop.next .mark{stroke:var(--accent);stroke-width:4}
+#route .stop.next .code,#route .stop.next .name{fill:var(--ink);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.9rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.k{display:inline-block;width:13px;height:13px;border:2px solid var(--muted);background:var(--surface)}
+.k.circle{border-radius:50%}
+.k.diamond{transform:rotate(45deg);width:11px;height:11px}
+.k.filled{background:var(--accent);border-color:var(--accent)}
+.k.ring{border-color:var(--accent);border-width:4px}
+
+/* the shape of a session */
+ol.shape{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:14px 26px;counter-reset:s}
+ol.shape li{counter-increment:s;border-top:1px solid var(--rule);padding-top:10px;color:var(--ink-2)}
+ol.shape li::before{content:counter(s);font-family:var(--mono);font-size:.78rem;color:var(--range);display:block;margin-bottom:2px}
+ol.shape b{color:var(--ink);font-weight:600}
+
+/* the sessions */
+.group{display:flex;flex-direction:column;gap:14px;margin-top:10px}
+.grouphead{display:flex;flex-direction:column;gap:4px;border-top:2px solid var(--ink);padding-top:12px}
+.grouphead p{color:var(--ink-2);max-width:70ch}
+.session{border:1px solid var(--rule);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+.session.next{background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.session.done{background:transparent}
+.session.done .title h3,.session.done .title .code{color:var(--muted)}
+.session header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 20px}
+.title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;min-width:0}
+.title .code{font-family:var(--mono);font-size:.95rem;color:var(--range);font-weight:500}
+.tick{display:inline-flex;align-items:center;gap:8px;font-size:.95rem;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.tick input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;margin:0}
+.tick input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.when{color:var(--muted);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.84rem;color:var(--ink-2);border:1px solid var(--rule);border-radius:3px;padding:1px 8px}
+.chip.nextchip{border:0}
+.change{font-family:var(--serif);font-size:1.12rem;display:flex;flex-direction:column;gap:2px}
+.change span{font-family:var(--mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.facts{display:grid;grid-template-columns:1fr;gap:16px 40px}
+@media (min-width:720px){.facts{grid-template-columns:1fr 1fr}.session.review .facts{grid-template-columns:repeat(3,1fr)}}
+.facts > div{display:flex;flex-direction:column;gap:5px}
+.facts p,.facts li{color:var(--ink-2)}
+.facts ol{padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.facts ol li::marker{font-family:var(--mono);font-size:.85em;color:var(--range)}
+.also{font-size:.95rem;color:var(--muted)}
+.say{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rule);padding-top:12px}
+.sayrow{display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px 14px}
+.words{font-family:var(--mono);font-size:.84rem;line-height:1.5;color:var(--ink);background:var(--accent-soft);padding:8px 10px;border-radius:4px;flex:1 1 320px;min-width:0;overflow-wrap:anywhere;user-select:all}
+button{font:inherit;font-size:.9rem;color:var(--accent);background:transparent;border:1px solid var(--accent);border-radius:4px;padding:6px 14px;cursor:pointer}
+button:hover{background:var(--accent-soft)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.after{max-width:66ch;color:var(--ink-2)}
+
+/* rules, stop signs, where */
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:36px 48px}
+.pair > div{display:flex;flex-direction:column;gap:16px}
+ol.rules{padding-left:1.4em;display:flex;flex-direction:column;gap:7px;color:var(--ink-2)}
+ol.rules li::marker{font-family:var(--mono);font-size:.85em;color:var(--range)}
+ol.rules b{color:var(--ink);font-weight:600}
+ul.stops{padding-left:1.1em;display:flex;flex-direction:column;gap:7px;color:var(--ink-2)}
+dl.where{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr);gap:10px 24px;max-width:82ch}
+dl.where dt{font-weight:600}
+dl.where dd{color:var(--ink-2)}
+@media (max-width:560px){dl.where{grid-template-columns:1fr;gap:2px}dl.where dd{margin-bottom:10px}}
+footer{border-top:1px solid var(--rule);padding-top:16px;font-size:.9rem;color:var(--muted);display:flex;flex-direction:column;gap:6px;max-width:80ch}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top"><p class="eyebrow">Planet · the second edition · from 27 September 2026</p><h1>Planet session guide</h1><p class="standfirst">What each session is for, what you will be asked, and what you should see at the end. Tick a session when it is done and the next one lights up.</p><p class="here" id="here"><span class="label">Next</span> <a id="here-link" href="#fs-0">FS-0 · The house in order</a></p></header>
+<section aria-labelledby="h-route"><h2 id="h-route">The route</h2><div class="routewrap" tabindex="0"><svg id="route" viewBox="0 0 1106 214" role="img" aria-label="The route: FS-0 to FS-3 get ready, then the first review; FS-4 to FS-6 reshape the land, then the second review; FS-7 and FS-8, then the third review; FS-9 goes public; then Layer 3. The two viewer sessions run alongside on the laptop, any time after FS-2 and both before FS-9.">
+<line class="track" x1="46" y1="78" x2="1060" y2="78"/>
+<path class="track side" d="M241 78 V168 H943 V78" fill="none"/>
+<a href="#fs-0"><g class="stop" data-stop="FS-0">
+<rect class="hit" x="9" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="46" cy="78" r="9"/>
+<text class="code" x="46" y="58" text-anchor="middle">FS-0</text>
+<text class="name" x="46" y="108" text-anchor="middle">Paperwork</text>
+</g></a>
+<a href="#fs-1"><g class="stop" data-stop="FS-1">
+<rect class="hit" x="87" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="124" cy="78" r="9"/>
+<text class="code" x="124" y="58" text-anchor="middle">FS-1</text>
+<text class="name" x="124" y="108" text-anchor="middle">Engine</text>
+</g></a>
+<a href="#fs-2"><g class="stop" data-stop="FS-2">
+<rect class="hit" x="165" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="202" cy="78" r="9"/>
+<text class="code" x="202" y="58" text-anchor="middle">FS-2</text>
+<text class="name" x="202" y="108" text-anchor="middle">Pictures</text>
+</g></a>
+<a href="#fs-3"><g class="stop" data-stop="FS-3">
+<rect class="hit" x="243" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="280" cy="78" r="9"/>
+<text class="code" x="280" y="58" text-anchor="middle">FS-3</text>
+<text class="name" x="280" y="108" text-anchor="middle">Look list</text>
+</g></a>
+<a href="#r1"><g class="stop" data-stop="R1">
+<rect class="hit" x="321" y="38" width="74" height="78" fill="transparent"/>
+<rect class="mark" x="350" y="70" width="16" height="16" transform="rotate(45 358 78)"/>
+<text class="code" x="358" y="58" text-anchor="middle">Fable</text>
+<text class="name" x="358" y="108" text-anchor="middle">Review</text>
+</g></a>
+<a href="#fs-4"><g class="stop" data-stop="FS-4">
+<rect class="hit" x="399" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="436" cy="78" r="9"/>
+<text class="code" x="436" y="58" text-anchor="middle">FS-4</text>
+<text class="name" x="436" y="108" text-anchor="middle">Birth</text>
+</g></a>
+<a href="#fs-5"><g class="stop" data-stop="FS-5">
+<rect class="hit" x="477" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="514" cy="78" r="9"/>
+<text class="code" x="514" y="58" text-anchor="middle">FS-5</text>
+<text class="name" x="514" y="108" text-anchor="middle">Plates</text>
+</g></a>
+<a href="#fs-6"><g class="stop" data-stop="FS-6">
+<rect class="hit" x="555" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="592" cy="78" r="9"/>
+<text class="code" x="592" y="58" text-anchor="middle">FS-6</text>
+<text class="name" x="592" y="108" text-anchor="middle">Coasts</text>
+</g></a>
+<a href="#r2"><g class="stop" data-stop="R2">
+<rect class="hit" x="633" y="38" width="74" height="78" fill="transparent"/>
+<rect class="mark" x="662" y="70" width="16" height="16" transform="rotate(45 670 78)"/>
+<text class="code" x="670" y="58" text-anchor="middle">Fable</text>
+<text class="name" x="670" y="108" text-anchor="middle">Review</text>
+</g></a>
+<a href="#fs-7"><g class="stop" data-stop="FS-7">
+<rect class="hit" x="711" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="748" cy="78" r="9"/>
+<text class="code" x="748" y="58" text-anchor="middle">FS-7</text>
+<text class="name" x="748" y="108" text-anchor="middle">Collisions</text>
+</g></a>
+<a href="#fs-8"><g class="stop" data-stop="FS-8">
+<rect class="hit" x="789" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="826" cy="78" r="9"/>
+<text class="code" x="826" y="58" text-anchor="middle">FS-8</text>
+<text class="name" x="826" y="108" text-anchor="middle">Interiors</text>
+</g></a>
+<a href="#r3"><g class="stop" data-stop="R3">
+<rect class="hit" x="867" y="38" width="74" height="78" fill="transparent"/>
+<rect class="mark" x="896" y="70" width="16" height="16" transform="rotate(45 904 78)"/>
+<text class="code" x="904" y="58" text-anchor="middle">Fable</text>
+<text class="name" x="904" y="108" text-anchor="middle">Review</text>
+</g></a>
+<a href="#fs-9"><g class="stop" data-stop="FS-9">
+<rect class="hit" x="945" y="38" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="982" cy="78" r="9"/>
+<text class="code" x="982" y="58" text-anchor="middle">FS-9</text>
+<text class="name" x="982" y="108" text-anchor="middle">Public</text>
+</g></a>
+<a href="#web-13"><g class="stop" data-stop="WEB-13">
+<rect class="hit" x="438" y="128" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="475" cy="168" r="9"/>
+<text class="code" x="475" y="148" text-anchor="middle">WEB-13</text>
+<text class="name" x="475" y="198" text-anchor="middle">Screen-sized</text>
+</g></a>
+<a href="#web-14"><g class="stop" data-stop="WEB-14">
+<rect class="hit" x="672" y="128" width="74" height="78" fill="transparent"/>
+<circle class="mark" cx="709" cy="168" r="9"/>
+<text class="code" x="709" y="148" text-anchor="middle">WEB-14</text>
+<text class="name" x="709" y="198" text-anchor="middle">Zoom detail</text>
+</g></a>
+<circle class="end" cx="1060" cy="78" r="5"/>
+<text class="code" x="1060" y="58" text-anchor="middle">Layer 3</text>
+<text class="name" x="1060" y="108" text-anchor="middle">Climate</text>
+<text class="aside" x="253" y="156">on this laptop, alongside</text>
+</svg></div><p class="legend"><span><i class="k circle"></i>a session</span><span><i class="k diamond"></i>a Fable review</span><span><i class="k circle filled"></i>done</span><span><i class="k circle ring"></i>next</span></p></section>
+<section aria-labelledby="h-shape"><h2 id="h-shape">Every session has the same shape</h2><ol class="shape"><li><b>It reads</b> the progress page, the rules of work and its own part of the brief.</li><li><b>It tells you the plan</b> in plain words, and puts its decisions: three at most, all at once.</li><li><b>It builds</b> one change.</li><li><b>It checks</b> the formatter, the tests and the fingerprints.</li><li><b>It makes the pictures</b> the same six, before and after, at full size.</li><li><b>You look</b> and say yes or no.</li><li><b>It writes the records</b> then commits and pushes.</li></ol></section>
+<section aria-labelledby="h-sessions"><h2 id="h-sessions">The sessions</h2>
+<div class="group"><div class="grouphead"><h3 class="groupname">Getting ready</h3><p>Four sessions that change no planet. They put the paperwork, the engine and the pictures in place, and end with your own list of what good looks like.</p></div>
+<article class="session" id="fs-0" data-id="FS-0">
+<header>
+<div class="title"><span class="code">FS-0</span><h3>The house in order</h3></div>
+<label class="tick" for="tick-FS-0"><input type="checkbox" id="tick-FS-0" data-tick="FS-0"><span>Done</span><span class="when" id="when-FS-0"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Documents only</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Puts Planet's paperwork in order, so every later session can start by reading a little and know what to do. It records your decisions of 27 September.</p><p class="also">It also brings the last test runs home from the server, stops the Earth-size test planet and keeps its file, and puts Claude's tools of 27 September to you as one line to confirm.</p></div>
+<div><h4>You will be asked</h4><ol><li>The documents as a whole: a shorter <code>CLAUDE.md</code>, a one-page <code>PROGRESS.md</code>, the old decisions file archived untouched and a fresh one begun, closed plans and research moved into folders.</li><li>The three old worktrees removed. Their branches stay; this only frees disk.</li><li>The habit's new wording: the best design wins, and the owner must be able to see it.</li></ol></div>
+<div><h4>You should see</h4><p>A docs folder with about a dozen files at its top, and a progress page that fits one screen.</p></div>
+<div><h4>Done when</h4><p>A fresh session can start from <code>CLAUDE.md</code>, <code>PROGRESS.md</code> and the brief alone.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-0">Read docs/FULL_SIZE_BRIEF.md in full, then run session FS-0.</p><button type="button" id="copy-FS-0" data-copy="say-FS-0">Copy</button></div></div>
+</article>
+<article class="session" id="fs-1" data-id="FS-1">
+<header>
+<div class="title"><span class="code">FS-1</span><h3>The engine made ready</h3></div>
+<label class="tick" for="tick-FS-1"><input type="checkbox" id="tick-FS-1" data-tick="FS-1"><span>Done</span><span class="when" id="when-FS-1"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Engine · no rule changes</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Makes every machine grow the same planet from the same seed, makes a stopped engine start itself again, and measures what one tick of a full-size planet costs.</p><p class="also">Afterwards laptop Claude can drop the server's special maths setting at the next release.</p></div>
+<div><h4>You will be asked</h4><ol><li>A new maths library, so every machine rounds alike.</li><li>A budget for how long one full-size tick may take.</li><li>Whether each plate stores only its own cells now, or later. Today an Earth-size world file is 1 GB, nearly all of it empty.</li></ol></div>
+<div><h4>You should see</h4><p>Nothing looks different. Every planet's fingerprint changes once, which is why this comes before the pictures.</p></div>
+<div><h4>Done when</h4><p>One program gives one fingerprint on Garcks-PC, the laptop and the server, and the cost of a tick is written in <code>PROGRESS.md</code>.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-1">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-1. Run session FS-1.</p><button type="button" id="copy-FS-1" data-copy="say-FS-1">Copy</button></div></div>
+</article>
+<article class="session" id="fs-2" data-id="FS-2">
+<header>
+<div class="title"><span class="code">FS-2</span><h3>The looking glass</h3></div>
+<label class="tick" for="tick-FS-2"><input type="checkbox" id="tick-FS-2" data-tick="FS-2"><span>Done</span><span class="when" id="when-FS-2"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5 · the test server</span><span class="chip">A tool · no world changed</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Builds <code>planet look</code>: one command that takes the same six pictures of any planet, with the same colours and the same light, and a page of numbers beside them. Then it grows the three planets that every later change is compared with.</p></div>
+<div><h4>You will be asked</h4><ol><li>The ages a planet is looked at. Suggested: 100 million, 1, 3 and 5 billion years.</li><li>A small picture library, or pictures written by hand.</li></ol></div>
+<div><h4>You should see</h4><p>A gallery of three Earth-size planets on today's rules: the before pictures.</p></div>
+<div><h4>Done when</h4><p>You have the before gallery open, and one command remakes it.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-2">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-2. Run session FS-2.</p><button type="button" id="copy-FS-2" data-copy="say-FS-2">Copy</button></div></div>
+</article>
+<article class="session" id="fs-3" data-id="FS-3">
+<header>
+<div class="title"><span class="code">FS-3</span><h3>What good looks like</h3></div>
+<label class="tick" for="tick-FS-3"><input type="checkbox" id="tick-FS-3" data-tick="FS-3"><span>Done</span><span class="when" id="when-FS-3"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Documents only</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Your list of what a good planet shows, in your own words. Six to ten lines, each something you can see in the pictures. It becomes the first clause of the gate.</p></div>
+<div><h4>You will be asked</h4><ol><li>The list itself.</li><li>Which three lines matter most. That can change the order of FS-4 to FS-8.</li></ol></div>
+<div><h4>You should see</h4><p>Your look list as a page of the Rulebook.</p></div>
+<div><h4>Done when</h4><p>The list is written down, and every line has a number that shadows it.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-3">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-3. Run session FS-3.</p><button type="button" id="copy-FS-3" data-copy="say-FS-3">Copy</button></div></div>
+</article>
+<article class="session review" id="r1" data-id="R1">
+<header>
+<div class="title"><span class="code">Review</span><h3>Fable review 1</h3></div>
+<label class="tick" for="tick-R1"><input type="checkbox" id="tick-R1" data-tick="R1"><span>Done</span><span class="when" id="when-R1"></span></label>
+</header>
+<p class="chips"><span class="chip">This laptop · Fable</span><span class="chip">Review</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>A second pair of eyes before the first rule changes. Can a picture show every line of the look list? Are the before pictures sound? Did the sessions keep to the rules of work?</p></div>
+<div><h4>You will get</h4><p>A short report: what is better, what is not, whether the rules of work held, and whether the next sessions are still the right ones.</p></div>
+<div><h4>Done when</h4><p>You have the report and have said whether FS-4 to FS-8 keep their order.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-R1">Please do Fable review 1 of Planet's second edition, as section 7 of the full-size brief sets out. Planet is read only.</p><button type="button" id="copy-R1" data-copy="say-R1">Copy</button></div></div>
+</article>
+</div>
+<div class="group"><div class="grouphead"><h3 class="groupname">Reshaping the land</h3><p>Five sessions, each with one change you can see. Each one is grown at full size on three seeds, and kept only when you have seen the same pictures before and after and said yes.</p></div>
+<article class="session" id="fs-4" data-id="FS-4">
+<header>
+<div class="title"><span class="code">FS-4</span><h3>The birth</h3></div>
+<label class="tick" for="tick-FS-4"><input type="checkbox" id="tick-FS-4" data-tick="FS-4"><span>Done</span><span class="when" id="when-FS-4"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Changes the world</span><span class="chip nextchip" hidden>Next</span></p>
+<p class="change"><span>The one change you will see</span>No flood at birth</p>
+<div class="facts">
+<div><h4>What it is for</h4><p>A newborn planet keeps its land. Today the Earth-size planet falls from 30% land to 3% in its first 50 million years and takes about two billion years to recover.</p></div>
+<div><h4>You will be asked</h4><ol><li>How the first ocean floor gets its age.</li><li>How many plates and continents a full-size planet is born with.</li><li>Whether a visitor sees the first 100 million years, or the planet is born a little aged.</li></ol></div>
+<div><h4>You should see</h4><p>Before and after at birth, at 100 and 500 million years, and at 1 and 3 billion.</p></div>
+<div><h4>Done when</h4><p>You have seen the pictures and said yes, or said no and the change is dropped.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-4">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-4. Run session FS-4.</p><button type="button" id="copy-FS-4" data-copy="say-FS-4">Copy</button></div></div>
+</article>
+<article class="session" id="fs-5" data-id="FS-5">
+<header>
+<div class="title"><span class="code">FS-5</span><h3>A plate&#x27;s life</h3></div>
+<label class="tick" for="tick-FS-5"><input type="checkbox" id="tick-FS-5" data-tick="FS-5"><span>Done</span><span class="when" id="when-FS-5"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Changes the world</span><span class="chip nextchip" hidden>Next</span></p>
+<p class="change"><span>The one change you will see</span>A dozen or so plates with clean edges</p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Plates are born, join and die sensibly. Today the Earth-size planet fills with 30 to 50 small ragged plates, because plates are born three ways, die one way and never join.</p></div>
+<div><h4>You will be asked</h4><ol><li>How two plates become one.</li><li>The smallest piece that may break away, in kilometres.</li><li>Anything the count of plates born and lost brings up.</li></ol></div>
+<div><h4>You should see</h4><p>The plates picture at 1, 2 and 3 billion years, before and after.</p></div>
+<div><h4>Done when</h4><p>You have seen the pictures and said yes, or said no and the change is dropped.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-5">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-5. Run session FS-5.</p><button type="button" id="copy-FS-5" data-copy="say-FS-5">Copy</button></div></div>
+</article>
+<article class="session" id="fs-6" data-id="FS-6">
+<header>
+<div class="title"><span class="code">FS-6</span><h3>Quieter coasts</h3></div>
+<label class="tick" for="tick-FS-6"><input type="checkbox" id="tick-FS-6" data-tick="FS-6"><span>Done</span><span class="when" id="when-FS-6"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Changes the world</span><span class="chip nextchip" hidden>Next</span></p>
+<p class="change"><span>The one change you will see</span>Some coasts without a wall</p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Not every coast gets a trench and a range. Borders may slide past each other, and quiet coasts stay quiet for longer. This also slows the continents' growth.</p></div>
+<div><h4>You will be asked</h4><ol><li>What makes a border slide.</li><li>What makes a quiet coast fail.</li><li>Whether almost no ocean floor older than 250 million years is still asked of a planet.</li></ol></div>
+<div><h4>You should see</h4><p>Every coast drawn by kind. About half have a trench today; Earth has about a fifth.</p></div>
+<div><h4>Done when</h4><p>You have seen the pictures and said yes, or said no and the change is dropped.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-6">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-6. Run session FS-6.</p><button type="button" id="copy-FS-6" data-copy="say-FS-6">Copy</button></div></div>
+</article>
+<article class="session review" id="r2" data-id="R2">
+<header>
+<div class="title"><span class="code">Review</span><h3>Fable review 2</h3></div>
+<label class="tick" for="tick-R2"><input type="checkbox" id="tick-R2" data-tick="R2"><span>Done</span><span class="when" id="when-R2"></span></label>
+</header>
+<p class="chips"><span class="chip">This laptop · Fable</span><span class="chip">Review</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Halfway. Is the planet better to look at than the before pictures, and by how much? Did any session turn a number to cancel another rule's side effect?</p></div>
+<div><h4>You will get</h4><p>A short report: what is better, what is not, whether the rules of work held, and whether the next sessions are still the right ones.</p></div>
+<div><h4>Done when</h4><p>You have the report.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-R2">Please do Fable review 2 of Planet's second edition, as section 7 of the full-size brief sets out. Planet is read only.</p><button type="button" id="copy-R2" data-copy="say-R2">Copy</button></div></div>
+</article>
+<article class="session" id="fs-7" data-id="FS-7">
+<header>
+<div class="title"><span class="code">FS-7</span><h3>Collisions that last</h3></div>
+<label class="tick" for="tick-FS-7"><input type="checkbox" id="tick-FS-7" data-tick="FS-7"><span>Done</span><span class="when" id="when-FS-7"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Changes the world</span><span class="chip nextchip" hidden>Next</span></p>
+<p class="change"><span>The one change you will see</span>High country inland</p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Ranges rise where continents meet, grow wide enough to be highlands, and are left behind as old worn hills. Today a collision is ended by a clock.</p></div>
+<div><h4>You will be asked</h4><ol><li>What ends a collision.</li><li>How far inland a range may grow.</li><li>The ceiling on how high a range may stand.</li></ol></div>
+<div><h4>You should see</h4><p>The highest range close up, and how much of the high land lies far from the sea.</p></div>
+<div><h4>Done when</h4><p>You have seen the pictures and said yes, or said no and the change is dropped.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-7">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-7. Run session FS-7.</p><button type="button" id="copy-FS-7" data-copy="say-FS-7">Copy</button></div></div>
+</article>
+<article class="session" id="fs-8" data-id="FS-8">
+<header>
+<div class="title"><span class="code">FS-8</span><h3>Interiors with a past</h3></div>
+<label class="tick" for="tick-FS-8"><input type="checkbox" id="tick-FS-8" data-tick="FS-8"><span>Done</span><span class="when" id="when-FS-8"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5</span><span class="chip">Changes the world</span><span class="chip nextchip" hidden>Next</span></p>
+<p class="change"><span>The one change you will see</span>Land with shape far from the sea</p>
+<div class="facts">
+<div><h4>What it is for</h4><p>The land behind the coastal ranges gets a shape of its own: old ranges, basins, harder and softer rock. Today it stands at about 120 m for 3,000 km.</p><p class="also">It may take two sessions: the past first, water second.</p></div>
+<div><h4>You will be asked</h4><ol><li>What a newborn planet's past holds.</li><li>How rock's hardness works.</li><li>Inland water now, or with rain in Layer 3.</li></ol></div>
+<div><h4>You should see</h4><p>The inside of the largest continent close up, and its biggest river from mouth to head.</p></div>
+<div><h4>Done when</h4><p>You have seen the pictures and said yes, or said no and the change is dropped.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-8">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-8. Run session FS-8.</p><button type="button" id="copy-FS-8" data-copy="say-FS-8">Copy</button></div></div>
+</article>
+</div>
+<div class="group"><div class="grouphead"><h3 class="groupname">On this laptop, alongside</h3><p>Two viewer sessions, done here where you judge the picture. Any time after FS-2, and both before FS-9.</p></div>
+<article class="session side" id="web-13" data-id="WEB-13">
+<header>
+<div class="title"><span class="code">WEB-13</span><h3>A picture the size of the screen</h3></div>
+<label class="tick" for="tick-WEB-13"><input type="checkbox" id="tick-WEB-13" data-tick="WEB-13"><span>Done</span><span class="when" id="when-WEB-13"></span></label>
+</header>
+<p class="chips"><span class="chip">This laptop · a Planet session</span><span class="chip">Viewer</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>The viewer asks for the planet at a size the screen can show, so a full-size planet turns smoothly. Today a full-size picture is 2.6 MB a refresh, sixteen times what the viewer was built for.</p></div>
+<div><h4>You will be asked</h4><ol><li>Which size of picture the hub gets, and whether a big laptop gets a finer one.</li><li>How rivers are drawn at that size.</li></ol></div>
+<div><h4>You should see</h4><p>An Earth-size planet live in the viewer, smooth on this laptop and on a phone.</p></div>
+<div><h4>Done when</h4><p>You have watched it on both and said it is smooth.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-WEB-13">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for WEB-13. Read docs/ITEMS_21_22.md as well. Run session WEB-13.</p><button type="button" id="copy-WEB-13" data-copy="say-WEB-13">Copy</button></div></div>
+</article>
+<article class="session side" id="web-14" data-id="WEB-14">
+<header>
+<div class="title"><span class="code">WEB-14</span><h3>Detail where you zoom</h3></div>
+<label class="tick" for="tick-WEB-14"><input type="checkbox" id="tick-WEB-14" data-tick="WEB-14"><span>Done</span><span class="when" id="when-WEB-14"></span></label>
+</header>
+<p class="chips"><span class="chip">This laptop · a Planet session</span><span class="chip">Viewer</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>The whole globe comes coarse, and the part you zoom into comes in full detail, as online maps do.</p></div>
+<div><h4>You will be asked</h4><ol><li>Its design, which is put to you before anything is built.</li></ol></div>
+<div><h4>You should see</h4><p>Zooming in on a full-size planet brings up its detail, with no gaps or seams.</p></div>
+<div><h4>Done when</h4><p>You have zoomed in and out on this laptop and a phone and said yes.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-WEB-14">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for WEB-14. Read docs/ITEMS_21_22.md as well. Run session WEB-14.</p><button type="button" id="copy-WEB-14" data-copy="say-WEB-14">Copy</button></div></div>
+</article>
+</div>
+<div class="group"><div class="grouphead"><h3 class="groupname">Going public</h3><p>The last step of the second edition, after the third review.</p></div>
+<article class="session review" id="r3" data-id="R3">
+<header>
+<div class="title"><span class="code">Review</span><h3>Fable review 3</h3></div>
+<label class="tick" for="tick-R3"><input type="checkbox" id="tick-R3" data-tick="R3"><span>Done</span><span class="when" id="when-R3"></span></label>
+</header>
+<p class="chips"><span class="chip">This laptop · Fable</span><span class="chip">Review</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>Before anything full-size is public. Does the planet meet your look list? Is anything left that a visitor would see?</p></div>
+<div><h4>You will get</h4><p>A short report: what is better, what is not, whether the rules of work held, and whether the next sessions are still the right ones.</p></div>
+<div><h4>Done when</h4><p>You have the report.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-R3">Please do Fable review 3 of Planet's second edition, as section 7 of the full-size brief sets out. Planet is read only.</p><button type="button" id="copy-R3" data-copy="say-R3">Copy</button></div></div>
+</article>
+<article class="session" id="fs-9" data-id="FS-9">
+<header>
+<div class="title"><span class="code">FS-9</span><h3>The full-size planet goes public</h3></div>
+<label class="tick" for="tick-FS-9"><input type="checkbox" id="tick-FS-9" data-tick="FS-9"><span>Done</span><span class="when" id="when-FS-9"></span></label>
+</header>
+<p class="chips"><span class="chip">Garcks-PC · Opus 5.5, then laptop Claude</span><span class="chip">Release</span><span class="chip nextchip" hidden>Next</span></p>
+<div class="facts">
+<div><h4>What it is for</h4><p>The Earth-size planet takes the small one's place on the website.</p><p class="also">Laptop Claude does the release, at your word.</p></div>
+<div><h4>You will be asked</h4><ol><li>What happens when a planet reaches 5 billion years: a new planet is born, or the clock slows.</li><li>The pace a visitor sees.</li><li>The first public seed.</li></ol></div>
+<div><h4>You should see</h4><p>The full-size planet at planet.anjaneyaworkshop.co.uk.</p></div>
+<div><h4>Done when</h4><p>The public check passes and you have walked the site on this laptop and a phone.</p></div>
+</div>
+<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-FS-9">Read docs/PROGRESS.md, then docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-9. Run session FS-9.</p><button type="button" id="copy-FS-9" data-copy="say-FS-9">Copy</button></div></div>
+</article>
+</div>
+<p class="after"><b>Then Layer 3: climate.</b> Rain that differs from place to place is what finishes the rivers and the erosion numbers, which is why they are not tuned before it.</p>
+</section>
+<section class="pair" aria-label="Rules and stop signs"><div><h2 id="h-rules">What every session keeps to</h2><ol class="rules"><li><b>Full size is the judge.</b> Nothing is kept on a small planet&#x27;s evidence.</li><li><b>Your eye is the gate.</b> Numbers sit beside the pictures; they do not decide.</li><li><b>One visible change a session.</b> No second change until you have looked at the first.</li><li><b>At most three decisions a session.</b> All at its start, each with its options and a picture or number.</li><li><b>Causes before numbers.</b> A number is never turned to cancel another rule&#x27;s side effect.</li><li><b>Kilometres and years.</b> No rule is written in cells or shares of the planet.</li><li><b>A planet lives about 5 billion years.</b> Rules are judged over that life.</li><li><b>Tripwires tell; they do not choose.</b> Land 25 to 40%, continent 32 to 45%.</li><li><b>Many-planet runs only when a picture cannot answer.</b> Three seeds and your eye are the usual test.</li><li><b>Nothing is scripted.</b> No schedules, and nothing steers a planet toward a figure.</li><li><b>It stops and says so</b> when one of the signs below appears.</li></ol></div><div><h2 id="h-stop">Say stop when a session</h2><ul class="stops"><li>puts more than three decisions to you, or a list to confirm</li><li>wants to judge a change on a small planet</li><li>proposes a second fix to cancel the side effects of the first</li><li>wants to loosen a test, or move a tripwire or a line of your look list</li><li>starts a second visible change before you have looked at the first</li><li>cannot show you the change in a picture</li></ul><p class="muted">Each of these is a rule the session has agreed to. Saying stop costs nothing, and a Fable review is there when it happens twice running.</p></div></section>
+<section aria-labelledby="h-where"><h2 id="h-where">Where things are</h2><dl class="where"><dt>The brief</dt><dd>In Planet, as <code>docs/FULL_SIZE_BRIEF.md</code>, since FS-0 filed it. The Workshop keeps the copy it sent, in <code>docs/process/requests/planet-full-size-brief/</code>.</dd><dt>The review</dt><dd><a href="https://claude.ai/artifact/M4oXiKmu7MExEN2sPPJKWN">Planet Meta Review</a>, with the maps and the chart.</dd><dt>The pictures</dt><dd>In <code>~/planet-looks/</code> on Garcks-PC, never in the repository. The planet you saw on 27 September is kept there; the before pictures come in FS-2.</dd><dt>The public planet</dt><dd><a href="https://planet.anjaneyaworkshop.co.uk/">planet.anjaneyaworkshop.co.uk</a>. Until FS-9 it is a quarter-size planet on the old rules, and nothing is judged by it.</dd><dt>Notes between Claudes</dt><dd>On Garcks-PC's Desktop. Whoever acts on one moves it to <code>~/planet-notes-archive/</code>.</dd><dt>The test server</dt><dd>Kept for growing full-size planets. About £7.50 a day while it exists; laptop Claude deletes it at your word.</dd></dl></section>
+<footer><p id="kept">Your ticks are kept in this browser.</p><p>Written by laptop Claude on 27 September 2026 from the full-size brief. If the brief and this page ever disagree, the brief is right.</p></footer>
+</div>
+<script>
+(function () {
+  var MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "FS-6", "R2", "FS-7", "FS-8", "R3", "FS-9"], SIDE = ["WEB-13", "WEB-14"], NAMES = {"FS-0": "FS-0 · The house in order", "FS-1": "FS-1 · The engine made ready", "FS-2": "FS-2 · The looking glass", "FS-3": "FS-3 · What good looks like", "R1": "Fable review 1", "FS-4": "FS-4 · The birth", "FS-5": "FS-5 · A plate's life", "FS-6": "FS-6 · Quieter coasts", "R2": "Fable review 2", "FS-7": "FS-7 · Collisions that last", "FS-8": "FS-8 · Interiors with a past", "WEB-13": "WEB-13 · A picture the size of the screen", "WEB-14": "WEB-14 · Detail where you zoom", "R3": "Fable review 3", "FS-9": "FS-9 · The full-size planet goes public"};
+  var ALL = MAIN.concat(SIDE), KEY = 'planet-session-guide', done = {}, doc = null, writing = Promise.resolve();
+  var kept = document.getElementById('kept');
+
+  function local() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function keepLocal() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
+  function day(iso) {
+    var d = new Date(iso + 'T12:00:00');
+    return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  }
+
+  function paint() {
+    var next = null;
+    for (var i = 0; i < MAIN.length; i++) { if (!done[MAIN[i]]) { next = MAIN[i]; break; } }
+    ALL.forEach(function (id) {
+      var card = document.getElementById(id.toLowerCase());
+      var box = document.getElementById('tick-' + id);
+      var when = document.getElementById('when-' + id);
+      var stop = document.querySelector('[data-stop="' + id + '"]');
+      var isDone = !!done[id], isNext = id === next;
+      if (card) {
+        card.classList.toggle('done', isDone);
+        card.classList.toggle('next', isNext);
+        var chip = card.querySelector('.nextchip');
+        if (chip) chip.hidden = !isNext;
+      }
+      if (box) box.checked = isDone;
+      if (when) when.textContent = isDone ? day(done[id]) : '';
+      if (stop) { stop.classList.toggle('done', isDone); stop.classList.toggle('next', isNext); }
+    });
+    var link = document.getElementById('here-link'), label = document.querySelector('#here .label');
+    if (next) { link.textContent = NAMES[next]; link.setAttribute('href', '#' + next.toLowerCase()); label.textContent = 'Next'; }
+    else { link.textContent = 'Layer 3: climate'; link.setAttribute('href', '#h-sessions'); label.textContent = 'All done'; }
+  }
+
+  function tick(id, on) {
+    var now = {};
+    Object.keys(done).forEach(function (k) { now[k] = done[k]; });
+    if (on) now[id] = new Date().toISOString().slice(0, 10); else delete now[id];
+    done = now; paint(); keepLocal();
+    if (doc) {
+      var body = { done: JSON.parse(JSON.stringify(done)) }, ref = doc;
+      writing = writing.then(function () { return ref.set(body); }).catch(function () {
+        kept.textContent = 'That tick could not be saved with the page. It is kept in this browser.';
+      });
+    }
+  }
+
+  ALL.forEach(function (id) {
+    var box = document.getElementById('tick-' + id);
+    if (box) box.addEventListener('change', function () { tick(id, box.checked); });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('button[data-copy]'), function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.getAttribute('data-copy')), words = el.textContent;
+      function back(t) { setTimeout(function () { b.textContent = 'Copy'; }, t); }
+      function copied() { b.textContent = 'Copied'; back(1600); }
+      function select() {
+        var r = document.createRange(); r.selectNodeContents(el);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selected: press Ctrl+C'; back(3000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(words).then(copied, select);
+      else select();
+    });
+  });
+
+  done = local();
+  paint();
+
+  // Kept with the page when the page can reach its own store; otherwise in this browser.
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('db').then(function (db) {
+      if (!db) return;
+      var ref = db.doc('progress/sessions');
+      doc = ref;
+      ref.onSnapshot(function (snap) {
+        var body = snap.exists ? snap.data() : null, from = (body && body.done) || {}, now = {};
+        Object.keys(from).forEach(function (k) { if (typeof from[k] === 'string') now[k] = from[k]; });
+        done = now; paint(); keepLocal();
+        kept.textContent = 'Your ticks are kept with this page, so they follow you to any device you open it on.';
+      }, function () {
+        doc = null;
+        kept.textContent = 'Your ticks are kept in this browser.';
+      });
+    }).catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>
