@@ -3,7 +3,7 @@
 # In:  the server's address; Garcks-PC's planet.service as it stands (read, never changed); --keep-world to change only the program.
 # Out: the server's planet-engine restarted on that release, and a line for frontdoor/state/server.md with what went up and when.
 # Decision: WS · D2 as amended (the public planet changes only by a deliberate copy, like a release) and WS · D7 (the engine on the server).
-# Built in W9 — the rented server (26 Sep 2026). Laptop Claude runs it: ssh reaches both machines from the laptop; nothing is kept here.
+# Built in W9 — the rented server (26 Sep 2026); W13 (27 Sep): the maths setting found by the hash, not assumed. Laptop Claude runs it from the laptop.
 set -euo pipefail
 
 SERVER="${1:-}"; KEEP="${2:-}"
@@ -58,15 +58,26 @@ echo "== 3b. the same planet on both machines? (Planet's rule 4 promises its has
 # server's processor would grow a different world from the same save: stop, and tell Jamie and Planet Claude.
 HASH_RUN='d=$(mktemp -d) && cd "$d" && "$0" run --seed 2 --f 8 --ticks 2000 | sed -n "s/^world hash //p"; rm -rf "$d"'
 PC_HASH="$("${SSH[@]}" "$PC" "sh -c '$HASH_RUN' '$BIN'")"
-# On the server, with the same setting the engine's service runs under (planet-engine.service: the maths library's
-# fast paths off, without which this server rounds differently from Garcks-PC — W9).
-TUNE="$("${SSH[@]}" "$VPS" 'systemctl show planet-engine -p Environment --value' | tr ' ' '\n' | grep '^GLIBC_TUNABLES=' || true)"
-[[ -n "$TUNE" ]] || { echo "STOPPED: planet-engine.service on the server has no GLIBC_TUNABLES; run server.sh base first." >&2; exit 1; }
-VPS_HASH="$("${SSH[@]}" "$VPS" "chmod +x /tmp/planet-release/planet && $TUNE sh -c '$HASH_RUN' /tmp/planet-release/planet")"
-echo "Garcks-PC: $PC_HASH"; echo "server:    $VPS_HASH"
+# On the server, first as the program is: from Planet's FS-1 it carries its own maths and needs no setting. Only if
+# that differs, again with W9-e's setting (the C library's FMA/AVX2 paths off), which a program older than FS-1 needs
+# on this processor; the setting that matched then goes into the release's own settings, engine.env (W13).
+MATHS=GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2,-FMA,-AVX
+TUNE=""
+VPS_HASH="$("${SSH[@]}" "$VPS" "chmod +x /tmp/planet-release/planet && env -u GLIBC_TUNABLES sh -c '$HASH_RUN' /tmp/planet-release/planet")"
+echo "Garcks-PC:                $PC_HASH"; echo "server, no setting:       $VPS_HASH"
+if [[ -n "$PC_HASH" && "$PC_HASH" != "$VPS_HASH" ]]; then
+  TUNE="$MATHS"
+  VPS_HASH="$("${SSH[@]}" "$VPS" "env $TUNE sh -c '$HASH_RUN' /tmp/planet-release/planet")"
+  echo "server, with the setting: $VPS_HASH"
+fi
 [[ -n "$PC_HASH" && "$PC_HASH" == "$VPS_HASH" ]] || { echo "STOPPED: the hashes differ; nothing installed. Tell Jamie and Planet Claude." >&2; exit 1; }
-NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC"
-"${SSH[@]}" "$VPS" "echo 'hash: seed 2, f 8, 2000 ticks = $PC_HASH on both machines' >> /tmp/planet-release/RELEASE.txt"
+if [[ -n "$TUNE" ]]; then
+  "${SSH[@]}" "$VPS" "echo '$TUNE' >> /tmp/planet-release/engine.env"
+  NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC with the maths setting (a program older than FS-1)"
+else
+  NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC with no maths setting"
+fi
+"${SSH[@]}" "$VPS" "echo 'hash: seed 2, f 8, 2000 ticks = $PC_HASH on both machines${TUNE:+, the server with $TUNE}' >> /tmp/planet-release/RELEASE.txt"
 
 echo "== 3c. the visitor budget: the release's picture weighed before it goes up (W11-b; Strategic Plan §Budget)"
 # The release runs for a few seconds on the server, on a spare port and a copy of its world, and its picture is weighed

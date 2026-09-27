@@ -2,16 +2,23 @@
 # In:  the Planet program in /opt/planet/planet and its settings in /etc/planet/engine.env, both put there by scripts/planet-release.sh.
 # Out: the engine on port 8080, answering nginx on this machine and nobody else; the world saved into /var/lib/planet every 500 ticks.
 # Decision: WS · D7 (the engine moves to the server) and W9-b (only the tunnel's door is public; rule 11: the engine never is).
-# Built in W9 — the rented server (26 Sep 2026). Installed as /etc/systemd/system/planet-engine.service by frontdoor/server.sh base.
+# Built in W9 — the rented server (26 Sep 2026); W13 (27 Sep): no maths setting, a crash limit. Installed by frontdoor/server.sh (base, and every release).
 #
 # The engine listens on every address and has no setting to change that (Planet's own code; a bind setting would be a
 # request to Planet, rule 8). So this unit fences it in two ways: IPAddressDeny/Allow drops every packet to or from
 # the engine that is not this machine talking to itself, and the firewall (server.sh base) lets nothing in but SSH.
-# The program and its arguments change with each Planet release; this file does not.
+# The program and its arguments change with each Planet release; this file goes up with each release too, so a change
+# here reaches the server at the next one (server.sh engine installs it and reloads systemd).
 
 [Unit]
 Description=Planet: the public world, served to nginx on this machine only
 After=network.target
+# A crash is restarted from the last save (Restart= below; since Planet's FS-1 a crashed simulation stops the whole
+# program). A fault that comes back each time would replay and crash again, forever: after 3 starts in half an hour
+# systemd leaves the engine stopped, and the hub shows the last picture with "last seen at" (rule 10) until laptop
+# Claude reads journalctl. Jamie's W13-d. The release's own start counts as one; server.sh engine clears the count first.
+StartLimitIntervalSec=30min
+StartLimitBurst=3
 
 [Service]
 User=planet
@@ -19,11 +26,11 @@ Group=planet
 StateDirectory=planet
 WorkingDirectory=/var/lib/planet
 EnvironmentFile=/etc/planet/engine.env
-# The same planet as Garcks-PC's (Planet's rule 4): this server's newer C library picks faster rounding paths for
-# sin, exp and the like on a processor with FMA/AVX2, which Garcks-PC's i7-3820 lacks, and the world drifts from the
-# first ticks (seed 2 f 8 at 2,000 ticks: 784394f0… here, f7ebff07… there). With those paths off the hashes match
-# (also seed 25660 f 32 at 3,000 ticks: b1461de6… on both). Found and measured in W9, 26 Sep 2026.
-Environment=GLIBC_TUNABLES=glibc.cpu.hwcaps=-AVX2,-FMA,-AVX
+# No maths setting here (W13). Programs before Planet's FS-1 took sin, exp and the like from the C library, whose
+# faster paths on this processor (FMA/AVX2, which Garcks-PC's i7-3820 lacks) grew a different world; W9-e turned them
+# off here. From FS-1 the program carries its own maths (libm) and grows Garcks-PC's world as it is: seed 2 f 8 at
+# 2,000 ticks 7e7e8b15… on Garcks-PC, the test server and the laptop. An older program, if ever released again, gets
+# W9-e's setting in engine.env: scripts/planet-release.sh finds out by the seed-2 hash.
 # PLANET_ARGS is split into words here (unbraced $): serve, seed, f, port, tps and the world file under /var/lib/planet.
 ExecStart=/opt/planet/planet $PLANET_ARGS
 Restart=on-failure

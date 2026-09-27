@@ -3,7 +3,7 @@
 # In:  a stage — base (firewall, SSH, updates, the planet account and service) or engine (a release put in /tmp/planet-release by scripts/planet-release.sh).
 # Out: the server locked down, and the public planet running from the release; the run logged to /var/tmp/server-<stage>.log.
 # Decision: WS · D7 (the engine on the server), W9-b (the tunnel stays; nothing opens but SSH). Laptop Claude runs this over SSH with sudo.
-# Built in W9 — the rented server (26 Sep 2026). Safe to run again.
+# Built in W9 — the rented server (26 Sep 2026); W13 (27 Sep): a release keeps a copy of the world and installs the service file. Safe to run again.
 set -euo pipefail
 
 STAGE="${1:-}"
@@ -64,10 +64,29 @@ engine)
   echo "== 1. stop the engine (it saves as it goes; the world on disk is the one we replace or keep)"
   systemctl stop planet-engine || true
 
-  echo "== 2. the program, the settings and the release note"
+  echo "== 1b. a copy of that world as it stands, the way back (W13)"
+  # A newer program's saves can be unreadable to an older one (Planet's FS-1 plates, for one, to planet-mg), and a new
+  # world of the same name replaces the file. So the world is copied first, by the planet account (SQLite's side files
+  # stay its own) with SQLite's backup, into /var/lib/planet/kept. No copy, no release: the old engine starts again.
+  if [[ -f "$WORLD" ]]; then
+    install -d -o planet -g planet -m 0750 /var/lib/planet/kept
+    COPY="/var/lib/planet/kept/$(basename "$WORLD" .sqlite).before-$(date -u +%Y%m%d-%H%M).sqlite"
+    if runuser -u planet -- sqlite3 "$WORLD" ".backup '$COPY'" && [[ -s "$COPY" ]]; then
+      echo "kept: $COPY ($(stat -c %s "$COPY") bytes)"
+    else
+      systemctl start planet-engine || true
+      fail "could not copy $WORLD; the old engine started again, nothing installed."
+    fi
+  else
+    echo "no world at $WORLD yet (a new name): nothing to keep; the older worlds in /var/lib/planet are left as they are"
+  fi
+
+  echo "== 2. the program, the settings, the release note, and the service file from this repo (so a change to it goes up with a release)"
   install -m 0755 "$REL/planet" /opt/planet/planet
   install -m 0644 "$REL/engine.env" /etc/planet/engine.env
   install -m 0644 "$REL/RELEASE.txt" /opt/planet/RELEASE.txt
+  install -m 0644 "$REPO/frontdoor/planet-engine.service" /etc/systemd/system/planet-engine.service
+  systemctl daemon-reload
   cat /opt/planet/RELEASE.txt
 
   echo "== 3. the world"
@@ -82,6 +101,8 @@ engine)
   fi
 
   echo "== 4. start, and ask it for its numbers"
+  # A crash limit reached before (planet-engine.service, W13-d) must not refuse a release's start.
+  systemctl reset-failed planet-engine 2>/dev/null || true
   systemctl start planet-engine
   for i in $(seq 1 30); do curl -fsS --max-time 2 http://127.0.0.1:8080/api/meta >/dev/null 2>&1 && break; sleep 1; done
   curl -fsS --max-time 2 http://127.0.0.1:8080/api/meta | head -c 300 || fail "the engine did not answer on 127.0.0.1:8080 in 30 s; see journalctl -u planet-engine."
