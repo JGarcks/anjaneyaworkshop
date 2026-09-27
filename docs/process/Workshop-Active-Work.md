@@ -17,7 +17,7 @@
 **Next build session: W13 — the Planet half of the performance round, then Phase 2's gate.** At its decision round, W6's recommendations as revised in W7:
 1. Planet items 12 (culling), 14 (a steady 30 fps only where 60 cannot be held) and 15 (`viewer.js` cached with a version), the baseline first on a quiet Garcks-PC (`Workshop-Performance-Plan.md`).
 2. The gate's rest: the server's engine stopped a minute, `door-rate.sh 60` on the server, Jamie's walk on the laptop and phone incl. pinch-out.
-3. Confirm or undo W9-e, W10-c, W11-b's 80,000 and W12-d (Claude's).
+3. Confirm or undo W9-e, W10-c and W11-b's 80,000 (Claude's, settled by the numbers).
 
 **Pending Jamie:** the D11 difference pictures: out of Planet's repository (its rule 11)? · the phone walk · swipe-to-refresh: leave it, or try the top strip catching the pull (real phone only) · WS · D5, BlockByBlock's new name (Phase 3) · the test server bills about £7.50 a day while kept.
 
