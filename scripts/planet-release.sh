@@ -68,6 +68,18 @@ echo "Garcks-PC: $PC_HASH"; echo "server:    $VPS_HASH"
 NOTE="$NOTE; seed-2 hash ${PC_HASH:0:8}… matches Garcks-PC"
 "${SSH[@]}" "$VPS" "echo 'hash: seed 2, f 8, 2000 ticks = $PC_HASH on both machines' >> /tmp/planet-release/RELEASE.txt"
 
+echo "== 3c. the visitor budget: the release's picture weighed before it goes up (W11-b; Strategic Plan §Budget)"
+# The release runs for a few seconds on the server, on a spare port and a copy of its world, and its picture is weighed
+# gzipped, as a visitor gets it. Over the ceiling, nothing is installed: a bigger planet goes public only once the viewer
+# sends the hub a screen-sized picture (Planet item 21, W11-a). At f 32 the picture is about 58 KB; at f 64 about 246 KB.
+PICTURE_MAX=80000
+if [[ "$KEEP" == --keep-world ]]; then SRC="/var/lib/planet/$NAME"; else SRC=/tmp/planet-release/world.sqlite; fi
+WEIGHT="$("${SSH[@]}" "$VPS" "bash -s -- $(printf '%q ' "$SRC" "$SARGS" "$ENVS" "$TUNE")" < "$(dirname "$0")/weigh-picture.sh" || true)"
+echo "the release's picture: ${WEIGHT:-?} bytes gzipped (ceiling $PICTURE_MAX)"
+[[ "${WEIGHT:-0}" =~ ^[0-9]+$ && "$WEIGHT" -gt 0 ]] || { echo "STOPPED: the release did not serve a picture within a minute on the spare port; nothing installed." >&2; exit 1; }
+[[ "$WEIGHT" -le "$PICTURE_MAX" ]] || { echo "STOPPED: the picture is $WEIGHT bytes, over the visitor budget of $PICTURE_MAX; nothing installed. A bigger planet waits for the screen-sized picture (Planet item 21). Tell Jamie." >&2; exit 1; }
+NOTE="$NOTE; picture $WEIGHT bytes gzipped"
+
 echo "== 4. install and start on the server"
 "${SSH[@]}" "$VPS" 'sudo bash ~/anjaneyaworkshop/frontdoor/server.sh engine'
 echo "== for frontdoor/state/server.md:"
