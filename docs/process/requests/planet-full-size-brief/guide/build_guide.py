@@ -284,6 +284,10 @@ MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "RW", "FS-6", "R2"
 SIDE = ["WEB-13", "WEB-14"]
 # A parked session is on the route but is never the next one: it waits, and the page says why.
 PARKED = ["FS-5"]
+# The ticks as Planet's own log had them when the page was built. A copy opened from a folder cannot reach the
+# page's store, so it starts from these the first time it is opened; after that the browser's own ticks rule.
+TICKED = {"FS-0": "2026-09-27", "FS-1": "2026-09-27", "FS-2": "2026-09-27", "FS-3": "2026-09-28",
+          "R1": "2026-09-28", "FS-4": "2026-09-28", "RW": "2026-09-28"}
 
 
 def text(s):
@@ -425,13 +429,16 @@ def page():
     parts.append('<section aria-labelledby="h-where"><h2 id="h-where">Where things are</h2><dl class="where">'
                  + "".join('<dt>%s</dt><dd>%s</dd>' % (html.escape(a), text(b)) for a, b in WHERE)
                  + '</dl></section>')
-    parts.append('<footer><p id="kept">Your ticks are kept in this browser.</p>'
+    parts.append('<footer><p id="kept">Your ticks are kept in this browser. It starts from the sessions done by '
+                 '28 September.</p>'
                  '<p>Written by laptop Claude on 27 September 2026 from the full-size brief, and brought up to date '
                  'on 28 September: the sessions in the order you chose, FS-5 parked, the water review added. If '
                  'the brief and this page ever disagree, the brief is right.</p></footer>')
     parts.append('</div>')
     script = SCRIPT.replace("__MAIN__", json.dumps(MAIN)).replace("__SIDE__", json.dumps(SIDE)) \
                    .replace("__PARKED__", json.dumps(PARKED)) \
+                   .replace("__TICKED__", json.dumps(TICKED)) \
+                   .replace("__FROM__", json.dumps(max(TICKED.values()))) \
                    .replace("__NAMES__", json.dumps(names, ensure_ascii=False))
     parts.append("<script>\n" + script + "\n</script>")
     return "\n".join(parts)
@@ -567,11 +574,23 @@ footer{border-top:1px solid var(--rule);padding-top:16px;font-size:.9rem;color:v
 </style>"""
 
 SCRIPT = r"""(function () {
-  var MAIN = __MAIN__, SIDE = __SIDE__, PARKED = __PARKED__, NAMES = __NAMES__;
+  var MAIN = __MAIN__, SIDE = __SIDE__, PARKED = __PARKED__, TICKED = __TICKED__, FROM = __FROM__, NAMES = __NAMES__;
   var ALL = MAIN.concat(SIDE), KEY = 'planet-session-guide', done = {}, doc = null, writing = Promise.resolve();
   var kept = document.getElementById('kept');
 
-  function local() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+  // The browser's own ticks; the first time this build of the page is opened, the sessions done when it was
+  // built are added to them, once.
+  function local() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {};
+      if (localStorage.getItem(KEY + '-from') !== FROM) {
+        Object.keys(TICKED).forEach(function (k) { if (!saved[k]) saved[k] = TICKED[k]; });
+        localStorage.setItem(KEY + '-from', FROM);
+        localStorage.setItem(KEY, JSON.stringify(saved));
+      }
+      return saved;
+    } catch (e) { return JSON.parse(JSON.stringify(TICKED)); }
+  }
   function keepLocal() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
   function day(iso) {
     var d = new Date(iso + 'T12:00:00');
