@@ -4,6 +4,7 @@
 #      (the same page without its outer wrapper, which is what is published as the private page on claude.ai).
 # Decision: the words are written once, here, from the full-size brief; the page's script only ticks and copies (W12).
 # Built in W12 — Planet's meta review (27 Sep 2026). After changing a session here: python build_guide.py, then republish.
+# Brought up to date in W14 (28 Sep 2026): the sessions as Planet renumbered them (its FS · D20), FS-5 parked, the water review.
 import html
 import io
 import json
@@ -83,8 +84,9 @@ GROUPS = [
              done="You have the report and have said whether FS-4 to FS-8 keep their order.",
              say=review(1)),
     ]),
-    ("Reshaping the land", "Five sessions, each with one change you can see. Each one is grown at full size on "
-     "three seeds, and kept only when you have seen the same pictures before and after and said yes.", [
+    ("Reshaping the land", "Six sessions, each with one change you can see. Each one is grown at full size on "
+     "three seeds, and kept only when you have seen the same pictures before and after and said yes. Their order "
+     "is the one you chose on 28 September, with water parked until the ground has a shape.", [
         dict(id="FS-4", name="The birth", short="Birth", where=PC, kind="Changes the world",
              change="No flood at birth",
              why="A newborn planet keeps its land. Today the Earth-size planet falls from 30% land to 3% in its "
@@ -95,33 +97,75 @@ GROUPS = [
              see="Before and after at birth, at 100 and 500 million years, and at 1 and 3 billion.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
              say=later("FS-4")),
-        dict(id="FS-5", name="A plate's life", short="Plates", where=PC, kind="Changes the world",
-             change="A dozen or so plates with clean edges",
-             why="Plates are born, join and die sensibly. Today the Earth-size planet fills with 30 to 50 small "
-                 "ragged plates, because plates are born three ways, die one way and never join.",
-             asked=["How two plates become one.",
-                    "The smallest piece that may break away, in kilometres.",
-                    "Anything the count of plates born and lost brings up."],
-             see="The plates picture at 1, 2 and 3 billion years, before and after.",
+        dict(id="FS-5", name="Water that can leave a basin", short="Water", where=PC, kind="Changes the world",
+             change="Interiors that are not waterlogged",
+             parked="Parked on 28 September, with nothing kept. It measured the great lakes and tried one rule "
+                    "(lakes measured from still water). Grown from birth, the water moved instead of leaving: on "
+                    "one planet the middle drowned under the sea. The review that followed found the water is "
+                    "showing the shape of the ground. It comes back once the ground has a shape; the second "
+                    "review says when.",
+             why="Great lakes and inland seas fill the middles of the continents. This session was to give the "
+                 "water a way out.",
+             asked=["Lakes measured from still water, water lost to the air, or both. You chose still water.",
+                    "How the session is judged.",
+                    "Whether a sea cut off from the ocean is a lake."],
+             also="When it returns it has three pieces, one change each: lakes measured from still water, rivers "
+                  "that keep the slope Earth's lowland rivers keep, and rivers that can cut a gorge through a "
+                  "range.",
+             see="The planet's middles at 500 million, 1 and 3 billion years, before and after.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
-             say=later("FS-5")),
-        dict(id="FS-6", name="Quieter coasts", short="Coasts", where=PC, kind="Changes the world",
-             change="Some coasts without a wall",
+             say="Parked. Nothing to start: FS-6 is next."),
+        dict(id="RW", name="The water review", short="Review", where=LAPTOP_FABLE, kind="Review", review=True,
+             why="You stopped FS-5 part way and asked for fresh eyes. Why are the middles wet, and is the plan "
+                 "still right?",
+             see="The report of 28 September. The sea rises about 280 m every billion years, because the "
+                 "continents keep gaining rock. The ground inland stands about 200 m above it all life long. "
+                 "Every continent is a bowl with a wall on nearly every coast, and nothing makes height inland. "
+                 "So FS-5 is parked and FS-6 comes next.",
+             done="You have the report and have agreed what comes next. You did, on 28 September.",
+             say="Done on 28 September. Its note for Planet is on Garcks-PC's Desktop, in "
+                 "for-planet-claude-fs5-fable-review."),
+        dict(id="FS-6", name="Quieter coasts", short="Coasts", where=PC + " · the test server",
+             kind="Changes the world",
+             change="Some coasts without a wall, and no specks over the ocean",
              why="Not every coast gets a trench and a range. Borders may slide past each other, and quiet coasts "
-                 "stay quiet for longer. This also slows the continents' growth.",
-             asked=["What makes a border slide.",
-                    "What makes a quiet coast fail.",
-                    "Whether almost no ocean floor older than 250 million years is still asked of a planet."],
-             see="Every coast drawn by kind. About half have a trench today; Earth has about a fifth.",
+                 "stay quiet for longer. That opens the bowls, and slows the continents' growth, which is what "
+                 "raises the sea.",
+             asked=["What makes a quiet coast fail.",
+                    "What makes a border slide.",
+                    "Whether almost no ocean floor older than 250 million years is still asked of a planet.",
+                    "The figure at which you are told the sea has risen too far."],
+             also="It is the biggest session in the brief. It may take two sittings, one change each, and then "
+                  "no more than three of these are put at a sitting. It measures first: what built the wall on "
+                  "quiet coasts, and where the continents' extra rock comes from. Its planets are grown on the "
+                  "test server.",
+             see="Every coast drawn by kind; about half have a trench today, and Earth has about a fifth. Beside "
+                 "the pictures, three numbers more: the sea's rise since birth, the continents' rock, and "
+                 "whether the land rises or falls inland.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
-             say=later("FS-6")),
+             say="Read docs/PROGRESS.md, then the note in ~/Desktop/for-planet-claude-fs5-fable-review/, then "
+                 "docs/FULL_SIZE_BRIEF.md sections 2 and 3 and the part of section 6 for FS-6. Record the note's "
+                 "six points as the owner's decision, then run session FS-6."),
         dict(id="R2", name="Fable review 2", short="Review", where=LAPTOP_FABLE, kind="Review", review=True,
              why="Halfway. Is the planet better to look at than the before pictures, and by how much? Did any "
-                 "session turn a number to cancel another rule's side effect?",
+                 "session turn a number to cancel another rule's side effect? It also settles what comes next: "
+                 "the plates, high country inland, the interiors' past, or water again.",
              see=WHAT_A_REVIEW_GIVES,
              done="You have the report.",
              say=review(2)),
-        dict(id="FS-7", name="Collisions that last", short="Collisions", where=PC, kind="Changes the world",
+        dict(id="FS-7", name="A plate's life", short="Plates", where=PC, kind="Changes the world",
+             change="A dozen or so plates with clean edges",
+             why="Plates are born, join and die sensibly, and land is grouped as Earth's is. Today the "
+                 "Earth-size planet fills with 30 to 50 small ragged plates, and from 1 billion years one "
+                 "landmass holds nearly all the land, because rifts never open an ocean.",
+             asked=["How two plates become one.",
+                    "The smallest piece that may break away, in kilometres.",
+                    "Anything the count of plates born and lost brings up."],
+             see="The plates picture at 1, 2 and 3 billion years, before and after, and the largest landmass's "
+                 "share of the land.",
+             done="You have seen the pictures and said yes, or said no and the change is dropped.",
+             say=later("FS-7")),
+        dict(id="FS-8", name="Collisions that last", short="Collisions", where=PC, kind="Changes the world",
              change="High country inland",
              why="Ranges rise where continents meet, grow wide enough to be highlands, and are left behind as old "
                  "worn hills. Today a collision is ended by a clock.",
@@ -130,21 +174,22 @@ GROUPS = [
                     "The ceiling on how high a range may stand."],
              see="The highest range close up, and how much of the high land lies far from the sea.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
-             say=later("FS-7")),
-        dict(id="FS-8", name="Interiors with a past", short="Interiors", where=PC, kind="Changes the world",
+             say=later("FS-8")),
+        dict(id="FS-9", name="Interiors with a past", short="Interiors", where=PC, kind="Changes the world",
              change="Land with shape far from the sea",
-             why="The land behind the coastal ranges gets a shape of its own: old ranges, basins, harder and "
-                 "softer rock. Today it stands at about 120 m for 3,000 km.",
+             why="The land behind the coastal ranges gets a shape of its own: hills, old ranges, basins, harder "
+                 "and softer rock. This is your own idea of 28 September: land shaped as Earth's is. Today it "
+                 "is born flat, about 170 m above the sea.",
              asked=["What a newborn planet's past holds.",
                     "How rock's hardness works.",
-                    "Inland water now, or with rain in Layer 3."],
-             also="It may take two sessions: the past first, water second.",
+                    "Anything the measurement shows."],
+             also="It may take two sessions.",
              see="The inside of the largest continent close up, and its biggest river from mouth to head.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
-             say=later("FS-8")),
+             say=later("FS-9")),
     ]),
     ("On this laptop, alongside", "Two viewer sessions, done here where you judge the picture. Any time after "
-     "FS-2, and both before FS-9.", [
+     "FS-2, and both before FS-10.", [
         dict(id="WEB-13", name="A picture the size of the screen", short="Screen-sized", where=LAPTOP_PLANET,
              kind="Viewer", side=True,
              why="The viewer asks for the planet at a size the screen can show, so a full-size planet turns "
@@ -171,7 +216,7 @@ GROUPS = [
              see=WHAT_A_REVIEW_GIVES,
              done="You have the report.",
              say=review(3)),
-        dict(id="FS-9", name="The full-size planet goes public", short="Public", where=PC + ", then laptop Claude",
+        dict(id="FS-10", name="The full-size planet goes public", short="Public", where=PC + ", then laptop Claude",
              kind="Release",
              why="The Earth-size planet takes the small one's place on the website.",
              asked=["What happens when a planet reaches 5 billion years: a new planet is born, or the clock slows.",
@@ -180,7 +225,7 @@ GROUPS = [
              also="Laptop Claude does the release, at your word.",
              see="The full-size planet at planet.anjaneyaworkshop.co.uk.",
              done="The public check passes and you have walked the site on this laptop and a phone.",
-             say=later("FS-9")),
+             say=later("FS-10")),
     ]),
 ]
 
@@ -222,17 +267,23 @@ WHERE = [
      "sent, in `docs/process/requests/planet-full-size-brief/`."),
     ("The review", '<a href="https://claude.ai/artifact/M4oXiKmu7MExEN2sPPJKWN">Planet Meta Review</a>, with the '
      "maps and the chart."),
+    ("The reviews since", "The notes sent to Planet after each Fable review are kept in the Workshop, in "
+     "`docs/process/requests/planet-full-size-brief/reviews/`."),
     ("The pictures", "In `~/planet-looks/` on Garcks-PC, never in the repository. The planet you saw on "
-     "27 September is kept there; the before pictures come in FS-2."),
+     "27 September is kept there, with the before pictures and each session's before and after. Their galleries "
+     "are private pages, linked from Planet's `docs/PROGRESS.md`."),
     ("The public planet", '<a href="https://planet.anjaneyaworkshop.co.uk/">planet.anjaneyaworkshop.co.uk</a>. '
-     "Until FS-9 it is a quarter-size planet on the old rules, and nothing is judged by it."),
+     "Until FS-10 it is a quarter-size planet on the old rules, and nothing is judged by it."),
     ("Notes between Claudes", "On Garcks-PC's Desktop. Whoever acts on one moves it to `~/planet-notes-archive/`."),
-    ("The test server", "Kept for growing full-size planets. About £7.50 a day while it exists; laptop Claude "
-     "deletes it at your word."),
+    ("The test server", "Kept for growing full-size planets, FS-6's among them. About £7.50 a day while it "
+     "exists, working or idle; laptop Claude deletes it at your word."),
 ]
 
-MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "FS-6", "R2", "FS-7", "FS-8", "R3", "FS-9"]
+MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "RW", "FS-6", "R2", "FS-7", "FS-8", "FS-9", "R3",
+        "FS-10"]
 SIDE = ["WEB-13", "WEB-14"]
+# A parked session is on the route but is never the next one: it waits, and the page says why.
+PARKED = ["FS-5"]
 
 
 def text(s):
@@ -255,21 +306,23 @@ def route_svg():
     step, left, y, side_y = 78, 46, 78, 168
     width = left * 2 + step * len(MAIN)
     out = ['<svg id="route" viewBox="0 0 %d 214" role="img" aria-label="The route: FS-0 to FS-3 get ready, then '
-           'the first review; FS-4 to FS-6 reshape the land, then the second review; FS-7 and FS-8, then the third '
-           'review; FS-9 goes public; then Layer 3. The two viewer sessions run alongside on the laptop, any time '
-           'after FS-2 and both before FS-9.">' % width]
+           'the first review; FS-4 is the birth; FS-5, water, is parked after the water review; FS-6 reshapes the '
+           'coasts, then the second review; FS-7, FS-8 and FS-9, then the third review; FS-10 goes public; then '
+           'Layer 3. The two viewer sessions run alongside on the laptop, any time after FS-2 and both before '
+           'FS-10.">' % width]
     x_of = {sid: left + i * step for i, sid in enumerate(MAIN)}
     end_x = left + len(MAIN) * step
     out.append('<line class="track" x1="%d" y1="%d" x2="%d" y2="%d"/>' % (left, y, end_x, y))
-    # the side track: leaves after FS-2, joins before FS-9
-    a, b = x_of["FS-2"] + step // 2, x_of["FS-9"] - step // 2
+    # the side track: leaves after FS-2, joins before FS-10
+    a, b = x_of["FS-2"] + step // 2, x_of["FS-10"] - step // 2
     out.append('<path class="track side" d="M%d %d V%d H%d V%d" fill="none"/>' % (a, y, side_y, b, y))
     side_x = {"WEB-13": a + (b - a) // 3, "WEB-14": a + 2 * (b - a) // 3}
     for sid in MAIN + SIDE:
         s = by_id[sid]
         x = x_of.get(sid, side_x.get(sid))
         cy = y if sid in x_of else side_y
-        out.append('<a href="#%s"><g class="stop" data-stop="%s">' % (anchor(sid), sid))
+        out.append('<a href="#%s"><g class="stop%s" data-stop="%s">'
+                   % (anchor(sid), " parked" if sid in PARKED else "", sid))
         out.append('<rect class="hit" x="%d" y="%d" width="%d" height="78" fill="transparent"/>'
                    % (x - step // 2 + 2, cy - 40, step - 4))
         if s.get("review"):
@@ -280,7 +333,7 @@ def route_svg():
         out.append('<text class="code" x="%d" y="%d" text-anchor="middle">%s</text>'
                    % (x, cy - 20, html.escape(sid if not s.get("review") else "Fable")))
         out.append('<text class="name" x="%d" y="%d" text-anchor="middle">%s</text>'
-                   % (x, cy + 30, html.escape(s["short"])))
+                   % (x, cy + 30, html.escape(s["short"] + (", parked" if sid in PARKED else ""))))
         out.append('</g></a>')
     out.append('<circle class="end" cx="%d" cy="%d" r="5"/>' % (end_x, y))
     out.append('<text class="code" x="%d" y="%d" text-anchor="middle">Layer 3</text>' % (end_x, y - 20))
@@ -292,7 +345,8 @@ def route_svg():
 
 def card(s):
     sid = s["id"]
-    classes = "session" + (" review" if s.get("review") else "") + (" side" if s.get("side") else "")
+    classes = ("session" + (" review" if s.get("review") else "") + (" side" if s.get("side") else "")
+               + (" parked" if s.get("parked") else ""))
     out = ['<article class="%s" id="%s" data-id="%s">' % (classes, anchor(sid), sid)]
     out.append('<header>')
     out.append('<div class="title"><span class="code">%s</span><h3>%s</h3></div>'
@@ -300,9 +354,12 @@ def card(s):
     out.append('<label class="tick" for="tick-%s"><input type="checkbox" id="tick-%s" data-tick="%s">'
                '<span>Done</span><span class="when" id="when-%s"></span></label>' % (sid, sid, sid, sid))
     out.append('</header>')
-    out.append('<p class="chips"><span class="chip">%s</span><span class="chip">%s</span>'
+    out.append('<p class="chips"><span class="chip">%s</span><span class="chip">%s</span>%s'
                '<span class="chip nextchip" hidden>Next</span></p>'
-               % (html.escape(s["where"]), html.escape(s["kind"])))
+               % (html.escape(s["where"]), html.escape(s["kind"]),
+                  '<span class="chip parkedchip">Parked</span>' if s.get("parked") else ""))
+    if s.get("parked"):
+        out.append('<p class="parkednote">%s</p>' % text(s["parked"]))
     if s.get("change"):
         out.append('<p class="change"><span>The one change you will see</span>%s</p>' % html.escape(s["change"]))
     out.append('<div class="facts">')
@@ -315,15 +372,20 @@ def card(s):
                % ("You will get" if s.get("review") else "You should see", text(s["see"])))
     out.append('<div><h4>Done when</h4><p>%s</p></div>' % text(s["done"]))
     out.append('</div>')
-    out.append('<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-%s">%s</p>'
-               '<button type="button" id="copy-%s" data-copy="say-%s">Copy</button></div></div>'
-               % (sid, html.escape(s["say"], quote=False), sid, sid))
+    if s["say"].startswith(("Parked.", "Done on")):
+        # nothing to start: the words are a plain line, with no Copy button
+        out.append('<div class="say"><h4>To start it</h4><p class="nostart" id="say-%s">%s</p></div>'
+                   % (sid, html.escape(s["say"], quote=False)))
+    else:
+        out.append('<div class="say"><h4>Say this to start it</h4><div class="sayrow"><p class="words" id="say-%s">'
+                   '%s</p><button type="button" id="copy-%s" data-copy="say-%s">Copy</button></div></div>'
+                   % (sid, html.escape(s["say"], quote=False), sid, sid))
     out.append('</article>')
     return "\n".join(out)
 
 
 def page():
-    names = {s["id"]: (("Fable review " + s["id"][1]) if s.get("review") else s["id"] + " · " + s["name"])
+    names = {s["id"]: (s["name"] if s.get("review") else s["id"] + " · " + s["name"])
              for s in every_session()}
     parts = [HEAD]
     parts.append('<div class="wrap">')
@@ -338,7 +400,8 @@ def page():
                  '<p class="legend"><span><i class="k circle"></i>a session</span>'
                  '<span><i class="k diamond"></i>a Fable review</span>'
                  '<span><i class="k circle filled"></i>done</span>'
-                 '<span><i class="k circle ring"></i>next</span></p></section>')
+                 '<span><i class="k circle ring"></i>next</span>'
+                 '<span><i class="k circle dashed"></i>parked</span></p></section>')
     parts.append('<section aria-labelledby="h-shape"><h2 id="h-shape">Every session has the same shape</h2>'
                  '<ol class="shape">' + "".join('<li><b>%s</b> %s</li>' % (html.escape(a), html.escape(b))
                                                   for a, b in SHAPE) + '</ol></section>')
@@ -363,10 +426,12 @@ def page():
                  + "".join('<dt>%s</dt><dd>%s</dd>' % (html.escape(a), text(b)) for a, b in WHERE)
                  + '</dl></section>')
     parts.append('<footer><p id="kept">Your ticks are kept in this browser.</p>'
-                 '<p>Written by laptop Claude on 27 September 2026 from the full-size brief. If the brief and this '
-                 'page ever disagree, the brief is right.</p></footer>')
+                 '<p>Written by laptop Claude on 27 September 2026 from the full-size brief, and brought up to date '
+                 'on 28 September: the sessions in the order you chose, FS-5 parked, the water review added. If '
+                 'the brief and this page ever disagree, the brief is right.</p></footer>')
     parts.append('</div>')
     script = SCRIPT.replace("__MAIN__", json.dumps(MAIN)).replace("__SIDE__", json.dumps(SIDE)) \
+                   .replace("__PARKED__", json.dumps(PARKED)) \
                    .replace("__NAMES__", json.dumps(names, ensure_ascii=False))
     parts.append("<script>\n" + script + "\n</script>")
     return "\n".join(parts)
@@ -419,7 +484,9 @@ code{font-family:var(--mono);font-size:.85em;background:var(--accent-soft);paddi
 /* the route */
 .routewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:10px 6px}
 .routewrap:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-#route{display:block;min-width:1000px;width:100%;height:auto}
+#route{display:block;min-width:1160px;width:100%;height:auto}
+#route .stop.parked .mark{stroke-dasharray:3 3}
+#route .stop.parked .code,#route .stop.parked .name{fill:var(--muted)}
 #route .track{stroke:var(--rule);stroke-width:3}
 #route .track.side{stroke-width:2}
 #route .mark{fill:var(--surface);stroke:var(--muted);stroke-width:2}
@@ -438,6 +505,7 @@ code{font-family:var(--mono);font-size:.85em;background:var(--accent-soft);paddi
 .k.diamond{transform:rotate(45deg);width:11px;height:11px}
 .k.filled{background:var(--accent);border-color:var(--accent)}
 .k.ring{border-color:var(--accent);border-width:4px}
+.k.dashed{border-style:dashed}
 
 /* the shape of a session */
 ol.shape{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:14px 26px;counter-reset:s}
@@ -463,6 +531,10 @@ ol.shape b{color:var(--ink);font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:.84rem;color:var(--ink-2);border:1px solid var(--rule);border-radius:3px;padding:1px 8px}
 .chip.nextchip{border:0}
+.chip.parkedchip{border-style:dashed;border-color:var(--range);color:var(--range)}
+.session.parked{border-style:dashed}
+.parkednote{color:var(--ink-2);max-width:70ch;border-left:2px solid var(--range);padding-left:12px}
+.nostart{color:var(--ink-2);max-width:70ch}
 .change{font-family:var(--serif);font-size:1.12rem;display:flex;flex-direction:column;gap:2px}
 .change span{font-family:var(--mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .facts{display:grid;grid-template-columns:1fr;gap:16px 40px}
@@ -495,7 +567,7 @@ footer{border-top:1px solid var(--rule);padding-top:16px;font-size:.9rem;color:v
 </style>"""
 
 SCRIPT = r"""(function () {
-  var MAIN = __MAIN__, SIDE = __SIDE__, NAMES = __NAMES__;
+  var MAIN = __MAIN__, SIDE = __SIDE__, PARKED = __PARKED__, NAMES = __NAMES__;
   var ALL = MAIN.concat(SIDE), KEY = 'planet-session-guide', done = {}, doc = null, writing = Promise.resolve();
   var kept = document.getElementById('kept');
 
@@ -508,7 +580,9 @@ SCRIPT = r"""(function () {
 
   function paint() {
     var next = null;
-    for (var i = 0; i < MAIN.length; i++) { if (!done[MAIN[i]]) { next = MAIN[i]; break; } }
+    for (var i = 0; i < MAIN.length; i++) {
+      if (!done[MAIN[i]] && PARKED.indexOf(MAIN[i]) < 0) { next = MAIN[i]; break; }
+    }
     ALL.forEach(function (id) {
       var card = document.getElementById(id.toLowerCase());
       var box = document.getElementById('tick-' + id);
