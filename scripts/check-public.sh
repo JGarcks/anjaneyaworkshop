@@ -6,7 +6,7 @@
 # Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door);
 #   W3 — the landing page began Phase 2 (browsers re-check the hub's files); W4 added the hub's framing, the still's age and
 #   time to first picture; W8 the one-request picture and what the door holds; W11 the visitor budget (the picture under 80 KB);
-#   W14 the budget set by Jamie at 300,000 bytes a second (W14-e).
+#   W14 the budget set by Jamie at 300,000 bytes a second (W14-e); W15 the packed picture and a planet of any size.
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
@@ -75,10 +75,13 @@ if (( THROUGH >= 1 )); then
   # 5. A field arrives compressed, labelled one second, with the tick (the restart signal, rule 12).
   h="$(headers "$PLANET/api/field/elevation_m" -H 'Accept-Encoding: gzip')"
   wire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/field/elevation_m" 2>/dev/null)"
-  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -lt 41000 ]]; then
-    pass "field elevation_m → 200, gzip, $wire bytes on the wire (41,000 uncompressed)"
+  #    Its size before compression is four bytes a cell, by the planet's own count (W15: 40,968 at quarter size, 655,368 at Earth's).
+  cells="$(curl -sS --max-time 15 "$PLANET/api/meta" 2>/dev/null | sed -n 's/.*"cells":\([0-9]*\).*/\1/p')"
+  plain=$(( ${cells:-0} * 4 ))
+  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "$plain" -gt 0 && "${wire:-0}" -lt "$plain" ]]; then
+    pass "field elevation_m → 200, gzip, $wire bytes on the wire ($plain uncompressed, ${cells} cells)"
   else
-    fail "field elevation_m → expected 200 gzip under 41,000 bytes, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes"
+    fail "field elevation_m → expected 200 gzip under its uncompressed $plain bytes, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes"
   fi
   tick="$(header x-planet-tick "$h")"
   if [[ "$tick" =~ ^[0-9]+$ ]]; then pass "X-Planet-Tick present on a field ($tick)"; else fail "X-Planet-Tick missing on a field"; fi
@@ -122,20 +125,44 @@ if (( THROUGH >= 1 )); then
   #     but still holds the separate fields, which only its hold keeps in step (W4-e). Checked W8.
   #     W11-b: the visitor budget — a picture arrives about once a second, so its weight is what a visitor downloads a second;
   #     under 80,000 bytes (about 58 KB at f 32; a half-size planet's is ~250 KB). scripts/planet-release.sh weighs it first.
-  #     W14-e (Jamie, 29 Sep 2026): the budget is 300,000 bytes a second. While a picture comes each second that is the
-  #     picture's weight; once Planet's packed picture paces itself (WEB-13), this check weighs that address and its pace.
+  #     W14-e (Jamie, 29 Sep 2026): the budget is 300,000 bytes a second.
+  #     W15: Planet's packed picture (/api/packed/, WEB-13) is what the viewer draws from once the engine serves it. The
+  #     viewer asks for it no faster than its bytes on the wire over the budget, but only when it arrives compressed; so the
+  #     guard is that it IS compressed, and that one picture stays under a ceiling (a fresh one at least every 1.5 s; the
+  #     heaviest Planet measured is 329,093). The unpacked picture stays as the viewer's way back, and then its weight is
+  #     not the visitor's. An engine older than WEB-13 has no packed picture: the unpacked one is weighed, as before.
   BUDGET=300000
+  CEILING=450000
   h="$(headers "$PLANET/api/picture/elevation_m" -H 'Accept-Encoding: gzip')"
   wire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/picture/elevation_m" 2>/dev/null)"
   tick="$(header x-planet-tick "$h")"
-  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -le "$BUDGET" && "$tick" =~ ^[0-9]+$ ]]; then
-    pass "picture elevation_m → 200, gzip, $wire bytes on the wire (visitor budget $BUDGET a second), tick $tick"
+  ph="$(headers "$PLANET/api/packed/elevation_m" -H 'Accept-Encoding: gzip')"
+  watched="/api/picture/elevation_m /api/meta"
+  if [[ "$(status_of "$ph")" == 200 ]]; then
+    watched="/api/packed/elevation_m $watched"
+    pwire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/packed/elevation_m" 2>/dev/null)"
+    ptick="$(header x-planet-tick "$ph")"
+    if [[ "$(header content-encoding "$ph")" == gzip && "${pwire:-0}" -gt 0 && "${pwire:-0}" -le "$CEILING" && "$ptick" =~ ^[0-9]+$ ]]; then
+      pace="$(awk -v w="$pwire" -v b="$BUDGET" 'BEGIN { p = w / b; if (p < 1) p = 1; printf "%.2f", p }')"
+      pass "packed picture elevation_m → 200, gzip, $pwire bytes on the wire: a fresh picture every $pace s within the visitor budget of $BUDGET bytes a second (ceiling $CEILING a picture), tick $ptick"
+    else
+      fail "packed picture elevation_m → expected 200 gzip, at most $CEILING bytes, with X-Planet-Tick, got $(status_of "$ph") $(header content-encoding "$ph") ${pwire:-?} bytes, tick ${ptick:-none}"
+    fi
+    cc="$(header cache-control "$ph")"
+    if [[ "$cc" == "public, max-age=0, s-maxage=1" ]]; then pass "/api/packed/ Cache-Control: $cc"; else fail "/api/packed/ Cache-Control: expected public, max-age=0, s-maxage=1, got ${cc:-none}"; fi
+    if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "$tick" =~ ^[0-9]+$ ]]; then
+      pass "picture elevation_m (the viewer's way back) → 200, gzip, $wire bytes on the wire, tick $tick"
+    else
+      fail "picture elevation_m (the viewer's way back) → expected 200 gzip with X-Planet-Tick, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes, tick ${tick:-none}"
+    fi
+  elif [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -le "$BUDGET" && "$tick" =~ ^[0-9]+$ ]]; then
+    pass "picture elevation_m → 200, gzip, $wire bytes on the wire (visitor budget $BUDGET a second; no packed picture on this engine: $(status_of "$ph")), tick $tick"
   else
     fail "picture elevation_m → expected 200 gzip within the visitor budget of $BUDGET bytes a second with X-Planet-Tick, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes, tick ${tick:-none}"
   fi
   cc="$(header cache-control "$h")"
   if [[ "$cc" == "public, max-age=0, s-maxage=1" ]]; then pass "/api/picture/ Cache-Control: $cc"; else fail "/api/picture/ Cache-Control: expected public, max-age=0, s-maxage=1, got ${cc:-none}"; fi
-  for path in /api/picture/elevation_m /api/meta; do
+  for path in $watched; do
     door="$(header x-cache-status "$(headers "$PLANET$path")")"
     if [[ "$door" == bypass ]]; then pass "$path not held at the door (X-Cache-Status BYPASS)"; else fail "$path held at the door: expected X-Cache-Status BYPASS (W5-b/c), got ${door:-none}"; fi
   done

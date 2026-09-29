@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # install.sh — every step on Garcks-PC that needs the admin password, in one reviewed place; Jamie runs it with sudo.
-# In:  a stage name — door (nginx, cloudflared and the door's config), tunnel (the tunnel's service), close (planet off the internet).
+# In:  a stage name — door (nginx, cloudflared and the door's config), tunnel (the tunnel's service), close (planet off the internet),
+#      config (W15: the door's config alone, checked and reloaded; no packages, no restart, the old config put back if nginx refuses the new).
 # Out: the installed files and services, and the whole run written to /var/tmp/frontdoor-install-<stage>.log for PC Claude to read.
 # Decision: W2-c — system services on their own restricted accounts; no Claude types a password, so Jamie runs this, PC Claude the rest.
 # Built in W2 — the front door (24 Sep 2026). Called from RUNBOOK.md steps 3, 5 and "Closing the door". Safe to run again.
@@ -8,7 +9,7 @@ set -euo pipefail
 
 STAGE="${1:-}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-case "$STAGE" in door|tunnel|close) ;; *) echo "Usage: sudo bash $0 door|tunnel|close" >&2; exit 2 ;; esac
+case "$STAGE" in door|tunnel|close|config) ;; *) echo "Usage: sudo bash $0 door|tunnel|close|config" >&2; exit 2 ;; esac
 if [[ "$(id -u)" != 0 ]]; then echo "This needs the admin password: sudo bash $0 $STAGE" >&2; exit 1; fi
 
 LOG="/var/tmp/frontdoor-install-$STAGE.log"
@@ -94,6 +95,26 @@ tunnel)
   systemctl --no-pager --lines=0 status cloudflared-frontdoor || true
   journalctl -u cloudflared-frontdoor -n 15 --no-pager -o cat || true
   echo "TUNNEL_ID=$ID"
+  ;;
+
+config)
+  LIVE=/etc/nginx/conf.d/anjaneya-frontdoor.conf
+  BEFORE=/var/tmp/anjaneya-frontdoor.conf.before
+  [[ -f "$LIVE" ]] || fail "no door installed here ($LIVE missing): run the door stage first."
+  echo "== 1. the door's config from this repo, the one in place kept beside it"
+  install -m 0644 "$LIVE" "$BEFORE"
+  install -m 0644 "$REPO/frontdoor/nginx.conf" "$LIVE"
+  diff "$BEFORE" "$LIVE" || true
+  echo "== 2. nginx -t"
+  if ! nginx -t; then
+    install -m 0644 "$BEFORE" "$LIVE"
+    fail "nginx -t refused the new config; the old one is back in place and nothing was reloaded."
+  fi
+  echo "== 3. reload: the door goes on answering while it rereads its config"
+  systemctl reload nginx
+  systemctl --no-pager --lines=0 status nginx || true
+  echo "== listeners (nginx must show 127.0.0.1:8090 and nothing else)"
+  ss -ltnp | grep -E 'nginx|:8090 ' || true
   ;;
 
 close)

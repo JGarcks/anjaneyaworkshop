@@ -84,8 +84,10 @@ echo "== 3c. the visitor budget: the release's picture weighed before it goes up
 # gzipped, as a visitor gets it. Over the ceiling, nothing is installed: a bigger planet goes public only once the viewer
 # sends the hub a screen-sized picture (Planet item 21, W11-a). At f 32 the picture is about 58 KB; at f 64 about 246 KB.
 # W14-e (Jamie, 29 Sep 2026): the budget is 300,000 bytes a second, and a full-size planet goes public at full detail with
-# its picture packed (Planet's WEB-13), not screen-sized. Until the packed picture has its own address, this weighs
-# /api/picture/ as before, so a full-size planet unpacked (about 400 to 1,200 KB) is still refused.
+# its picture packed (Planet's WEB-13), not screen-sized. W15: weigh-picture.sh weighs the packed picture when the
+# program serves one and the unpacked one otherwise, so a full-size planet on a program older than WEB-13 (its picture
+# about 280 to 1,200 KB) is still refused. A release's picture is its youngest and lightest; as the planet ages
+# check-public.sh watches the ceiling (450,000 bytes a picture).
 PICTURE_MAX=300000
 if [[ "$KEEP" == --keep-world ]]; then SRC="/var/lib/planet/$NAME"; else SRC=/tmp/planet-release/world.sqlite; fi
 WEIGHT="$("${SSH[@]}" "$VPS" "bash -s -- $(printf '%q ' "$SRC" "$SARGS" "$ENVS" "$TUNE")" < "$(dirname "$0")/weigh-picture.sh" || true)"
