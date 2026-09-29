@@ -4,6 +4,12 @@
 
 **The machine.** OVHcloud VPS-1 (order 259163206), Erith (London). `vps-5e97d8be.vps.ovh.net`, IPv4 57.129.161.57 (IPv6 2001:41d0:801:2000::2595, unused). Ubuntu 26.04.1 LTS, kernel 7.0.0-28, glibc 2.43; 2 vCores (Intel Haswell, with FMA and AVX2), 3.8 GB, 38 GB disk. Login: `ubuntu`, the laptop's key only (`docs/process/secrets-map.md`).
 
+## 29 Sep 2026, 20:11 UTC — the full-size ocean planet released (W15-t)
+
+- released 2026-09-29 20:11 UTC: planet-048b324 (sha256 b55a57faffbf1bdf…), world planet-seed7-ocean-048b324.sqlite from Garcks-PC at tick 0, settings none; seed-2 hash 4fa40b59… matches Garcks-PC with no maths setting; picture 190240 bytes gzipped
+
+`scripts/planet-release.sh 57.129.161.57 --reborn-at-myr=5000`, the checkout at `573b1f9`. Seed 7, f 128, radius 6,371 km, one tick a second, the corner "Born as ocean" (one phrase, through `planet-start.sh`, its first run under systemd). No world of that name was on the server, so nothing was copied to `kept/`; the older worlds in `/var/lib/planet` are left as they are. The birth kept at `/var/lib/planet/birth/planet-seed7-ocean-048b324.sqlite` (5,459,968 bytes); `planet-reborn.timer` on, at 5 billion years. The engine at 113 MB in its first second. **The grid at Cloudflare** was the old planet's (409,692 bytes, age 82,500 s, HIT) until purged by address in the dashboard at about 20:27 UTC, Jamie signed in; after, 6,553,692 bytes, as the engine sends. A browser that saw the old planet within the day keeps the old grid (`max-age=86400`) until it is fetched again.
+
 ## 29 Sep 2026, about 20:30 UTC — before the ocean planet's release (W15-t)
 
 Read only, nothing installed: `nginx -t` syntax ok, test successful (the door's config is unchanged; `planet-start.sh` and the service's new `ExecStart` go up with the release). The public planet at tick 414,743 on `planet-fs1`. Memory 3,814 MB, 3,151 available; the disk 3.1 of 38 GB. The checkout at `dfc9f7e`.
