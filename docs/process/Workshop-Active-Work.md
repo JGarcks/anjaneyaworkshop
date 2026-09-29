@@ -27,12 +27,13 @@
 
 - **The hub does not notice a stopped tick** (W12): if Planet's engine stops while its server still answers, the page shows a frozen planet as live (`watch.js` goes still only on failed requests). Flagged as its own task. The engine's half is public since W13 (a crash stops the program; the service restarts it); a planet that hangs without crashing would still look live.
 - **CLAUDE.md is 13.0 KB against 12** (trimmed W15-r): the log's format to a file of its own, or the limit 13 KB — Jamie's.
+- **The laptop's Chrome drops to the still** (W15-t): its console at a drop-out.
 - **A new size leaves the old grid cached a day, in browsers and at Cloudflare** (W15-t): `check-public.sh` to compare the grid with the planet's cell count; the lasting mend put to Jamie.
 - **No test server exists** (deleted 29 Sep at Jamie's word, W15-p): a new one when a Planet session asks, its address into Garcks-PC's Desktop note.
 - **The viewer in parts** (Planet's HK · D1): a WEB session on the laptop before WEB-14; each new file a door entry and a release (Planet's `HK_VIEWER_REVIEW.md`).
 - **More on the server** (Jamie asked, W9): Planet's background test runs at the lowest priority, or other apps — a scope decision for Jamie after a few days of the site on it; VPS-2 (4 vCores, 8 GB) if wanted. Planet Claude would need its own login.
-- **Garcks-PC's idle door**: nginx on 127.0.0.1 and the stopped tunnel, kept for the way back (RUNBOOK §M2); remove once the server has run a month.
-- **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
+- **Garcks-PC's idle door**: kept for the way back (RUNBOOK §M2); remove once the server has run a month.
+- **The 3D viewer** (Planet's, after Layer 3): the page adopts it.
 
 ## Held for triggers
 
