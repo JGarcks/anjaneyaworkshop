@@ -4,7 +4,7 @@
 
 ## The text
 
-> **Anjaneya Workshop** is where I build things with AI assistance. I'm Jamie, a claims handler, not a programmer. I describe what I want and make every decision. The AI writes the code.
+> Welcome to my site – Anjaneya Workshop, the home of Planet and some of my other projects (updates to follow). I'm Jamie and I build with AI assistance on my projects.
 >
 > The planet on this page is my main project. It is a simulated world the size of Earth, running day and night. It begins as ocean. Plates drift, volcanoes raise islands, islands join into continents, and rivers wear them down again. After its first moment, every mountain and coastline is the planet's own doing. Nothing is drawn by hand.
 >
@@ -18,11 +18,14 @@
 | Name | Jamie, first name only |
 | Where it sits | Behind a quiet About link, not on the dark screen itself |
 | The other projects | Left out for now; each gets its line when its room opens |
+| The opening paragraph (29 Sep, later the same day, W15-g) | Jamie's own: a welcome, the site as the home of Planet and other projects to come, and one sentence on how Jamie builds ("That is enough"). It replaces Claude's draft, which named Jamie's trade and said who decides and who writes the code |
 
 ## What each claim rests on, and when it becomes true
 
 | Sentence | Rests on | True today? |
 |---|---|---|
+| "the home of Planet and some of my other projects (updates to follow)" | The hub links to Planet's room; BlockByBlock's and the work apps' rooms are Phases 3 and 5 | Yes: Planet is there, the others are promised, not claimed |
+| "I build with AI assistance on my projects" | Every project's own record: Jamie decides, an AI writes the code | Yes |
 | "the size of Earth" | Planet's FS · D2: radius 6,371 km, 163,842 cells | Not on the public planet, which is quarter size until the ocean planet is released |
 | "running day and night" | The engine on the rented server (W9) | Yes |
 | "It begins as ocean" | Planet's FS · D30: seed 7, one continent a thousandth of the planet | After that release |
