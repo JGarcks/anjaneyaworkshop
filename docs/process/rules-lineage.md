@@ -36,3 +36,18 @@
 - **Explore's benchmark, presets and graphics ladder** — the budget here is a handful of HTTP numbers, not a frame-time distribution.
 - **Planet's rules 1–4, 6–13** — the world's own physics and determinism. The site reads their outputs and never touches them; rule 4 (hash on this machine) reappears only as a note under WS · D7.
 - **Planet's "Pictures at each gate" as a gate condition** — kept as a habit (the how-it-works page, WS · D12) but not as a gate, because a phase here is closed by the public check and Jamie's walk.
+
+## Trimmed out of CLAUDE.md on 29 Sep 2026 (W15-r), kept here
+
+No rule was removed; each kept its instruction. What left the page:
+
+- **The set-up's detail.** The laptop is `desktop-tmsridg` and runs Cowork or the Code tab; the server is OVHcloud VPS-1, London, since W9; Garcks-PC's `planet.service` and door are stopped (W9-d); viewer graphics are done in a laptop Planet session (Jamie, W4); performance here means the door's egress and the cache. Addresses are in `frontdoor/state/server.md`.
+- **Rule 9, what the public check asserts:** gzip on, `s-maxage=1` (a second at the edge, none in the browser), `X-Planet-Tick` present, a POST refused with 405, the second fetch of a field within a second a cache hit. The script is the record.
+- **Rule 11:** on the server only loopback reaches the engine (firewall and unit; WS · D1, W9-b). Multiplayer, comments and uploads were the examples of a new decision.
+- **Rule 7:** the "Not an official Minecraft product" line lives in BlockByBlock's room, not on the hub.
+- **Rule 14:** the file's opening note is the substitute for explain-back in chat.
+- **Rule 16:** Jamie, 24 Sep 2026; the bot W3-e (`.github/workflows/still.yml`, which refuses anything outside `site/public/still/`). PC Claude's state file says what it installed, from which commit, when, and what `nginx -t` and the service status said. Reports between the two Claudes go through `frontdoor/state/`.
+- **The pictures:** `docs/how-workshop-works.html` was started after Phase 1 from a real run, one request followed from a phone to the engine and back.
+- **What works well (the calibration anchor):** the doc quartet, each with one job · the public check as the work queue for the budget and Jamie's walk as the queue for looks · the shown projects reached through their artefacts and APIs · one folder per job · commit messages name the session · automated, then eyeball, then wrap-up · learning by deciding.
+
+**Added the same day:** rule 6 rewritten (W15-n, W15-q: sizes measured every session, limits moved only by Jamie); a decision judged by eye is put with the case against each option and no recommendation (W15-o).

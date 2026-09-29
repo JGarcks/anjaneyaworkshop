@@ -28,7 +28,7 @@
 ## Queued (cross-session, ride-alongside — pick when a session is already in the relevant file)
 
 - **The hub does not notice a stopped tick** (W12): if Planet's engine stops while its server still answers, the page shows a frozen planet as live (`watch.js` goes still only on failed requests). Flagged as its own task. The engine's half is public since W13 (a crash stops the program; the service restarts it); a planet that hangs without crashing would still look live.
-- **Trim CLAUDE.md** (16.9 KB → 12): the cuts were put to Jamie on 29 Sep; made at Jamie's yes.
+- **CLAUDE.md is 13.0 KB against 12** (trimmed W15-r): the log's format to a file of its own, or the limit 13 KB — Jamie's.
 - **The test server is deleted when not in use** (W15-p): FS-7's planets are growing on it (from 16:20 UTC 29 Sep); delete at Jamie's word once Planet says they are home, and create a new one when a session asks.
 - **More on the server** (Jamie asked, W9): Planet's background test runs at the lowest priority, or other apps — a scope decision for Jamie after a few days of the site on it; VPS-2 (4 vCores, 8 GB) if wanted. Planet Claude would need its own login.
 - **Garcks-PC's idle door**: nginx on 127.0.0.1 and the stopped tunnel, kept for the way back (RUNBOOK §M2); remove once the server has run a month.
