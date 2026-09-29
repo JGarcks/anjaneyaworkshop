@@ -190,16 +190,24 @@ GROUPS = [
     ]),
     ("On this laptop, alongside", "Two viewer sessions, done here where you judge the picture. Any time after "
      "FS-2, and both before FS-10.", [
-        dict(id="WEB-13", name="A picture the size of the screen", short="Screen-sized", where=LAPTOP_PLANET,
-             kind="Viewer", side=True,
+        dict(id="WEB-13", name="A picture the size of the screen", short="Screen-sized",
+             where="A Planet session · Opus 5.5 · judged on this laptop", kind="Viewer", side=True,
              why="The viewer asks for the planet at a size the screen can show, so a full-size planet turns "
-                 "smoothly. Today a full-size picture is 2.6 MB a refresh, sixteen times what the viewer was "
-                 "built for.",
-             asked=["Which size of picture the hub gets, and whether a big laptop gets a finer one.",
-                    "How rivers are drawn at that size."],
-             see="An Earth-size planet live in the viewer, smooth on this laptop and on a phone.",
-             done="You have watched it on both and said it is smooth.",
-             say=later("WEB-13", " Read docs/ITEMS_21_22.md as well.")),
+                 "smoothly and passes the website's guard. Today a full-size picture is 2.6 MB a refresh, "
+                 "sixteen times what the viewer was built for. It is what lets the ocean planet go public.",
+             asked=["How a coarse cell takes its value: the cell at its centre (sharp, thin islands may flicker) "
+                    "or the mean of the cells around it (steady, thin islands sink).",
+                    "Who gets the coarse picture: the hub only, or every viewer of a big planet.",
+                    "Whether the ocean planet goes public before rivers are drawn at the coarse size, or after."],
+             also="Its first sitting draws heights and lakes at today's cell count. Rivers at that size are a "
+                  "second sitting, and a finer picture for bigger screens comes after. It works in its own copy "
+                  "of Planet on Garcks-PC, so it does not meet FS-6.",
+             see="The full-size ocean planet live on port 8097, on this laptop and on a phone, beside the full "
+                 "picture on port 8096.",
+             done="You have watched it on both and said yes.",
+             say="Read CLAUDE.md and docs/PROGRESS.md, then ~/Desktop/for-planet-claude-web13-brief.md. Work in "
+                 "a second copy of Planet as its section 3 says, not in ~/Desktop/planet. Run WEB-13's first "
+                 "sitting."),
         dict(id="WEB-14", name="Detail where you zoom", short="Zoom detail", where=LAPTOP_PLANET, kind="Viewer",
              side=True,
              why="The whole globe comes coarse, and the part you zoom into comes in full detail, as online maps "
