@@ -5,7 +5,8 @@
 # Decision: the budget is a test (CLAUDE.md rule 9) — a FAIL here blocks the commit exactly as a red npm test does.
 # Built in W1 — Ground (24 Sep 2026), Phase 0 (HTTPS, redirects); W2 — the front door added Phase 1 (the budget at the door);
 #   W3 — the landing page began Phase 2 (browsers re-check the hub's files); W4 added the hub's framing, the still's age and
-#   time to first picture; W8 the one-request picture and what the door holds; W11 the visitor budget (the picture under 80 KB).
+#   time to first picture; W8 the one-request picture and what the door holds; W11 the visitor budget (the picture under 80 KB);
+#   W14 the budget set by Jamie at 300,000 bytes a second (W14-e).
 set -u
 
 SITE="${1:-https://anjaneyaworkshop.co.uk}"
@@ -121,13 +122,16 @@ if (( THROUGH >= 1 )); then
   #     but still holds the separate fields, which only its hold keeps in step (W4-e). Checked W8.
   #     W11-b: the visitor budget — a picture arrives about once a second, so its weight is what a visitor downloads a second;
   #     under 80,000 bytes (about 58 KB at f 32; a half-size planet's is ~250 KB). scripts/planet-release.sh weighs it first.
+  #     W14-e (Jamie, 29 Sep 2026): the budget is 300,000 bytes a second. While a picture comes each second that is the
+  #     picture's weight; once Planet's packed picture paces itself (WEB-13), this check weighs that address and its pace.
+  BUDGET=300000
   h="$(headers "$PLANET/api/picture/elevation_m" -H 'Accept-Encoding: gzip')"
   wire="$(curl -sS -o /dev/null --max-time 15 -w '%{size_download}' -H 'Accept-Encoding: gzip' "$PLANET/api/picture/elevation_m" 2>/dev/null)"
   tick="$(header x-planet-tick "$h")"
-  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -le 80000 && "$tick" =~ ^[0-9]+$ ]]; then
-    pass "picture elevation_m → 200, gzip, $wire bytes on the wire (visitor budget 80,000), tick $tick"
+  if [[ "$(status_of "$h")" == 200 && "$(header content-encoding "$h")" == gzip && "${wire:-0}" -gt 0 && "${wire:-0}" -le "$BUDGET" && "$tick" =~ ^[0-9]+$ ]]; then
+    pass "picture elevation_m → 200, gzip, $wire bytes on the wire (visitor budget $BUDGET a second), tick $tick"
   else
-    fail "picture elevation_m → expected 200 gzip within the visitor budget of 80,000 bytes with X-Planet-Tick, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes, tick ${tick:-none}"
+    fail "picture elevation_m → expected 200 gzip within the visitor budget of $BUDGET bytes a second with X-Planet-Tick, got $(status_of "$h") $(header content-encoding "$h") ${wire:-?} bytes, tick ${tick:-none}"
   fi
   cc="$(header cache-control "$h")"
   if [[ "$cc" == "public, max-age=0, s-maxage=1" ]]; then pass "/api/picture/ Cache-Control: $cc"; else fail "/api/picture/ Cache-Control: expected public, max-age=0, s-maxage=1, got ${cc:-none}"; fi

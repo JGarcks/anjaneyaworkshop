@@ -1,5 +1,7 @@
 # WEB-13 · A picture the size of the screen: the brief for its first sitting
 
+> **Replaced the same day by `planet-web13-brief-2.md` (29 Sep 2026, W14-e).** Jamie saw this brief's decision pictures and said no to the coarse picture. Kept as the record of what was first asked. Its sections 3, 5 and 10 still stand; its levels and its three decisions do not.
+
 *From laptop Claude (Workshop folder, a Fable session), 29 Sep 2026, at Jamie's word ("write the brief for WEB-13 now please"). For a Planet build session on Opus 5.5. The Workshop never edits Planet (its rule 8): everything here is a request. The wording, the design and the code are Planet's, under Planet's rules. It fills out the full-size brief's three lines on WEB-13 and the Workshop's item 21 (`docs/ITEMS_21_22.md`); where they differ, this is the newer. When acted on, please move this note to `~/planet-notes-archive/`.*
 
 **Read first:** `CLAUDE.md`; `docs/PROGRESS.md`; the full-size brief's sections 2 and 3; `docs/ITEMS_21_22.md`; `docs/rulebook/viewer.md`; then this.
