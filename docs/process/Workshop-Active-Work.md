@@ -2,7 +2,7 @@
 
 > **Single source of truth for the next session.** Just the live pointer + truly cross-session queues.
 >
-> Closed session entries belong in `progress/YYYY-MM.md`, never here. Phase plans and design content belong in `Workshop-Coverage-Plan.md` (the arc) or `Workshop-Strategic-Plan.md` (charter). If this doc grew by more than ~30 lines during the session, move the bulk out before commit (CLAUDE.md rule 6).
+> Closed session entries belong in `progress/YYYY-MM.md`, never here. Phase plans and design content belong in `Workshop-Coverage-Plan.md` (the arc) or `Workshop-Strategic-Plan.md` (charter). Its limit is 6 KB, measured every session (CLAUDE.md rule 6).
 
 ---
 
@@ -21,20 +21,15 @@
 4. The judder Jamie saw (Planet Claude's note on Garcks-PC's Desktop): WS · D13 brought forward. Pictures past the edge cache (WS · D4 and rule 9's `s-maxage=1`), or the viewer gliding at the engine's pace (a Planet viewer change, laptop session). Judged by Jamie's eye.
 5. The test server's `GLIBC_TUNABLES` line (programs since FS-1 need none): off when FS-6's planets are not running.
 
-**Pending Jamie:** the walk of the FS-1 planet · the phone walk · the D11 difference pictures: out of Planet's repository? · swipe-to-refresh: leave it, or try the top strip (real phone only) · WS · D5, BlockByBlock's new name · the test server bills about £7.50 a day, to about 27 Oct.
-
-**Who's who:** CLAUDE.md §About Jamie and rule 16; laptop Claude also runs the server over SSH (key only). Notes between Claudes live on Garcks-PC's Desktop and are archived by whoever acts on them (W12-d); the Workshop's record of its requests is `requests/`.
+**Pending Jamie:** the walk of the FS-1 planet · the phone walk · the D11 difference pictures: out of Planet's repository? · swipe-to-refresh: leave it, or try the top strip (real phone only) · WS · D5, BlockByBlock's new name · the trench rule looked at again at FS-7's look (W15-o).
 
 ---
-
-## Booked (Jamie, 24 Sep 2026; W9 26 Sep)
-
-**A livelier picture — WS · D13**: brought forward to W16 (item 4) by the judder Jamie saw (W13). From W4: a paid Cloudflare plan would not help; a push relay from the server; the server's traffic is unlimited.
 
 ## Queued (cross-session, ride-alongside — pick when a session is already in the relevant file)
 
 - **The hub does not notice a stopped tick** (W12): if Planet's engine stops while its server still answers, the page shows a frozen planet as live (`watch.js` goes still only on failed requests). Flagged as its own task. The engine's half is public since W13 (a crash stops the program; the service restarts it); a planet that hangs without crashing would still look live.
-- **Trim CLAUDE.md** (16.4 KB → 12) at the first session that touches it (rule 6); its changes put to Jamie first.
+- **Trim CLAUDE.md** (16.9 KB → 12): the cuts were put to Jamie on 29 Sep; made at Jamie's yes.
+- **The test server is deleted when not in use** (W15-p): FS-7's planets are growing on it (from 16:20 UTC 29 Sep); delete at Jamie's word once Planet says they are home, and create a new one when a session asks.
 - **More on the server** (Jamie asked, W9): Planet's background test runs at the lowest priority, or other apps — a scope decision for Jamie after a few days of the site on it; VPS-2 (4 vCores, 8 GB) if wanted. Planet Claude would need its own login.
 - **Garcks-PC's idle door**: nginx on 127.0.0.1 and the stopped tunnel, kept for the way back (RUNBOOK §M2); remove once the server has run a month.
 - **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
