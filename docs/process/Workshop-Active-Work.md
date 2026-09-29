@@ -19,8 +19,6 @@
 2. The gate's rest: the server's engine stopped a minute, `door-rate.sh 60` on the server, Jamie's walk on the laptop and phone incl. pinch-out.
 3. Confirm or undo W15-f (Claude's): the guard's ceiling of 450,000 bytes a picture.
 4. The judder Jamie saw (Planet Claude's note on Garcks-PC's Desktop): WS · D13 brought forward. Pictures past the edge cache (WS · D4 and rule 9's `s-maxage=1`), or the viewer gliding at the engine's pace (a Planet viewer change, laptop session). Judged by Jamie's eye.
-5. The test server's `GLIBC_TUNABLES` line (programs since FS-1 need none): off when FS-6's planets are not running.
-
 **Pending Jamie:** the walk of the FS-1 planet · the phone walk · the D11 difference pictures: out of Planet's repository? · swipe-to-refresh: leave it, or try the top strip (real phone only) · WS · D5, BlockByBlock's new name · the trench rule looked at again at FS-7's look (W15-o).
 
 ---
@@ -29,7 +27,7 @@
 
 - **The hub does not notice a stopped tick** (W12): if Planet's engine stops while its server still answers, the page shows a frozen planet as live (`watch.js` goes still only on failed requests). Flagged as its own task. The engine's half is public since W13 (a crash stops the program; the service restarts it); a planet that hangs without crashing would still look live.
 - **CLAUDE.md is 13.0 KB against 12** (trimmed W15-r): the log's format to a file of its own, or the limit 13 KB — Jamie's.
-- **The test server is deleted when not in use** (W15-p): FS-7's planets are home (29 Sep); **it may go, at Jamie's word**.
+- **No test server exists** (deleted 29 Sep at Jamie's word, W15-p): a new one when a Planet session asks, its address into Garcks-PC's Desktop note.
 - **The viewer in parts** (Planet's HK · D1): a WEB session on the laptop before WEB-14; each new file a door entry and a release (Planet's `HK_VIEWER_REVIEW.md`).
 - **More on the server** (Jamie asked, W9): Planet's background test runs at the lowest priority, or other apps — a scope decision for Jamie after a few days of the site on it; VPS-2 (4 vCores, 8 GB) if wanted. Planet Claude would need its own login.
 - **Garcks-PC's idle door**: nginx on 127.0.0.1 and the stopped tunnel, kept for the way back (RUNBOOK §M2); remove once the server has run a month.
