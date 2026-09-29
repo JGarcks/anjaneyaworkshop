@@ -4,6 +4,10 @@
 
 **The machine.** OVHcloud VPS-1 (order 259163206), Erith (London). `vps-5e97d8be.vps.ovh.net`, IPv4 57.129.161.57 (IPv6 2001:41d0:801:2000::2595, unused). Ubuntu 26.04.1 LTS, kernel 7.0.0-28, glibc 2.43; 2 vCores (Intel Haswell, with FMA and AVX2), 3.8 GB, 38 GB disk. Login: `ubuntu`, the laptop's key only (`docs/process/secrets-map.md`).
 
+## 29 Sep 2026, about 20:30 UTC — before the ocean planet's release (W15-t)
+
+Read only, nothing installed: `nginx -t` syntax ok, test successful (the door's config is unchanged; `planet-start.sh` and the service's new `ExecStart` go up with the release). The public planet at tick 414,743 on `planet-fs1`. Memory 3,814 MB, 3,151 available; the disk 3.1 of 38 GB. The checkout at `dfc9f7e`.
+
 ## 29 Sep 2026, 10:11 UTC — the door learns `/api/packed/`, ahead of the engine (W15)
 
 `install.sh config` from commit 54b836a (its first run: the config alone, no packages, no restart). `nginx -t`: syntax ok, test successful. `systemctl reload nginx`: the master process of 26 Sep kept, new workers started; listeners nginx on 127.0.0.1:8090 only. The old config is kept at `/var/tmp/anjaneya-frontdoor.conf.before`. Asked on the server through the door: `/api/packed/elevation_m` before, nginx's own 404 (`text/html`); after, the engine's 404 (`text/plain`, "not found"), since `planet-fs1` has no packed picture; the first ask straight after the reload still met an old worker. `/api/picture/elevation_m` 200, 63,093 bytes compressed; a POST to the packed address 405; nginx, planet-engine and cloudflared-frontdoor active. `check-public.sh` from the laptop afterwards: 29 of 29, the picture 63,141 bytes on the wire, time to first picture 0.892 s.

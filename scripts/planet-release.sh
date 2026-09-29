@@ -25,12 +25,19 @@ SSH=(ssh -o BatchMode=yes -o ConnectTimeout=10)
 echo "== 1. what Garcks-PC is running (planet.service, read only)"
 ARGV="$("${SSH[@]}" "$PC" 'systemctl --user show planet -p ExecStart --value' | sed -n 's/.*argv\[\]=\([^;]*\) ;.*/\1/p' | head -1)"
 ENVS="$("${SSH[@]}" "$PC" 'systemctl --user show planet -p Environment --value')"
+# The corner's words (W15-d) are one phrase with spaces in it, and systemd shows the arguments with their quotes gone: the
+# phrase is everything after --corner up to the next --option. It travels in a setting of its own (PLANET_CORNER).
+CORNER="$(sed -n 's/.* --corner \(.*\)$/\1/p' <<<"$ARGV" | sed 's/ --[a-z].*$//')"
+if [[ -n "$CORNER" ]]; then
+  [[ "$CORNER" =~ ^[A-Za-z0-9\ ,.-]+$ ]] || { echo "STOPPED: the corner's words must be letters, numbers, spaces, commas, full stops or hyphens, got: $CORNER" >&2; exit 1; }
+  ARGV="${ARGV/ --corner $CORNER/}"
+fi
 read -r -a WORDS <<<"$ARGV"
 BIN="${WORDS[0]}"; ARGS=("${WORDS[@]:1}")
 PC_WORLD=""; for i in "${!ARGS[@]}"; do [[ "${ARGS[$i]}" == --world ]] && PC_WORLD="${ARGS[$((i+1))]}"; done
 [[ -n "$BIN" && -n "$PC_WORLD" && "${ARGS[0]}" == serve ]] || { echo "STOPPED: could not read the program and world from planet.service: $ARGV" >&2; exit 1; }
 NAME="$(basename "$PC_WORLD")"
-echo "program: $BIN"; echo "world:   $PC_WORLD"; echo "args:    ${ARGS[*]}"; echo "settings: ${ENVS:-none}"
+echo "program: $BIN"; echo "world:   $PC_WORLD"; echo "args:    ${ARGS[*]}"; echo "corner:  ${CORNER:-none}"; echo "settings: ${ENVS:-none}"
 
 # The same arguments with the world moved to the server's folder.
 SARGS="$(printf '%s ' "${ARGS[@]}" | sed "s#--world [^ ]*#--world /var/lib/planet/$NAME#; s/ $//")"
@@ -54,6 +61,7 @@ scp -q -3 "$PC:$BIN" "$VPS:/tmp/planet-release/planet"
   echo "# /etc/planet/engine.env — written by scripts/planet-release.sh; read by planet-engine.service."
   for kv in $ENVS; do echo "$kv"; done
   echo "PLANET_ARGS=\"$SARGS\""
+  echo "PLANET_CORNER=\"$CORNER\""
 } | "${SSH[@]}" "$VPS" 'cat > /tmp/planet-release/engine.env'
 if [[ "$KEEP" == --keep-world ]]; then WORLD_NOTE="the server's own world $NAME kept"; else WORLD_NOTE="world $NAME from Garcks-PC at tick ${TICK:-?}"; fi
 NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM…), $WORLD_NOTE, settings ${ENVS:-none}"
@@ -61,6 +69,7 @@ NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM
   echo "$NOTE"
   [[ "$KEEP" == --keep-world ]] && echo "keep-world: yes"
   [[ -n "$REBORN_MYR" ]] && echo "reborn-at-years: ${REBORN_MYR}000000"
+  [[ -n "$CORNER" ]] && echo "corner: $CORNER"
   echo "args: $SARGS"
 } | "${SSH[@]}" "$VPS" 'cat > /tmp/planet-release/RELEASE.txt'
 

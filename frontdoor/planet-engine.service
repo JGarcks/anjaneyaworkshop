@@ -31,8 +31,9 @@ EnvironmentFile=/etc/planet/engine.env
 # off here. From FS-1 the program carries its own maths (libm) and grows Garcks-PC's world as it is: seed 2 f 8 at
 # 2,000 ticks 7e7e8b15… on Garcks-PC, the test server and the laptop. An older program, if ever released again, gets
 # W9-e's setting in engine.env: scripts/planet-release.sh finds out by the seed-2 hash.
-# PLANET_ARGS is split into words here (unbraced $): serve, seed, f, port, tps and the world file under /var/lib/planet.
-ExecStart=/opt/planet/planet $PLANET_ARGS
+# planet-start.sh splits PLANET_ARGS into words (serve, seed, f, port, tps and the world file under /var/lib/planet)
+# and hands PLANET_CORNER over as one phrase (W15-d), then becomes the engine itself.
+ExecStart=/opt/planet/planet-start.sh
 Restart=on-failure
 RestartSec=10s
 MemoryMax=2G

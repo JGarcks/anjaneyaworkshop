@@ -59,6 +59,7 @@ base)
 engine)
   REL=/tmp/planet-release
   for f in planet world.sqlite engine.env RELEASE.txt; do [[ -s "$REL/$f" ]] || fail "$REL/$f missing: run scripts/planet-release.sh from the laptop."; done
+  [[ -s "$REPO/frontdoor/planet-start.sh" ]] || fail "$REPO/frontdoor/planet-start.sh missing; nothing changed."
   # shellcheck disable=SC1091
   WORLD="$(. "$REL/engine.env"; sed -n 's/.*--world \([^ ]*\).*/\1/p' <<<"$PLANET_ARGS")"
   [[ "$WORLD" == /var/lib/planet/* ]] || fail "engine.env's --world is not under /var/lib/planet: $WORLD"
@@ -93,6 +94,7 @@ engine)
 
   echo "== 2. the program, the settings, the release note, and the service file from this repo (so a change to it goes up with a release)"
   install -m 0755 "$REL/planet" /opt/planet/planet
+  install -m 0755 "$REPO/frontdoor/planet-start.sh" /opt/planet/planet-start.sh
   install -m 0644 "$REL/engine.env" /etc/planet/engine.env
   install -m 0644 "$REL/RELEASE.txt" /opt/planet/RELEASE.txt
   install -m 0644 "$REPO/frontdoor/planet-engine.service" /etc/systemd/system/planet-engine.service
