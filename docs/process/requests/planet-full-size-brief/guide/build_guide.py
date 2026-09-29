@@ -117,7 +117,7 @@ GROUPS = [
                   "range.",
              see="The planet's middles at 500 million, 1 and 3 billion years, before and after.",
              done="You have seen the pictures and said yes, or said no and the change is dropped.",
-             say="Parked. Nothing to start: FS-7 is next."),
+             say="Parked. Nothing to start: the code put in order is next, then FS-7."),
         dict(id="RW", name="The water review", short="Review", where=LAPTOP_FABLE, kind="Review", review=True,
              why="You stopped FS-5 part way and asked for fresh eyes. Why are the middles wet, and is the plan "
                  "still right?",
@@ -155,6 +155,23 @@ GROUPS = [
              done="You have the report and have agreed what comes next. You did, on 29 September.",
              say="Done on 29 September. Its note for Planet is on Garcks-PC's Desktop, as "
                  "for-planet-claude-second-fable-review.md."),
+        dict(id="HK", name="The code put in order", short="Code", where="Garcks-PC · Fable, then Opus 5.5",
+             kind="Code only · no world changed",
+             why="You asked for the code to be checked on 29 September. It is sound where it matters: every "
+                 "file explains itself and the rules are tested. But a few functions have grown to over 200 "
+                 "lines, a dozen one-off measuring tools have piled up in the engine, and the viewer is one "
+                 "file of 2,100 lines. This puts them in order before FS-7 builds on them.",
+             asked=["The order of the work.",
+                    "Which measuring tools are retired.",
+                    "Anything its own review finds. It is not limited to laptop Claude's brief."],
+             also="Set Fable to high effort for it. Fable reviews, plans and does the simulation's files; "
+                  "Opus 5.5 does the wider, plainer pieces to that plan; Fable reads the result.",
+             see="Nothing looks different, and that is the test: every planet's fingerprint is the same "
+                 "before and after each step. At the end, the same measurements again, side by side.",
+             done="The checks are green, no fingerprint has moved, and you have the before and after numbers.",
+             say="Read CLAUDE.md and docs/PROGRESS.md, then ~/Desktop/for-planet-claude-housekeeping-brief.md. "
+                 "Do your own review of the whole codebase first; the brief is a starting point, not a limit. "
+                 "Then put your plan to me. No world may change."),
         dict(id="FS-7", name="A plate's life", short="Plates", where=PC, kind="Changes the world",
              change="Fewer small plates, and coasts left quiet",
              why="Plates are born, join and die sensibly, and land is grouped as Earth's is. The large plates "
@@ -322,7 +339,7 @@ WHERE = [
      "exists, working or idle; laptop Claude deletes it at your word."),
 ]
 
-MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "RW", "FS-6", "R2", "FS-7", "FS-6-3", "FS-8", "FS-9",
+MAIN = ["FS-0", "FS-1", "FS-2", "FS-3", "R1", "FS-4", "FS-5", "RW", "FS-6", "R2", "HK", "FS-7", "FS-6-3", "FS-8", "FS-9",
         "R3", "FS-10"]
 SIDE = ["WEB-13", "WEB-14"]
 # A parked session is on the route but is never the next one: it waits, and the page says why.
@@ -355,7 +372,7 @@ def route_svg():
     width = left * 2 + step * len(MAIN)
     out = ['<svg id="route" viewBox="0 0 %d 214" role="img" aria-label="The route: FS-0 to FS-3 get ready, then '
            'the first review; FS-4 is the birth; FS-5, water, is parked after the water review; FS-6 reshapes the '
-           'coasts, then the second review; FS-7, the plates; the last sitting of FS-6; FS-8 and FS-9, then the '
+           'coasts, then the second review; the code put in order; FS-7, the plates; the last sitting of FS-6; FS-8 and FS-9, then the '
            'third review; FS-10 goes public; then '
            'Layer 3. The two viewer sessions run alongside on the laptop, any time after FS-2 and both before '
            'FS-10.">' % width]
