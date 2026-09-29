@@ -56,7 +56,7 @@ Build session shape: **read Active-Work + Coverage-Plan → decision round → b
 3. **No history-rewriting git operations.** Single branch: `commit`, `log`, `restore`, `revert`, and `pull` (a merge) only. No `rebase`, `reset --hard`, force-push. A commit with a mistake is fixed by another commit.
 4. **Commit as you go.** Every step that runs and checks green gets committed, even mid-session. A landing page with no live line is a commit; the live line is the next one.
 5. **Doc-quartet drift discipline.** At session start, if the queued next action contradicts what the quartet says is current, stop and ask Jamie. At session end, before commit, walk the four docs: Active-Work pointer rotated; Coverage-Plan phase status updated; Strategic-Plan amended only if a hosting, scope or budget decision changed; CLAUDE.md gains a rule only if one was learned; the decisions table gains the session's decisions.
-6. **Session-end trim discipline — whole quartet.** Active-Work ≈ 4 KB, CLAUDE.md ≈ 12 KB, Coverage-Plan ≈ 24 KB. Closed phases collapse to one line (the progress log holds the detail); reasons go to `docs/process/rules-lineage.md`.
+6. **Sizes are measured, every session (Jamie, 29 Sep 2026).** Active-Work 4 KB, CLAUDE.md 12 KB, Coverage-Plan 24 KB; no function in this repo over 60 lines. Every session's log entry carries a **Sizes** line: each of the three against its limit, and the longest function with its file. One over its limit is trimmed before the commit, or the entry says why not and Jamie is told in chat. A limit is moved only by Jamie. Closed phases collapse to one line (the progress log holds the detail); reasons go to `docs/process/rules-lineage.md`. A review of any project reports the same two numbers for it.
 7. **Never bundle Mojang's assets — of any kind.** No textures, models, sounds, fonts, logos or the word *Minecraft* in a product or domain name. On the hub, nothing Minecraft-shaped beyond the renamed BlockByBlock's own small mark; the "Not an official Minecraft product" line lives in that app's room, not on the hub. Every public build is scanned for Mojang assets before it ships.
 8. **The Workshop never edits another project.** Planet, BlockByBlock, ClaimsDesk and PolicyRAG are shown here, never changed here. Anything the site needs from one of them is a request written into that project's own queue for that project's own session, under that project's rules. This site takes their built artefacts and their public API only.
 9. **The budget is a test.** The bandwidth and cache numbers in the Strategic Plan (§Budget) are asserted by `scripts/check-public.sh` against the public address: gzip on, `s-maxage=1` (a second at the edge, none in the browser), `X-Planet-Tick` present, a POST refused with 405, the second fetch of a field within a second a cache hit. A regression blocks the commit the same way a red test does. A failed budget changes the *approach*, never the number.
@@ -74,7 +74,7 @@ Build session shape: **read Active-Work + Coverage-Plan → decision round → b
 
 **Review (eyeball):** 6. **Open the site on the dev server and on the public address**; screenshot the landing page on the laptop and a phone and compare with the previous phase's set in `docs/screens/<phase>/`. The framed viewer must look the same as the viewer on the LAN. 7. **Jamie's walk**, recorded under *The walk* in the log. Jamie's eye is the bar on anything visual.
 
-**Wrap-up:** 8. Progress-log entry (format below). 9. Decisions into `docs/decisions.md`, one row each. 10. The quartet walk (rule 5) and trim (rule 6). 11. Commit named for the session and its numbers.
+**Wrap-up:** 8. Progress-log entry (format below). 9. Decisions into `docs/decisions.md`, one row each. 10. The quartet walk (rule 5) and **the sizes measured** (rule 6). 11. Commit named for the session and its numbers.
 
 ## Progress Log Discipline
 
@@ -87,6 +87,7 @@ Build session shape: **read Active-Work + Coverage-Plan → decision round → b
 **Leave alone (already correct).**
 **Verification.** <site tests, nginx -t, check-public numbers and budget result, link check>
 **Public check.** <the numbers of record for this phase, if they moved: bytes per tick, cache hit ratio, time to first picture>
+**Sizes.** <Active-Work, CLAUDE.md, Coverage-Plan, each against its limit; the longest function and its file>
 **The walk.** <what Jamie saw on the laptop and the phone, what they asked for, where it looked wrong — or "none this session">
 **Decisions.** <Jamie's decisions and reasons, one line each; Claude's check-settled ones marked as such>
 **Deferred.**

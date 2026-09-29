@@ -30,7 +30,9 @@ def review(n):
 
 
 WHAT_A_REVIEW_GIVES = ("A short report: what is better, what is not, whether the rules of work held, and whether the "
-                       "next sessions are still the right ones.")
+                       "next sessions are still the right ones. With it, two numbers: the longest function in the "
+                       "code, and each document against its size limit. Decisions judged by eye are put with "
+                       "their options and the case against each, and no recommendation.")
 
 GROUPS = [
     ("Getting ready", "Four sessions that change no planet. They put the paperwork, the engine and the pictures in "
