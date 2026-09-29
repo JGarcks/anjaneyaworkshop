@@ -10,7 +10,7 @@
 | 2 | The public pace | One tick a second |
 | 3 | The planet's end | Reborn at 5 billion years, "for now" |
 | 4 | The words in the viewer's corner | Just "Born as ocean", and able to be switched off |
-| 5 | The grid packed before the release, or after | Not yet answered |
+| 5 | The grid packed before the release, or after | After, "for now"; to be looked at again later in the project |
 
 **Measured for decision 2** (laptop Claude, `planet-39fc35f` on the public server at the lowest priority, the live planet untouched): a full-size tick 0.13 s newborn (seed 7, the ocean settings, ticks 1 to 301) and 0.53 s at 2 billion years (a copy of `ocean-planets/looks/seed-7/myr-2000/world.sqlite`, carried on 100 ticks); memory 110 to 330 MB. So one tick a second is the most that server holds.
 
@@ -24,7 +24,8 @@
 
 ## Not asked
 
-- **The grid packed:** it waits for the owner's answer.
+- **The grid packed:** after the release (the owner's answer, a few minutes after this note was first left). It stays in your queue; the Workshop holds a trigger to put it to the owner again.
+- **The door** lets `/api/packed/` through since 10:11 UTC on 29 Sep, always compressed and not held; today's public engine answers it 404 until the release.
 - **Rebirth in the engine:** the Workshop does it for now, on the server (seed 7 started again from its tick-0 world when the planet reaches 5 billion years; the hub already reads a lower tick as a restart). FS-10's question stays open for the lasting answer.
 - **The pace:** set at the release (`--tps 1`).
 
