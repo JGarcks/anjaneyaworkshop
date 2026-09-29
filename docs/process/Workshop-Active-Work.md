@@ -10,7 +10,7 @@
 
 **Phases 0, 1 and 4 closed (W1, W2, W9).** The public planet runs on OVH's VPS-1 (`frontdoor/state/server.md`) and changes only by `scripts/planet-release.sh`, at Jamie's word; today `planet-fs1`, seed 28209, since 27 Sep (W13). **Phase 2 — the landing page: open.** Live; 75 tests; check-public 29/29. Detail: `progress/2026-09.md`.
 
-**Planet's second edition:** Opus 5.5 builds, Fable reviews; the brief, the reviews' notes and Jamie's guide are in `requests/planet-full-size-brief/` (the guide, redrawn 29 Sep: https://claude.ai/artifact/DUeKJYvnAZymyDPgXPrLzh). Two reviews and the water review done; **the code put in order is next** (W15-m: a Fable session in Planet at high effort, `requests/planet-housekeeping-brief.md`), then FS-7 (plates), then FS-6's third sitting (W15-i, W15-j); inner heat and volcanoes are in the plan (W15-l). The third review: before FS-10. Planet's own `docs/PROGRESS.md` says which session is next.
+**Planet's second edition:** Opus 5.5 builds, Fable reviews; the brief, the reviews' notes and Jamie's guide are in `requests/planet-full-size-brief/` (the guide, redrawn 29 Sep: https://claude.ai/artifact/DUeKJYvnAZymyDPgXPrLzh). Two reviews, the water review and the housekeeping done (HK, `9197309`; checked, W15-s); **FS-7 (plates) is next**, then FS-6's third sitting (W15-i, W15-j); inner heat and volcanoes are in the plan (W15-l). The third review: before FS-10. Planet's own `docs/PROGRESS.md` says which session is next.
 
 **W15 — the full-size ocean planet goes public: held by Jamie (W15-k)** until FS-7's first change has had Jamie's look. The Workshop's half is built and live (the door, the guard, the About panel, the rebirth: `progress/2026-09.md` §W15). **At the release:** seed 7 grown again on the commit released; a full-size tick timed on the server at its plate count; `planet-release.sh --reborn-at-myr=5000`; the grid purged at Cloudflare; `check-public.sh`; Jamie's walk on the laptop and the phone; Planet Claude's four notes archived.
 
@@ -29,7 +29,8 @@
 
 - **The hub does not notice a stopped tick** (W12): if Planet's engine stops while its server still answers, the page shows a frozen planet as live (`watch.js` goes still only on failed requests). Flagged as its own task. The engine's half is public since W13 (a crash stops the program; the service restarts it); a planet that hangs without crashing would still look live.
 - **CLAUDE.md is 13.0 KB against 12** (trimmed W15-r): the log's format to a file of its own, or the limit 13 KB — Jamie's.
-- **The test server is deleted when not in use** (W15-p): FS-7's planets are growing on it (from 16:20 UTC 29 Sep); delete at Jamie's word once Planet says they are home, and create a new one when a session asks.
+- **The test server is deleted when not in use** (W15-p): FS-7's planets are home (29 Sep); **it may go, at Jamie's word**.
+- **The viewer in parts** (Planet's HK · D1): a WEB session on the laptop before WEB-14; each new file a door entry and a release (Planet's `HK_VIEWER_REVIEW.md`).
 - **More on the server** (Jamie asked, W9): Planet's background test runs at the lowest priority, or other apps — a scope decision for Jamie after a few days of the site on it; VPS-2 (4 vCores, 8 GB) if wanted. Planet Claude would need its own login.
 - **Garcks-PC's idle door**: nginx on 127.0.0.1 and the stopped tunnel, kept for the way back (RUNBOOK §M2); remove once the server has run a month.
 - **The 3D viewer**: when Planet's three.js viewer exists (its brief, after Layer 3), the landing page adopts it. Note only.
