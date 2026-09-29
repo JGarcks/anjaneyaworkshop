@@ -4,10 +4,20 @@
 # Out: the server's planet-engine restarted on that release, and a line for frontdoor/state/server.md with what went up and when.
 # Decision: WS · D2 as amended (the public planet changes only by a deliberate copy, like a release) and WS · D7 (the engine on the server).
 # Built in W9 — the rented server (26 Sep 2026); W13 (27 Sep): the maths setting found by the hash, not assumed. Laptop Claude runs it from the laptop.
+#   W15 (29 Sep): --reborn-at-myr=N asks the server to start the planet again from its first moment when it reaches N million years (W15-c).
 set -euo pipefail
 
-SERVER="${1:-}"; KEEP="${2:-}"
-[[ -n "$SERVER" ]] || { echo "Usage: bash scripts/planet-release.sh <server address> [--keep-world]" >&2; exit 2; }
+SERVER="${1:-}"; KEEP=""; REBORN_MYR=""
+for word in "${@:2}"; do
+  case "$word" in
+    --keep-world) KEEP=--keep-world ;;
+    --reborn-at-myr=*) REBORN_MYR="${word#--reborn-at-myr=}" ;;
+    *) echo "Not understood: $word" >&2; SERVER="" ;;
+  esac
+done
+[[ -n "$SERVER" ]] || { echo "Usage: bash scripts/planet-release.sh <server address> [--keep-world] [--reborn-at-myr=5000]" >&2; exit 2; }
+[[ -z "$REBORN_MYR" || "$REBORN_MYR" =~ ^[1-9][0-9]*$ ]] || { echo "--reborn-at-myr wants a whole number of million years, got: $REBORN_MYR" >&2; exit 2; }
+[[ -z "$REBORN_MYR" || -z "$KEEP" ]] || { echo "A planet is reborn from its first moment, so --reborn-at-myr cannot go with --keep-world." >&2; exit 2; }
 PC=garcks@192.168.1.157
 VPS="ubuntu@$SERVER"
 SSH=(ssh -o BatchMode=yes -o ConnectTimeout=10)
@@ -50,6 +60,7 @@ NOTE="released $(date -u '+%Y-%m-%d %H:%M UTC'): $(basename "$BIN") (sha256 $SUM
 {
   echo "$NOTE"
   [[ "$KEEP" == --keep-world ]] && echo "keep-world: yes"
+  [[ -n "$REBORN_MYR" ]] && echo "reborn-at-years: ${REBORN_MYR}000000"
   echo "args: $SARGS"
 } | "${SSH[@]}" "$VPS" 'cat > /tmp/planet-release/RELEASE.txt'
 

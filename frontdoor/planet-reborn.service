@@ -1,0 +1,14 @@
+# planet-reborn.service — one look at the public planet's age, and its rebirth if it has lived its life.
+# In:  planet-reborn.timer, every five minutes; /opt/planet/planet-reborn.sh and /etc/planet/reborn.env, both installed by server.sh at a release.
+# Out: nothing while the planet is younger than its life; otherwise the planet started again from its first moment, and a line in the journal.
+# Decision: W15-c (Jamie: reborn at 5 billion years, "for now"). A one-shot run as root, since it stops and starts planet-engine and replaces its world.
+# Built in W15 — the full-size ocean planet goes public (29 Sep 2026). Read its doings with: journalctl -u planet-reborn
+
+[Unit]
+Description=Planet: reborn at the end of its life
+After=planet-engine.service
+ConditionPathExists=/etc/planet/reborn.env
+
+[Service]
+Type=oneshot
+ExecStart=/opt/planet/planet-reborn.sh

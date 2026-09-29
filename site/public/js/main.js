@@ -5,8 +5,10 @@
  *   a console warning naming any failure (rule 10).
  * Decision: every rule lives in the tested modules (watch, line, layout); this file only wires them to the page. It asks with the browser's
  *   ordinary caching, never "no-store", so Cloudflare's one-second copy answers every visitor and the house sees one ask a second.
- * Built in W3 — the landing page (24 Sep 2026); W8 keeps the still until "drawn" and turns a phone by message.
+ * Built in W3 — the landing page (24 Sep 2026); W8 keeps the still until "drawn" and turns a phone by message;
+ *   W15 shows the About word only while about.js says its panel is true of the planet on show, and opens and closes the panel.
  */
+import { aboutHolds, whyNot } from "./about.js";
 import { howToReshape, layout, reshapes } from "./layout.js";
 import { formatLastSeen, formatLine } from "./line.js";
 import { HUB, PLANET, viewerAddress } from "./planet.js";
@@ -18,6 +20,7 @@ const RESHAPE_AFTER_MS = 400;  // a resize settles this long before the frame is
 
 const $ = (id) => document.getElementById(id);
 const frame = $("planet"), still = $("still"), line = $("line"), status = $("status");
+const aboutOpen = $("about-open"), about = $("about"), aboutClose = $("about-close");
 
 const watch = createWatch({ startedAt: Date.now() });
 let stillZoom = 0.9;           // replaced by still/planet.json's own figure when it arrives
@@ -77,6 +80,18 @@ function render() {
   status.classList.toggle("shown", note !== "");
 }
 
+// The About word shows only while its panel is true of the planet on show (about.js); said in the console when it is not,
+// once for each reason (rule 10). A planet that stops matching hides the word and closes the panel.
+let aboutSaid = "";
+function showAbout(meta) {
+  const holds = aboutHolds(meta);
+  aboutOpen.hidden = !holds;
+  if (!holds && about.open) about.close();
+  const why = holds ? "" : whyNot(meta);
+  if (why && why !== aboutSaid) console.info(`The About word is hidden: ${why}, and its panel speaks of a planet the size of Earth, born as ocean.`);
+  aboutSaid = why;
+}
+
 function soon(ms) {
   clearTimeout(timer);
   timer = setTimeout(ask, ms);
@@ -91,6 +106,7 @@ async function ask() {
     if (!reply.ok) throw new Error("HTTP " + reply.status);
     const meta = await reply.json();
     if (!Number.isFinite(meta.tick) || !Number.isFinite(meta.year)) throw new Error("a reply without a tick or a year");
+    showAbout(meta);
     if (watch.metaOk(meta, Date.now()).reloadFrame) {
       console.info("Planet's front door is answering again: reloading the live picture.");
       loadFrame(place());
@@ -109,6 +125,11 @@ async function ask() {
     soon(POLL_MS);
   }
 }
+
+// The panel opens over the planet, which goes on turning; Close, Escape or a click on the dark around it shuts it.
+aboutOpen.addEventListener("click", () => { if (!about.open) about.showModal(); });
+aboutClose.addEventListener("click", () => about.close());
+about.addEventListener("click", (event) => { if (event.target === about) about.close(); });
 
 frame.addEventListener("load", () => { watch.frameLoaded(Date.now()); render(); });
 

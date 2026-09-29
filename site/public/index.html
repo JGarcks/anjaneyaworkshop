@@ -5,7 +5,8 @@
   Out: the hub at anjaneyaworkshop.co.uk: the planet turning within seconds, or the still with "last seen" if the house is away.
   Decision: the viewer is framed, never copied (WS · D3), full screen behind the words (Jamie, W3 decision 2); a room's link appears only when the room exists,
     under the name, with the line at the very bottom (Jamie, W4-a).
-  Built in W1 — Ground as the holding page; became the landing page in W3 (24 Sep 2026); rooms moved under the name in W4; the Planet link at zoom 0.65 in W9.
+  Built in W1 — Ground as the holding page; became the landing page in W3 (24 Sep 2026); rooms moved under the name in W4; the Planet link at zoom 0.65 in W9;
+    the About panel in W15 (29 Sep 2026): Jamie's words (W14-d, docs/process/landing-page-about.md), its link shown only while they are true of the planet on show.
 -->
 <html lang="en-GB">
 <head>
@@ -18,7 +19,7 @@
   <!-- ?v=w8: the holding page's style.css sat in browsers for 4 hours (the zone's old Browser Cache TTL, fixed by W3-i);
        a name no browser has saved makes every one fetch this page's own. Bumped in W8, when the frame's size moved here from
        the script: an old style with the new script would leave the frame with no size. -->
-  <link rel="stylesheet" href="style.css?v=w8">
+  <link rel="stylesheet" href="style.css?v=w15">
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
@@ -28,11 +29,19 @@
     <h1 id="name">Anjaneya Workshop</h1>
     <nav aria-label="Rooms">
       <a href="https://planet.anjaneyaworkshop.co.uk/?zoom=0.65"><svg class="mark" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.4"/><ellipse cx="8" cy="8" rx="7.2" ry="2.4" transform="rotate(-18 8 8)"/></svg>Planet</a>
+      <button id="about-open" type="button" hidden aria-haspopup="dialog" aria-controls="about">About</button>
     </nav>
   </header>
   <div id="words">
     <p id="status" role="status"></p>
     <p id="line"></p>
   </div>
+  <dialog id="about" aria-labelledby="about-title">
+    <h2 id="about-title">About</h2>
+    <p>Anjaneya Workshop is where I build things with AI assistance. I'm Jamie, a claims handler, not a programmer. I describe what I want and make every decision. The AI writes the code.</p>
+    <p>The planet on this page is my main project. It is a simulated world the size of Earth, running day and night. It begins as ocean. Plates drift, volcanoes raise islands, islands join into continents, and rivers wear them down again. After its first moment, every mountain and coastline is the planet's own doing. Nothing is drawn by hand.</p>
+    <p>The aim is a world with a history nobody wrote: land first, then climate, plants, animals, and one day peoples. It is unfinished, and I change it in the open.</p>
+    <button id="about-close" type="button">Close</button>
+  </dialog>
 </body>
 </html>

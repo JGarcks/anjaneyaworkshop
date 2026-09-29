@@ -1,0 +1,16 @@
+# planet-reborn.timer — asks planet-reborn.service to look at the planet's age every five minutes.
+# In:  the server's clock.
+# Out: a run of planet-reborn.service two minutes after the server starts, and every five minutes after each run.
+# Decision: W15-c. Five minutes is 300 ticks at one tick a second, 30 million years: a planet is reborn between 5.00 and 5.03 billion years.
+# Built in W15 — the full-size ocean planet goes public (29 Sep 2026). Enabled by server.sh only for a release that asks to be reborn.
+
+[Unit]
+Description=Planet: look at its age every five minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

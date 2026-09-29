@@ -4,6 +4,8 @@
 # Out: the server locked down, and the public planet running from the release; the run logged to /var/tmp/server-<stage>.log.
 # Decision: WS · D7 (the engine on the server), W9-b (the tunnel stays; nothing opens but SSH). Laptop Claude runs this over SSH with sudo.
 # Built in W9 — the rented server (26 Sep 2026); W13 (27 Sep): a release keeps a copy of the world and installs the service file. Safe to run again.
+#   W15 (29 Sep): a release that asks to be reborn (RELEASE.txt's "reborn-at-years") keeps a copy of the planet's birth and switches on
+#   planet-reborn.timer; any other release switches it off, so no planet is reborn by a setting left behind.
 set -euo pipefail
 
 STAGE="${1:-}"
@@ -60,6 +62,14 @@ engine)
   # shellcheck disable=SC1091
   WORLD="$(. "$REL/engine.env"; sed -n 's/.*--world \([^ ]*\).*/\1/p' <<<"$PLANET_ARGS")"
   [[ "$WORLD" == /var/lib/planet/* ]] || fail "engine.env's --world is not under /var/lib/planet: $WORLD"
+  # A release that asks to be reborn (W15-c) must bring a planet at its first moment: checked here, before anything is stopped.
+  LIFE="$(sed -n 's/^reborn-at-years: \([0-9]*\)$/\1/p' "$REL/RELEASE.txt" | head -1)"
+  if [[ -n "$LIFE" ]]; then
+    grep -q '^keep-world: yes' "$REL/RELEASE.txt" && fail "this release asks to be reborn and to keep the server's world, which is not at its first moment; nothing changed."
+    BORN="$(sqlite3 -readonly "$REL/world.sqlite" 'select max(tick) from checkpoints' 2>/dev/null || true)"
+    [[ "$BORN" == 0 ]] || fail "this release asks to be reborn, but its world is at tick ${BORN:-unreadable}, not a planet's first moment; nothing changed."
+    for f in planet-reborn.sh planet-reborn.service planet-reborn.timer; do [[ -s "$REPO/frontdoor/$f" ]] || fail "$REPO/frontdoor/$f missing; nothing changed."; done
+  fi
 
   echo "== 1. stop the engine (it saves as it goes; the world on disk is the one we replace or keep)"
   systemctl stop planet-engine || true
@@ -98,6 +108,26 @@ engine)
     rm -f "$WORLD" "$WORLD-wal" "$WORLD-shm"
     install -o planet -g planet -m 0640 "$REL/world.sqlite" "$WORLD"
     echo "world copied in: $WORLD"
+  fi
+
+  echo "== 3b. reborn at its life's end, or not (W15-c)"
+  # Switched off first, whatever was there: only this release's own word switches it on again.
+  systemctl disable --now planet-reborn.timer 2>/dev/null || true
+  rm -f /etc/planet/reborn.env
+  if [[ -n "$LIFE" ]]; then
+    install -d -o planet -g planet -m 0750 /var/lib/planet/birth
+    BIRTH="/var/lib/planet/birth/$(basename "$WORLD")"
+    install -o planet -g planet -m 0640 "$WORLD" "$BIRTH"
+    printf '# /etc/planet/reborn.env — written by frontdoor/server.sh at a release; read by planet-reborn.sh.\nLIFE_YEARS=%s\nWORLD=%s\nBIRTH=%s\n' "$LIFE" "$WORLD" "$BIRTH" > /etc/planet/reborn.env
+    install -m 0755 "$REPO/frontdoor/planet-reborn.sh" /opt/planet/planet-reborn.sh
+    install -m 0644 "$REPO/frontdoor/planet-reborn.service" /etc/systemd/system/planet-reborn.service
+    install -m 0644 "$REPO/frontdoor/planet-reborn.timer" /etc/systemd/system/planet-reborn.timer
+    systemctl daemon-reload
+    systemctl enable --now planet-reborn.timer
+    echo "reborn at $LIFE years: the birth kept at $BIRTH ($(stat -c %s "$BIRTH") bytes); the timer is on"
+    systemctl --no-pager list-timers planet-reborn.timer || true
+  else
+    echo "this release does not ask to be reborn: the timer is off"
   fi
 
   echo "== 4. start, and ask it for its numbers"

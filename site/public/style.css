@@ -5,7 +5,8 @@
  *   links brightening on hover; the still and the live globe handing over through the dark (W4-b).
  * Decision: #0b0e14 is the viewer's own background, so the frame's edge is invisible (WS · D3); a soft dark halo keeps the words
  *   readable where the planet runs under them (W3 decision 2). Until main.js runs, the still sits centred by these rules alone.
- * Built in W1 — Ground as the holding page's look; became the landing page's in W3 (24 Sep 2026); rearranged in W4.
+ * Built in W1 — Ground as the holding page's look; became the landing page's in W3 (24 Sep 2026); rearranged in W4;
+ *   the About panel in W15 (29 Sep 2026): a quiet word under the name, and a dark panel over the planet that still turns behind it.
  */
 :root {
   --bg: #0b0e14;
@@ -147,7 +148,7 @@ nav {
   margin: 4px 0 0 -4px;
 }
 
-nav a {
+nav a, nav button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -164,14 +165,79 @@ nav a {
   transition: opacity 0.25s ease;
 }
 
-nav a:hover, nav a:focus-visible {
+/* The About word is a button, since it opens a panel and leads nowhere; it wears the rooms' look (W15). */
+nav button, #about-close {
+  margin: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+nav button[hidden] {
+  display: none;
+}
+
+nav a:hover, nav a:focus-visible, nav button:hover, nav button:focus-visible {
   opacity: 0.95;
 }
 
-nav a:focus-visible {
+nav a:focus-visible, nav button:focus-visible, #about-close:focus-visible {
   outline: 1px solid currentColor;
   outline-offset: 4px;
   border-radius: 2px;
+}
+
+/* The About panel (Jamie's words, W14-d): the page's own dark, a little see-through, so the planet goes on turning behind it.
+   Wide enough for a comfortable line, never wider than the screen less its gutters, and it scrolls inside itself on a short phone. */
+#about {
+  box-sizing: border-box;
+  width: min(34rem, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  margin: auto;
+  padding: 26px 28px 22px;
+  overflow-y: auto;
+  border: 1px solid rgb(127 135 148 / 0.28);
+  border-radius: 4px;
+  background: rgb(11 14 20 / 0.9);
+  color: var(--ink);
+}
+
+#about::backdrop {
+  background: rgb(11 14 20 / 0.55);
+}
+
+#about h2 {
+  margin: 0 0 16px;
+  color: var(--faint);
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+#about p {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+#about-close {
+  display: block;
+  margin: 8px 0 0 -4px;
+  padding: 8px 4px;
+  color: var(--ink);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: opacity 0.25s ease;
+}
+
+#about-close:hover, #about-close:focus-visible {
+  opacity: 0.95;
 }
 
 .mark {
@@ -187,5 +253,5 @@ nav a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #still, #still.gone, #planet, #planet.shown, #status, nav a { transition: none; }
+  #still, #still.gone, #planet, #planet.shown, #status, nav a, nav button, #about-close { transition: none; }
 }
