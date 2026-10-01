@@ -4,6 +4,10 @@
 
 **The machine.** OVHcloud VPS-1 (order 259163206), Erith (London). `vps-5e97d8be.vps.ovh.net`, IPv4 57.129.161.57 (IPv6 2001:41d0:801:2000::2595, unused). Ubuntu 26.04.1 LTS, kernel 7.0.0-28, glibc 2.43; 2 vCores (Intel Haswell, with FMA and AVX2), 3.8 GB, 38 GB disk. Login: `ubuntu`, the laptop's key only (`docs/process/secrets-map.md`).
 
+## 1 Oct 2026, 17:10 UTC — the ocean planet two days on, read only (W16)
+
+**The rebirths.** `planet-engine` stopped and started by the rebirth at 10:07:08 UTC on 30 Sep, 00:04:21 and 14:00:44 on 1 Oct: three lives of 50,000 ticks in 50,153, 50,233 and 50,183 s, so one tick a second held to 5 billion years each time. **A tick timed:** over 40 ticks at 1.13 billion years (tick 11,339 to 11,379), 0.776 s of processor a tick against the 1 s pace; 884 MB; load 0.68 to 1.06. The peak over a life is not measured. **The door:** answers `/api/meta` on 127.0.0.1:8090 in 0.002 s; `cloudflared-frontdoor` active. Nothing was changed: a private line from the laptop to port 8090 (`ssh -L`) was used to compare the door with the edge, and closed.
+
 ## 29 Sep 2026, 20:11 UTC — the full-size ocean planet released (W15-t)
 
 - released 2026-09-29 20:11 UTC: planet-048b324 (sha256 b55a57faffbf1bdf…), world planet-seed7-ocean-048b324.sqlite from Garcks-PC at tick 0, settings none; seed-2 hash 4fa40b59… matches Garcks-PC with no maths setting; picture 190240 bytes gzipped

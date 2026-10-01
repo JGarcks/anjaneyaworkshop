@@ -77,7 +77,7 @@ One place to remember; each room independent of the hub and of each other.
 
 **Booked (Jamie, 24 Sep 2026):** put at the decision round after Phase 2 closes, with WS · D13, rather than waiting for a trigger.
 
-### WS · D13 — A livelier public picture (open; booked for the decision round after Phase 2)
+### WS · D13 — A livelier public picture (settled W16, 1 Oct 2026: neither a paid plan nor a push relay; pictures asked for by their tick, Planet item 23, `requests/planet-delivery.md`)
 
 *W4 finding (WS · D4): half the ~2.1 s gap is the door's own hold, but that hold is also what keeps the viewer's four fields on one tick; removing it stopped the picture. A paid plan would not help. The options for this round are now a Planet request (fields fetched as one, or addressed by tick) and the push relay.*
 
