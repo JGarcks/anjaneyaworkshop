@@ -62,6 +62,7 @@ The dark hub, live. *W3 built and deployed the page, the line, the fallbacks and
 
 - **What to strip** is Jamie's list, per app, made before the session.
 - **The room** for each, deployed from its own repo once stripped; nothing from either touches the site before then, screenshots included.
+- **Jamie's intent (1 Oct 2026, W16):** finish ClaimsDesk and PolicyRAG in their own sessions, then both onto the site. To settle at this phase's decision round, none decided: ClaimsDesk shown on its blind mailbox (66 synthetic threads of another insurer, nothing of Aviva's), already read, with no key; PolicyRAG's page pictures are drawn from Aviva's PDFs, public but not ours to redistribute; and both have a box that writes or spends a key (the ask box, Done), against rule 11, so each room is read-only or a new decision.
 
 **Gate:** nothing Aviva-branded or Aviva-worded in the deployed files, checked by a search of the build output; Jamie's sign-off; the hub's link works.
 
