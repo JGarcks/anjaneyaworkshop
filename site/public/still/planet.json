@@ -1,11 +1,11 @@
 {
-  "takenAt": "2026-10-17T14:13:41.367Z",
-  "tick": 27754,
-  "year": 2775400000,
+  "takenAt": "2026-10-18T14:38:02.134Z",
+  "tick": 15018,
+  "year": 1501800000,
   "key_numbers": {
-    "land_share": 0.10130474832126042,
-    "continent_share": 0.12490553357874681,
-    "highest_peak_m": 4205.36669921875
+    "land_share": 0.05708236857597452,
+    "continent_share": 0.08303065844581785,
+    "highest_peak_m": 4410.640625
   },
   "zoom": 0.9,
   "size": 1200
